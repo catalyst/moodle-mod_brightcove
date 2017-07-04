@@ -59,17 +59,12 @@ class mod_brightcove_mod_form extends moodleform_mod {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('name', 'brightcovename', 'mod_brightcove');
 
-        // Adding the standard "intro" and "introformat" fields.
-        if ($CFG->branch >= 29) {
-            $this->standard_intro_elements();
-        } else {
-            $this->add_intro_editor();
-        }
+        $this->standard_intro_elements();
 
-        // Adding the rest of mod_brightcove settings, spreading all them into this fieldset
-        // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        $mform->addElement('static', 'label1', 'brightcovesettings', get_string('brightcovesettings', 'mod_brightcove'));
-        $mform->addElement('header', 'brightcovefieldset', get_string('brightcovefieldset', 'mod_brightcove'));
+        $mform->addElement('text', 'videoid', get_string('videoid', 'brightcove'), array('size'=>'64'));
+        $mform->addRule('videoid', null, 'required', null, 'client');
+        $mform->setType('videoid', PARAM_TEXT);
+        $mform->addHelpButton('videoid', 'videoid', 'mod_brightcove');
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();

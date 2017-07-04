@@ -32,10 +32,9 @@ defined('MOODLE_INTERNAL') || die();
  */
 function mod_brightcove_supports($feature) {
     switch ($feature) {
-        case FEATURE_GRADE_HAS_GRADE:
-            return true;
-        case FEATURE_MOD_INTRO:
-            return true;
+        case FEATURE_GRADE_HAS_GRADE:           return true;
+        case FEATURE_MOD_INTRO:                 return true;
+        case FEATURE_SHOW_DESCRIPTION:          return true;
         default:
             return null;
     }

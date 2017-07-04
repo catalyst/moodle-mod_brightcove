@@ -29,7 +29,11 @@ $string['pluginname'] = 'Brightcove Activity';
 $string['modulename'] = 'Brightcove Activity';
 $string['modulenameplural'] = 'Brightcove Activity';
 
+$string['brightcovename'] = 'Activity name';
+$string['brightcovename_help'] = 'This is the name that will be displayed to users.';
 $string['playerid'] = 'Player ID';
 $string['playerid_help'] = 'eg 3122341508001';
 $string['threeplayapikey'] = '3Play API Key';
 $string['threeplayapikey_help'] = 'Setup here: <a href="https://account.3playmedia.com/api_management">API Management</a>';
+$string['videoid'] = 'Video ID';
+$string['videoid_help'] = 'eg 3059996735001';
