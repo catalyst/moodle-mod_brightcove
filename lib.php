@@ -51,12 +51,12 @@ function mod_brightcove_supports($feature) {
  * @param mod_brightcove_mod_form $mform The form.
  * @return int The id of the newly inserted record.
  */
-function mod_brightcove_add_instance($moduleinstance, $mform = null) {
+function brightcove_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
     $moduleinstance->timecreated = time();
 
-    $id = $DB->insert_record('mod_brightcove', $moduleinstance);
+    $id = $DB->insert_record('brightcove', $moduleinstance);
 
     return $id;
 }
@@ -71,13 +71,13 @@ function mod_brightcove_add_instance($moduleinstance, $mform = null) {
  * @param mod_brightcove_mod_form $mform The form.
  * @return bool True if successful, false otherwise.
  */
-function mod_brightcove_update_instance($moduleinstance, $mform = null) {
+function brightcove_update_instance($moduleinstance, $mform = null) {
     global $DB;
 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
 
-    return $DB->update_record('mod_brightcove', $moduleinstance);
+    return $DB->update_record('brightcove', $moduleinstance);
 }
 
 /**
@@ -86,15 +86,15 @@ function mod_brightcove_update_instance($moduleinstance, $mform = null) {
  * @param int $id Id of the module instance.
  * @return bool True if successful, false on failure.
  */
-function mod_brightcove_delete_instance($id) {
+function brightcove_delete_instance($id) {
     global $DB;
 
-    $exists = $DB->get_record('mod_brightcove', array('id' => $id));
+    $exists = $DB->get_record('brightcove', array('id' => $id));
     if (!$exists) {
         return false;
     }
 
-    $DB->delete_records('mod_brightcove', array('id' => $id));
+    $DB->delete_records('brightcove', array('id' => $id));
 
     return true;
 }
@@ -109,10 +109,10 @@ function mod_brightcove_delete_instance($id) {
  * @param int $scaleid ID of the scale.
  * @return bool True if the scale is used by the given mod_brightcove instance.
  */
-function mod_brightcove_scale_used($moduleinstanceid, $scaleid) {
+function brightcove_scale_used($moduleinstanceid, $scaleid) {
     global $DB;
 
-    if ($scaleid && $DB->record_exists('mod_brightcove', array('id' => $moduleinstanceid, 'grade' => -$scaleid))) {
+    if ($scaleid && $DB->record_exists('brightcove', array('id' => $moduleinstanceid, 'grade' => -$scaleid))) {
         return true;
     } else {
         return false;
@@ -127,10 +127,10 @@ function mod_brightcove_scale_used($moduleinstanceid, $scaleid) {
  * @param int $scaleid ID of the scale.
  * @return bool True if the scale is used by any mod_brightcove instance.
  */
-function mod_brightcove_scale_used_anywhere($scaleid) {
+function brightcove_scale_used_anywhere($scaleid) {
     global $DB;
 
-    if ($scaleid and $DB->record_exists('mod_brightcove', array('grade' => -$scaleid))) {
+    if ($scaleid and $DB->record_exists('brightcove', array('grade' => -$scaleid))) {
         return true;
     } else {
         return false;
@@ -146,7 +146,7 @@ function mod_brightcove_scale_used_anywhere($scaleid) {
  * @param bool $reset Reset grades in the gradebook.
  * @return void.
  */
-function mod_brightcove_grade_item_update($moduleinstance, $reset=false) {
+function brightcove_grade_item_update($moduleinstance, $reset=false) {
     global $CFG;
     require_once($CFG->libdir.'/gradelib.php');
 
@@ -177,7 +177,7 @@ function mod_brightcove_grade_item_update($moduleinstance, $reset=false) {
  * @param stdClass $moduleinstance Instance object.
  * @return grade_item.
  */
-function mod_brightcove_grade_item_delete($moduleinstance) {
+function brightcove_grade_item_delete($moduleinstance) {
     global $CFG;
     require_once($CFG->libdir.'/gradelib.php');
 
@@ -193,7 +193,7 @@ function mod_brightcove_grade_item_delete($moduleinstance) {
  * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
  * @param int $userid Update grade of specific user only, 0 means all participants.
  */
-function mod_brightcove_update_grades($moduleinstance, $userid = 0) {
+function brightcove_update_grades($moduleinstance, $userid = 0) {
     global $CFG, $DB;
     require_once($CFG->libdir.'/gradelib.php');
 
@@ -212,7 +212,7 @@ function mod_brightcove_update_grades($moduleinstance, $userid = 0) {
  * @param stdClass $module.
  * @param cm_info $cm.
  */
-function mod_brightcove_extend_navigation($brightcovenode, $course, $module, $cm) {
+function brightcove_extend_navigation($brightcovenode, $course, $module, $cm) {
 }
 
 /**
@@ -224,5 +224,5 @@ function mod_brightcove_extend_navigation($brightcovenode, $course, $module, $cm
  * @param settings_navigation $settingsnav {@link settings_navigation}
  * @param navigation_node $brightcovenode {@link navigation_node}
  */
-function mod_brightcove_extend_settings_navigation($settingsnav, $brightcovenode = null) {
+function brightcove_extend_settings_navigation($settingsnav, $brightcovenode = null) {
 }

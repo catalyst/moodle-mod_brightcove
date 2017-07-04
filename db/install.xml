@@ -4,14 +4,15 @@
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="brightcove" COMMENT="Defines brightcove" NEXT="brightcove_events">
+    <TABLE NAME="brightcove" COMMENT="Defines brightcove">
       <FIELDS>
-        <FIELD NAME="id"           TYPE="int"  LENGTH="10"  NOTNULL="true"              SEQUENCE="true" />
-        <FIELD NAME="course"       TYPE="int"  LENGTH="10"  NOTNULL="true" DEFAULT="0"  SEQUENCE="false" />
-        <FIELD NAME="name"         TYPE="char" LENGTH="255" NOTNULL="true"              SEQUENCE="false" />
-        <FIELD NAME="videoid"      TYPE="char" LENGTH="20"  NOTNULL="false"             SEQUENCE="false" />
-        <FIELD NAME="timemodified" TYPE="int"  LENGTH="10"  NOTNULL="true"  DEFAULT="0" SEQUENCE="false" />
-        <FIELD NAME="duration"     TYPE="int"  LENGTH="10"  NOTNULL="false" DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="id"           TYPE="int"  LENGTH="10"      NOTNULL="true"                              SEQUENCE="true" />
+        <FIELD NAME="course"       TYPE="int"  LENGTH="10"      NOTNULL="true"                  DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="name"         TYPE="char" LENGTH="255"     NOTNULL="true"                              SEQUENCE="false" />
+        <FIELD NAME="intro"        TYPE="text" LENGTH="small"   NOTNULL="false"                             SEQUENCE="false" />
+        <FIELD NAME="introformat"  TYPE="int"  LENGTH="4"       NOTNULL="true"  UNSIGNED="true" DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="videoid"      TYPE="char" LENGTH="20"      NOTNULL="false"                             SEQUENCE="false" />
+        <FIELD NAME="timemodified" TYPE="int"  LENGTH="10"      NOTNULL="true"                  DEFAULT="0" SEQUENCE="false" />
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
