@@ -26,6 +26,17 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
-   // TODO: Define the plugin settings page.
-   // https://docs.moodle.org/dev/Admin_settings
+
+    // Brightcove API key setting
+    $settings->add(new admin_setting_configtext('brightcove/playerid',
+            get_string('playerid',             'brightcove'),
+            get_string('playerid_help',        'brightcove'),
+            null, PARAM_TEXT));
+
+    // 3Play media API key setting
+    $settings->add(new admin_setting_configtext('brightcove/threeplayapikey',
+            get_string('threeplayapikey',      'brightcove'),
+            get_string('threeplayapikey_help', 'brightcove'),
+            null, PARAM_TEXT));
+
 }

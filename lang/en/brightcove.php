@@ -15,33 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin upgrade steps are defined here.
+ * Plugin strings are defined here.
  *
  * @package     mod_brightcove
- * @category    upgrade
+ * @category    string
  * @copyright   2017 Matt Porritt <mattp@catalyst-au.net>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * Execute mod_brightcove upgrade from the given old version.
- *
- * @param int $oldversion
- * @return bool
- */
-function xmldb_mod_brightcove_upgrade($oldversion) {
-    global $DB;
+$string['pluginname'] = 'Brightcove Activity';
+$string['modulename'] = 'Brightcove Activity';
+$string['modulenameplural'] = 'Brightcove Activity';
 
-    $dbman = $DB->get_manager();
-
-    // For further information please read the Upgrade API documentation:
-    // https://docs.moodle.org/dev/Upgrade_API
-    //
-    // You will also have to create the db/install.xml file by using the XMLDB Editor.
-    // Documentation for the XMLDB Editor can be found at:
-    // https://docs.moodle.org/dev/XMLDB_editor
-
-    return true;
-}
+$string['playerid'] = 'Player ID';
+$string['playerid_help'] = 'eg 3122341508001';
+$string['threeplayapikey'] = '3Play API Key';
+$string['threeplayapikey_help'] = 'Setup here: <a href="https://account.3playmedia.com/api_management">API Management</a>';

@@ -1,8 +1,6 @@
 # Brightcove Activity #
 
-TODO Describe the plugin shortly here.
-
-TODO Provide more detailed description here.
+Activity plugin for Moodle that allows Brightcove hosted videos to be used as graded activities in Moodle LMS.
 
 ## License ##
 
