@@ -27,16 +27,25 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
 
-    // Brightcove API key setting
+    // Brightcove API and account settiings
+    $settings->add(new admin_setting_configtext('brightcove/accountid',
+            get_string('accountid',             'brightcove'),
+            get_string('accountid_help',        'brightcove'),
+            null, PARAM_TEXT));
+
     $settings->add(new admin_setting_configtext('brightcove/playerid',
             get_string('playerid',             'brightcove'),
             get_string('playerid_help',        'brightcove'),
             null, PARAM_TEXT));
 
-    // 3Play media API key setting
-    $settings->add(new admin_setting_configtext('brightcove/threeplayapikey',
-            get_string('threeplayapikey',      'brightcove'),
-            get_string('threeplayapikey_help', 'brightcove'),
+    $settings->add(new admin_setting_configtext('brightcove/apikey',
+            get_string('apikey',      'brightcove'),
+            get_string('apikey_help', 'brightcove'),
+            null, PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('brightcove/apisecret',
+            get_string('apisecret',      'brightcove'),
+            get_string('apisecret_help', 'brightcove'),
             null, PARAM_TEXT));
 
 }

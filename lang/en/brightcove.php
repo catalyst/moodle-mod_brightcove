@@ -29,12 +29,16 @@ $string['pluginname'] = 'Brightcove Activity';
 $string['modulename'] = 'Brightcove Activity';
 $string['modulenameplural'] = 'Brightcove Activity';
 
+$string['accountid'] = 'Brightcove Account ID';
+$string['accountid_help'] = 'eg 3122341508001';
+$string['apikey'] = 'Brightcove API Key';
+$string['apikey_help'] = 'eg 5eb0f20e-29a8-4f19-8cb5-80336e2789ab';
+$string['apisecret'] = 'Brightcove API Secret';
+$string['apisecret_help'] = 'eg Zqpb_2YrvnGUEjqQUndx6GsjQ3JyAgXoA2gNbhoj-yUV4scij0jwCN0OBz9FILEwHupjeqwdbOUSFMi7zkhpVg';
 $string['brightcovename'] = 'Activity name';
 $string['brightcovename_help'] = 'This is the name that will be displayed to users.';
 $string['playerid'] = 'Player ID';
 $string['playerid_help'] = 'eg 3122341508001';
 $string['pluginadministration'] = 'Brightcove administration';
-$string['threeplayapikey'] = '3Play API Key';
-$string['threeplayapikey_help'] = 'Setup here: <a href="https://account.3playmedia.com/api_management">API Management</a>';
 $string['videoid'] = 'Video ID';
 $string['videoid_help'] = 'eg 3059996735001';
