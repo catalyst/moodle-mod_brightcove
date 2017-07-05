@@ -61,10 +61,20 @@ class mod_brightcove_mod_form extends moodleform_mod {
 
         $this->standard_intro_elements();
 
+        // Brightcove video ID.
         $mform->addElement('text', 'videoid', get_string('videoid', 'brightcove'), array('size'=>'64'));
         $mform->addRule('videoid', null, 'required', null, 'client');
         $mform->setType('videoid', PARAM_TEXT);
         $mform->addHelpButton('videoid', 'videoid', 'mod_brightcove');
+
+        // Video Aspect ratio.
+        // When proper API integration has been added this will be removed,
+        // as we will source this infor directly from the API.
+        $radioarray=array();
+        $radioarray[] = $mform->createElement('radio', 'aspect', '', get_string('aspect169', 'brightcove'), 0);
+        $radioarray[] = $mform->createElement('radio', 'aspect', '', get_string('aspect43', 'brightcove'), 1);
+        $mform->addGroup($radioarray, 'radioar', get_string('aspectratio', 'brightcove'));
+        $mform->addHelpButton('radioar', 'aspectratio', 'mod_brightcove');
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();
