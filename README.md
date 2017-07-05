@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/catalyst/moodle-mod_brightcove.svg?branch=master)](https://travis-ci.org/catalyst/moodle-mod_brightcove)
 # Brightcove Activity #
 
 Activity plugin for Moodle that allows Brightcove hosted videos to be used as graded activities in Moodle LMS.
