@@ -70,11 +70,15 @@ class mod_brightcove_mod_form extends moodleform_mod {
         // Video Aspect ratio.
         // When proper API integration has been added this will be removed,
         // as we will source this infor directly from the API.
-        $radioarray=array();
-        $radioarray[] = $mform->createElement('radio', 'aspect', '', get_string('aspect169', 'brightcove'), 0);
-        $radioarray[] = $mform->createElement('radio', 'aspect', '', get_string('aspect43', 'brightcove'), 1);
-        $mform->addGroup($radioarray, 'radioar', get_string('aspectratio', 'brightcove'));
-        $mform->addHelpButton('radioar', 'aspectratio', 'mod_brightcove');
+        $options = array(
+                169 => get_string('aspect169', 'brightcove'),
+                43 => get_string('aspect43', 'brightcove')
+        );
+        $select = $mform->addElement('select', 'aspectratio', get_string('aspectratio', 'brightcove'), $options);
+        // This will select the colour blue.
+        $select->setSelected(169);
+
+        $mform->addHelpButton('aspectratio', 'aspectratio', 'mod_brightcove');
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();

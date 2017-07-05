@@ -46,12 +46,25 @@ if ($id) {
 require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
+$moduleconfig = get_config('brightcove');
+
+// Calulate video aspect ratio.
+$aspectratio = "56.25";
+if ($moduleinstance->aspectratio != 169){
+    $aspectratio = "75";
+}
 
 $PAGE->set_url('/mod/brightcove/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
+$playervalues = new stdClass();
+$playervalues->accountid = $moduleconfig->accountid;
+$playervalues->playerid = $moduleconfig->playerid;
+$playervalues->videoid = $moduleinstance->videoid;
+$playervalues->aspectratio = $aspectratio;
+
 echo $OUTPUT->header();
-echo "output goes here";
+echo $OUTPUT->render_from_template('mod_brightcove/player', $playervalues);
 echo $OUTPUT->footer();
