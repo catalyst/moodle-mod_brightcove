@@ -44,5 +44,6 @@ $string['brightcovename_help'] = 'This is the name that will be displayed to use
 $string['playerid'] = 'Player ID';
 $string['playerid_help'] = 'eg 3122341508001';
 $string['pluginadministration'] = 'Brightcove administration';
+$string['search:activity'] = 'Brightcove - activity information';
 $string['videoid'] = 'Video ID';
 $string['videoid_help'] = 'eg 3059996735001';
