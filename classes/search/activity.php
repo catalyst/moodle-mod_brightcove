@@ -15,11 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Search area for mod_page activities.
+ * Search area for mod_brightcove activities.
  *
- * @package    mod_page
- * @copyright  2015 David Monllao {@link http://www.davidmonllao.com}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_brightcove
+ * @copyright   2017 Matt Porritt <mattp@catalyst-au.net>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_brightcove\search;
@@ -71,12 +71,10 @@ class activity extends \core_search\base_activity {
         $doc->set('owneruserid', \core_search\manager::NO_OWNER_ID);
         $doc->set('modified', $record->timemodified);
 
-        //<rant>
         // There are a defined set of fields you can use when indexing things in search,
         // this is why the fileds below don't match the schema of the activity.
         // Each search engine can define their own fields, but then this actity type would be
         // locked to a particular search engine plugin. This is dumb.
-        //</rant>
         $doc->set('description1', content_to_text($record->transcript, $record->introformat));
         $doc->set('description2', content_to_text($record->videoname, false));
 

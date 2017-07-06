@@ -18,7 +18,6 @@
  * Plugin administration pages are defined here.
  *
  * @package     mod_brightcove
- * @category    admin
  * @copyright   2017 Matt Porritt <mattp@catalyst-au.net>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
 
-    // Brightcove API and account settiings
+    // Brightcove API and account settiings.
     $settings->add(new admin_setting_configtext('brightcove/accountid',
             get_string('accountid',             'brightcove'),
             get_string('accountid_help',        'brightcove'),

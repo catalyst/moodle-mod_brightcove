@@ -62,7 +62,7 @@ class mod_brightcove_mod_form extends moodleform_mod {
         $this->standard_intro_elements();
 
         // Brightcove video ID.
-        $mform->addElement('text', 'videoid', get_string('videoid', 'brightcove'), array('size'=>'64'));
+        $mform->addElement('text', 'videoid', get_string('videoid', 'brightcove'), array('size' => '64'));
         $mform->addRule('videoid', null, 'required', null, 'client');
         $mform->setType('videoid', PARAM_TEXT);
         $mform->addHelpButton('videoid', 'videoid', 'mod_brightcove');

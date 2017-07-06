@@ -32,9 +32,12 @@ defined('MOODLE_INTERNAL') || die();
  */
 function mod_brightcove_supports($feature) {
     switch ($feature) {
-        case FEATURE_GRADE_HAS_GRADE:           return true;
-        case FEATURE_MOD_INTRO:                 return true;
-        case FEATURE_SHOW_DESCRIPTION:          return true;
+        case FEATURE_GRADE_HAS_GRADE:
+            return true;
+        case FEATURE_MOD_INTRO:
+            return true;
+        case FEATURE_SHOW_DESCRIPTION:
+            return true;
         default:
             return null;
     }
@@ -208,9 +211,9 @@ function brightcove_update_grades($moduleinstance, $userid = 0) {
  * This can be called by an AJAX request so do not rely on $PAGE as it might not be set up properly.
  *
  * @param navigation_node $brightcovenode An object representing the navigation tree node.
- * @param stdClass $course.
- * @param stdClass $module.
- * @param cm_info $cm.
+ * @param stdClass $course course.
+ * @param stdClass $module module.
+ * @param cm_info $cm cm.
  */
 function brightcove_extend_navigation($brightcovenode, $course, $module, $cm) {
 }

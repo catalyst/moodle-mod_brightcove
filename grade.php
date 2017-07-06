@@ -25,6 +25,8 @@
 
 require(__DIR__.'/../../config.php');
 
+require_login();
+
 // Course module ID.
 $id = required_param('id', PARAM_INT);
 

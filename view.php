@@ -25,7 +25,7 @@
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
-// Course_module ID, or
+// Course_module ID, or.
 $id = optional_param('id', 0, PARAM_INT);
 
 // ... module instance id.
@@ -50,7 +50,7 @@ $moduleconfig = get_config('brightcove');
 
 // Calulate video aspect ratio.
 $aspectratio = "56.25";
-if ($moduleinstance->aspectratio != 169){
+if ($moduleinstance->aspectratio != 169) {
     $aspectratio = "75";
 }
 
