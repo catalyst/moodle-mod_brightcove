@@ -39,6 +39,7 @@ $string['aspect169'] = '16:9';
 $string['aspect43'] = '4:3';
 $string['aspectratio'] = 'Video Aspect Ratio';
 $string['aspectratio_help'] = 'Choose the apset ratio that applies to your video, either 4:3 (square) or 16:9 (widescreen).';
+$string['brightcove:addinstance'] = 'Add Brightcove activity';
 $string['brightcovename'] = 'Activity name';
 $string['brightcovename_help'] = 'This is the name that will be displayed to users.';
 $string['playerid'] = 'Player ID';
