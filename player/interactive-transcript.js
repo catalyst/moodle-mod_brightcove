@@ -9,10 +9,11 @@ videojs.plugin('interactiveTranscriptPlugin', function() {
         };
      // Initialize the plugin.
         var transcript = myPlayer.transcript(options);
+        var transcriptUrl = myPlayer.el().dataset.captions
 
-        overlay = document.createElement('track');
+        var overlay = document.createElement('track');
         overlay.kind = 'captions';
-        overlay.src = 'http://brightcove.vo.llnwd.net/v1/unsecured/media/5483960634001/201706/212/5483960634001_3a9acb3d-2e23-403c-b58c-fdf0a02b8fd3.vtt?pubId=5483960634001&videoId=5488076477001';
+        overlay.src = transcriptUrl;
         overlay.srclang="en" 
         overlay.label="English"
         myPlayer.el().getElementsByTagName("video")[0].appendChild(overlay);

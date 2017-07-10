@@ -38,6 +38,8 @@ require_once($CFG->dirroot . '/local/aws/sdk/aws-autoloader.php');
 class brightcove_api {
     /**
      * Initialises the class.
+     * Makes relevant configuration from config available and
+     * creates Guzzle client.
      *
      * @return void
      */
@@ -54,8 +56,10 @@ class brightcove_api {
     }
 
     /**
-     * 
-     * @return mixed
+     * Generates OAuth token from stored key and secret deatils.
+     * Token is used to make API calls.
+     *
+     * @return string $token the API acesss token.
      */
     private function generate_token() {
         $url = $this->config->oauthendpoint. 'access_token';
@@ -80,7 +84,10 @@ class brightcove_api {
     }
 
     /**
-     * 
+     * Get the current API token.
+     * Tries to get token from cache first, if cache isn't set
+     * token is generated.
+     *
      * @return string|mixed
      */
     private function get_token() {
@@ -98,9 +105,11 @@ class brightcove_api {
     }
 
     /**
+     * Get video object from Brightcove API.
+     * Returns data about video based on given video ID.
      * 
-     * @param unknown $videoid
-     * @param string $retry
+     * @param string $videoid The Brightcove ID of the video.
+     * @param bool $retry Set true if we are retying based on auth denied condition.
      */
     public function get_video($videoid, $retry=true) {
         $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/videos/' . $videoid;
@@ -120,7 +129,6 @@ class brightcove_api {
             $response = $e->getResponse();
         }
 
-
         $responsecode = $response->getStatusCode();
         $responseobj = json_decode($response->getBody(), true);
 
@@ -133,9 +141,21 @@ class brightcove_api {
             $responseobj = $this->get_video($videoid, false);
         }
 
-        error_log(print_r($responseobj['text_tracks'], true));
-
         return $responseobj;
+    }
+
+    /**
+     * Returns text track details for the given video ID.
+     * Only details for the first track are returned.
+     *
+     * @param string $videoid The Brightcove ID of the video.
+     * @return array $texttracks Array of details for the first found text track.
+     */
+    public function get_transcript($videoid) {
+        $videoobj = $this->get_video($videoid);
+        $texttracks = $videoobj['text_tracks'];
+
+        return $texttracks[0];
 
     }
 }

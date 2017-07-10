@@ -62,13 +62,14 @@ $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
 $brightcove = new brightcove_api();
-$video = $brightcove->get_video($moduleinstance->videoid);
+$video_transcript = $brightcove->get_transcript($moduleinstance->videoid);
 
 $playervalues = new stdClass();
 $playervalues->accountid = $moduleconfig->accountid;
 $playervalues->playerid = $moduleconfig->playerid;
 $playervalues->videoid = $moduleinstance->videoid;
 $playervalues->aspectratio = $aspectratio;
+$playervalues->transcripturl = $video_transcript['src'];
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('mod_brightcove/player', $playervalues);
