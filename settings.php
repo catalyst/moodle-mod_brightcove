@@ -47,4 +47,14 @@ if ($ADMIN->fulltree) {
             get_string('apisecret_help', 'brightcove'),
             null, PARAM_TEXT));
 
+    $settings->add(new admin_setting_configtext('brightcove/oauthendpoint',
+            get_string('oauthendpoint',      'brightcove'),
+            get_string('oauthendpoint_help', 'brightcove'),
+            'https://oauth.brightcove.com/v4/', PARAM_URL));
+
+    $settings->add(new admin_setting_configtext('brightcove/apiendpoint',
+            get_string('apiendpoint',      'brightcove'),
+            get_string('apiendpoint_help', 'brightcove'),
+            'https://cms.api.brightcove.com/v1/', PARAM_URL));
+
 }

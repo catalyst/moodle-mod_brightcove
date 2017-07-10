@@ -37,22 +37,29 @@
     }
 
 }}
-
 <div style="display: block; position: relative; max-width: 75%; margin-left: auto; margin-right: auto;">
     <div style="padding-top: {{aspectratio}}%;">
         <video id="{{playerid}}"
                data-video-id="{{videoid}}" 
                data-account="{{accountid}}" 
                data-player="{{playerid}}" 
+               data-setup='{ "playbackRates": [0.5, 1, 1.5, 2.0] }' 
                data-embed="default" 
+               data-captions=" http://brightcove.vo.llnwd.net/v1/unsecured/media/5483960634001/201706/212/5483960634001_3a9acb3d-2e23-403c-b58c-fdf0a02b8fd3.vtt?pubId=5483960634001&videoId=5488076477001" 
                data-application-id 
                class="video-js" 
                controls 
                style="width: 100%; height: 100%; position: absolute; top: 0px; bottom: 0px; right: 0px; left: 0px;">
         </video>
         <script src="//players.brightcove.net/{{accountid}}/{{playerid}}_default/index.min.js"></script>
+        <script src="/mod/brightcove/player/videojs-transcript.min.js"></script>
         <script src="/mod/brightcove/player/download-video.js"></script>
+        <script src="/mod/brightcove/player/interactive-transcript.js"></script>
         <script>videojs('{{playerid}}').downloadVideoPlugin();</script>
+        <script>videojs('{{playerid}}').interactiveTranscriptPlugin();</script>
     </div>
 </div>
+<div id="transcript"></div>
 <p id="insertionPoint"></p>
+
+</p>

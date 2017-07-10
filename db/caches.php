@@ -15,20 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Brightcove cache definitions.
  *
- * @package     mod_brightcove
+ * @package    mod_brightcove
+ * @category   cache
  * @copyright   2017 Matt Porritt <mattp@catalyst-au.net>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->component = 'mod_brightcove';
-$plugin->version = 2017071006;
-$plugin->release = 2017071006;      // Same as version.
-$plugin->requires = 2016052304;
-$plugin->maturity = MATURITY_BETA;
-$plugin->dependencies = array(
-        'local_aws' => 2017030100
+$definitions = array(
+    // This MUST NOT be a local cache, sorry cluster lovers.
+    'apitoken' => array(
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true, // The course id or 0 for global.
+        'simpledata' => true
+    ),
 );

@@ -22,6 +22,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_brightcove\brightcove_api;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
@@ -58,6 +60,9 @@ $PAGE->set_url('/mod/brightcove/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
+
+$brightcove = new brightcove_api();
+$video = $brightcove->get_video($moduleinstance->videoid);
 
 $playervalues = new stdClass();
 $playervalues->accountid = $moduleconfig->accountid;
