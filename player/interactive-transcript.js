@@ -14,8 +14,8 @@ videojs.plugin('interactiveTranscriptPlugin', function() {
         var overlay = document.createElement('track');
         overlay.kind = 'captions';
         overlay.src = transcriptUrl;
-        overlay.srclang="en" 
-        overlay.label="English"
+        overlay.srclang="en";
+        overlay.label="English";
         myPlayer.el().getElementsByTagName("video")[0].appendChild(overlay);
 
         // Then attach the widget to the page.

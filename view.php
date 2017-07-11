@@ -56,11 +56,6 @@ if ($moduleinstance->aspectratio != 169) {
     $aspectratio = "75";
 }
 
-$PAGE->set_url('/mod/brightcove/view.php', array('id' => $cm->id));
-$PAGE->set_title(format_string($moduleinstance->name));
-$PAGE->set_heading(format_string($course->fullname));
-$PAGE->set_context($modulecontext);
-
 $brightcove = new brightcove_api();
 $video_transcript = $brightcove->get_transcript($moduleinstance->videoid);
 
@@ -70,6 +65,12 @@ $playervalues->playerid = $moduleconfig->playerid;
 $playervalues->videoid = $moduleinstance->videoid;
 $playervalues->aspectratio = $aspectratio;
 $playervalues->transcripturl = $video_transcript['src'];
+
+$PAGE->set_url('/mod/brightcove/view.php', array('id' => $cm->id));
+$PAGE->set_title(format_string($moduleinstance->name));
+$PAGE->set_heading(format_string($course->fullname));
+$PAGE->set_context($modulecontext);
+$PAGE->requires->js_call_amd('mod_brightcove/mark_transcript', 'init');
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('mod_brightcove/player', $playervalues);
