@@ -45,11 +45,11 @@ class brightcove_api {
      */
     public function __construct() {
         $this->config = get_config('brightcove');
-        $this->accountid= $this->config->accountid;
-        $this->apikey= $this->config->apikey;
-        $this->apisecret= $this->config->apisecret;
-        $this->oauthendpoint= $this->config->oauthendpoint;
-        $this->apiendpoint= $this->config->apiendpoint;
+        $this->accountid = $this->config->accountid;
+        $this->apikey = $this->config->apikey;
+        $this->apisecret = $this->config->apisecret;
+        $this->oauthendpoint = $this->config->oauthendpoint;
+        $this->apiendpoint = $this->config->apiendpoint;
 
         $this->client = new \GuzzleHttp\Client();
 
@@ -63,19 +63,18 @@ class brightcove_api {
      */
     private function generate_token() {
         $url = $this->config->oauthendpoint. 'access_token';
-        //$url = 'https://requestb.in/162r8o11';
         $authcreds = base64_encode ($this->apikey.':'.$this->apisecret);
         $authstring = 'Basic '.$authcreds;
         $headers = ['Authorization' => $authstring];
         $params = ['headers' => $headers,
-                   'form_params' => ['grant_type' => 'client_credentials',]
+                   'form_params' => ['grant_type' => 'client_credentials']
             ];
 
         $response = $this->client->request('POST', $url, $params);
         $responseobj = json_decode($response->getBody(), true);
         $accesstoken = $responseobj['access_token'];
 
-        // update cache with new token
+        // Update cache with new token.
         $cache = \cache::make('mod_brightcove', 'apitoken');
         $cache->set('token', $accesstoken);
 
@@ -94,9 +93,9 @@ class brightcove_api {
         $cache = \cache::make('mod_brightcove', 'apitoken');
         $token = '';
 
-        if (!$cache->get('token')){
-           // Token doesn't exist, get one
-           $token = $this->generate_token();
+        if (!$cache->get('token')) {
+            // Token doesn't exist, get one.
+            $token = $this->generate_token();
         } else {
             $token = $cache->get('token');
         }
@@ -107,13 +106,12 @@ class brightcove_api {
     /**
      * Get video object from Brightcove API.
      * Returns data about video based on given video ID.
-     * 
+     *
      * @param string $videoid The Brightcove ID of the video.
      * @param bool $retry Set true if we are retying based on auth denied condition.
      */
     public function get_video($videoid, $retry=true) {
         $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/videos/' . $videoid;
-        //$url = 'https://requestb.in/162r8o11';
         $token = $this->get_token();
         $params = ['headers' => ['Content-Type' => 'application/json',
                                  'Authorization' => 'Bearer ' . $token]];
@@ -135,8 +133,7 @@ class brightcove_api {
         // If we get a 401 response code it is likely our Bearer token has expired.
         // In this case we generate a new token and retry getting video details.
         // We only retry once.
-        if ($responsecode == 401 && $retry == true){
-            error_log('possible expired token, retrying once...');
+        if ($responsecode == 401 && $retry == true) {
             $this->generate_token();
             $responseobj = $this->get_video($videoid, false);
         }

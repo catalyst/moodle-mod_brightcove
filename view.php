@@ -57,21 +57,23 @@ if ($moduleinstance->aspectratio != 169) {
 }
 
 $brightcove = new brightcove_api();
-$video_transcript = $brightcove->get_transcript($moduleinstance->videoid);
+$videotranscript = $brightcove->get_transcript($moduleinstance->videoid);
 
 $playervalues = new stdClass();
 $playervalues->accountid = $moduleconfig->accountid;
 $playervalues->playerid = $moduleconfig->playerid;
 $playervalues->videoid = $moduleinstance->videoid;
 $playervalues->aspectratio = $aspectratio;
-$playervalues->transcripturl = $video_transcript['src'];
+$playervalues->transcripturl = $videotranscript['src'];
 
 $PAGE->set_url('/mod/brightcove/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
-$PAGE->requires->js(new moodle_url('https://players.brightcove.net/'.$moduleconfig->accountid.'/'.$moduleconfig->playerid.'_default/index.js'));
+$PAGE->requires->js(
+        new moodle_url('https://players.brightcove.net/'.$moduleconfig->accountid.'/'.$moduleconfig->playerid.'_default/index.js')
+        );
 $PAGE->requires->js_call_amd('mod_brightcove/brightcove', 'init', array($moduleconfig->playerid));
 $PAGE->requires->js_call_amd('mod_brightcove/videojs_transcript', 'init');
 $PAGE->requires->js_call_amd('mod_brightcove/mark_transcript', 'init');

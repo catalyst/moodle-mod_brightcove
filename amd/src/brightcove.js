@@ -76,8 +76,8 @@ define(['bc'], function() {
                 myPlayer.on('loadstart',function(){
                     // Set up any options.
                     var options = {
-                      showTitle: false,
-                      showTrackSelector: false,
+                        showTitle: false,
+                        showTrackSelector: false,
                     };
                     // Initialize the plugin.
                     var transcript = myPlayer.transcript(options);
@@ -86,22 +86,22 @@ define(['bc'], function() {
                     var overlay = document.createElement('track');
                     overlay.kind = 'captions';
                     overlay.src = transcriptUrl;
-                    overlay.srclang="en";
-                    overlay.label="English";
+                    overlay.srclang = "en";
+                    overlay.label = "English";
                     myPlayer.el().getElementsByTagName("video")[0].appendChild(overlay);
 
                     // Then attach the widget to the page.
                     var transcriptContainer = document.querySelector('#transcript');
-                    transcriptContainer.appendChild(transcript.el()); 
+                    transcriptContainer.appendChild(transcript.el());
                 });
             });
         }
 
-        // Call the plugin constructors
+        // Call the plugin constructors.
         constructDownloadPlugin(playerid);
         constructTranscriptPlugin(playerid);
 
-        // Attach the plugins to videoJS
+        // Attach the plugins to videoJS.
         videojs(playerid).downloadVideoPlugin();
         videojs(playerid).interactiveTranscriptPlugin();
     };
