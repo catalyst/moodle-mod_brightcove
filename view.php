@@ -70,6 +70,10 @@ $PAGE->set_url('/mod/brightcove/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
+
+$PAGE->requires->js(new moodle_url('https://players.brightcove.net/'.$moduleconfig->accountid.'/'.$moduleconfig->playerid.'_default/index.js'));
+$PAGE->requires->js_call_amd('mod_brightcove/brightcove', 'init', array($moduleconfig->playerid));
+$PAGE->requires->js_call_amd('mod_brightcove/videojs_transcript', 'init');
 $PAGE->requires->js_call_amd('mod_brightcove/mark_transcript', 'init');
 
 echo $OUTPUT->header();
