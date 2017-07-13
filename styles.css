@@ -1,0 +1,33 @@
+.transcript-line {
+    position: relative;
+}
+
+.transcript-timestamp {
+    width: 3em;
+    text-align: right;
+    padding-right: 6px;
+    position: absolute;
+    left: 0;
+}
+
+.transcript-text {
+    margin-left: 3em;
+    display: inline-block;
+}
+
+.transcript-line.is-active {
+    background: #c1d42b;
+    color: #003057;
+}
+
+.transcript-text mark {
+    background: #afe6af;
+    padding: 3px 3px;
+    margin: 0 -3px;
+}
+
+.transcript-text mark.current {
+    background: #2a66a9;
+    color: white;
+}
+
