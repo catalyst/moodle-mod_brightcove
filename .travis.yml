@@ -17,6 +17,7 @@ php:
 env:
  global:
   - IGNORE_PATHS=amd/src/videojs_transcript.js
+  - IGNORE_PATHS=amd/src/jquery.mark.js
   - IGNORE_NAMES=*.min.js
  matrix:
   - DB=pgsql MOODLE_BRANCH=MOODLE_32_STABLE
