@@ -77,6 +77,13 @@ $PAGE->requires->js(
 $PAGE->requires->js_call_amd('mod_brightcove/brightcove', 'init', array($moduleconfig->playerid));
 $PAGE->requires->js_call_amd('mod_brightcove/videojs_transcript', 'init');
 $PAGE->requires->js_call_amd('mod_brightcove/mark_transcript', 'init');
+$PAGE->requires->js_call_amd('mod_brightcove/activity_progress', 'init', [
+    [
+        'playerid' => $playervalues->playerid,
+        'cmid'     => $cm->id,
+        'userid'   => $USER->id,
+    ],
+]);
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('mod_brightcove/player', $playervalues);
