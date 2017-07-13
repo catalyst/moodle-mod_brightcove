@@ -1,3 +1,8 @@
+/**
+ * This file cannot be minified automatically using Moodle tools.
+ * This code was transformed into an amd module and has to be minified using the force parameter.
+ */
+
 /*! videojs-transcript - v0.8.1 - 2017-04-21
 * Copyright (c) 2017 Matthew Walsh; Licensed MIT */
 define(['bc'], function () {

@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @since      3.1
  */
-define(['jquery', 'mod_brightcove/jquery.mark'], function($, Mark) {
+define(['jquery', 'mod_brightcove/jquery.mark'], function($) {
 
     var MarkTranscript = {};
 
