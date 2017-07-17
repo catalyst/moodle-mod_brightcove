@@ -22,6 +22,7 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_activity_progress\output\progressbar_renderer;
 use mod_brightcove\brightcove_api;
 
 require(__DIR__.'/../../config.php');
@@ -85,6 +86,9 @@ $PAGE->requires->js_call_amd('mod_brightcove/activity_progress', 'init', [
     ],
 ]);
 
+$progressbar = progressbar_renderer::get();
+
 echo $OUTPUT->header();
+echo $progressbar->html();
 echo $OUTPUT->render_from_template('mod_brightcove/player', $playervalues);
 echo $OUTPUT->footer();
