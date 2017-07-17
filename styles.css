@@ -31,3 +31,64 @@
     color: white;
 }
 
+/**
+ * Mobile first
+ * Video with transcript underneath in portrait mode
+ */
+
+.mod_brightcove__layout {
+    position: relative;
+}
+
+.mod_brightcove__video {
+    position: relative;
+}
+
+
+.mod_brightcover__transcript {
+    /* Just enough in portrait for the video and the transcript */
+    max-height: 350px;
+    overflow-y: scroll;
+}
+
+/**
+ * Mobile in landscape mode
+ * Focus just on video?
+ */
+
+
+/**
+ * Large desktop
+ * Pull the transcript over to the right
+ */
+
+
+@media only screen and (min-width: 980px) {
+
+    .mod_brightcove__video {
+        margin-right: 23em;
+    }
+
+    .mod_brightcove__transcript_control {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 23em;
+    }
+
+    .mod_brightcover__transcript {
+        max-height: none;
+    }
+
+    .mod_brightcover__transcript {
+        max-height: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 70px; /* height of transcript search form */
+    }
+
+}
+
