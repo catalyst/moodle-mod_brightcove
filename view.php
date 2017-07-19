@@ -72,9 +72,8 @@ $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
-$PAGE->requires->js(
-        new moodle_url('https://players.brightcove.net/'.$moduleconfig->accountid.'/'.$moduleconfig->playerid.'_default/index.js')
-        );
+$brightcoveurl = '//players.brightcove.net/' . $moduleconfig->accountid . '/' . $moduleconfig->playerid . '_default/index';
+$PAGE->requires->js_amd_inline("requirejs.config({paths:{'bc':['{$brightcoveurl}']}});");
 $PAGE->requires->js_call_amd('mod_brightcove/brightcove', 'init', array($moduleconfig->playerid));
 $PAGE->requires->js_call_amd('mod_brightcove/videojs_transcript', 'init');
 $PAGE->requires->js_call_amd('mod_brightcove/mark_transcript', 'init');
