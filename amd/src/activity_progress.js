@@ -29,6 +29,7 @@ define(['local_activity_progress/user_progress', 'bc'], function (UserProgress) 
         this.intervalid = null;
 
         this.userProgressAPI = new UserProgress(cmid, userid);
+        this.userProgressAPI.addListener('received', this.onReceived.bind(this));
 
         this.player.on('play', this.onPlay.bind(this));
         this.player.on('pause', this.onPause.bind(this));
@@ -36,6 +37,13 @@ define(['local_activity_progress/user_progress', 'bc'], function (UserProgress) 
 
         window.console.debug('BrightcoveProgress [new]', this);
     }
+
+    BrightcoveProgress.prototype.onReceived = function (event) {
+        var data = event.detail;
+        var progress = data.progress;
+        window.console.log('My percentage is: ', progress);
+        // this.player.playFromThisPosition(object)
+    };
 
     BrightcoveProgress.prototype.onPlay = function () {
         window.console.debug('BrightcoveProgress.onPlay');
