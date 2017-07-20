@@ -16,8 +16,7 @@
 }
 
 .transcript-line.is-active {
-    background: #c1d42b;
-    color: #003057;
+    background: rgba(0, 55, 104, 0.41);
 }
 
 .transcript-text mark {
@@ -66,7 +65,7 @@
 @media only screen and (min-width: 980px) {
 
     .mod_brightcove__video {
-        margin-right: 23em;
+        margin-right: 24em;
     }
 
     .mod_brightcove__transcript_control {
