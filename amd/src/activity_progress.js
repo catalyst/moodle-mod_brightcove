@@ -29,19 +29,19 @@ define(['local_activity_progress/user_progress', 'bc'], function (UserProgress) 
         this.intervalid = null;
 
         this.userProgressAPI = new UserProgress(cmid, userid);
-        this.userProgressAPI.addListener('received', this.onReceived.bind(this));
 
         this.player.on('play', this.onPlay.bind(this));
         this.player.on('pause', this.onPause.bind(this));
         this.player.on('ended', this.onEnded.bind(this));
+        this.player.on('loadedmetadata', this.onLoadedmetadata.bind(this));
 
         window.console.debug('BrightcoveProgress [new]', this);
     }
 
-    BrightcoveProgress.prototype.onReceived = function (event) {
-        var data = event.detail;
-        var progress = data.progress;
-        window.console.log('My percentage is: ', progress);
+    BrightcoveProgress.prototype.onLoadedmetadata = function (event) {
+        var progress= this.player.el().dataset.progress;
+        window.console.log('My duration is: ', this.player.duration());
+        window.console.log('My progress percent is: ', progress);
         // this.player.playFromThisPosition(object)
     };
 

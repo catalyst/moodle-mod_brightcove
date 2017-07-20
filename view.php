@@ -27,6 +27,7 @@ use mod_brightcove\brightcove_api;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
+require_once($CFG->dirroot . '/local/activity_progress/externallib.php');
 
 // Course_module ID, or.
 $id = optional_param('id', 0, PARAM_INT);
@@ -50,6 +51,7 @@ require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
 $moduleconfig = get_config('brightcove');
+$activityobject = local_activity_progress_external::get_user_progress($cm->id, $USER->id);
 
 // Calulate video aspect ratio.
 $aspectratio = "56.25";
@@ -66,6 +68,7 @@ $playervalues->playerid = $moduleconfig->playerid;
 $playervalues->videoid = $moduleinstance->videoid;
 $playervalues->aspectratio = $aspectratio;
 $playervalues->transcripturl = $videotranscript['src'];
+$playervalues->progress = $activityobject['progress'];
 
 $PAGE->set_url('/mod/brightcove/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($moduleinstance->name));
