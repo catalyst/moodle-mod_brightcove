@@ -39,7 +39,7 @@ define(['local_activity_progress/user_progress', 'bc'], function (UserProgress) 
     }
 
     BrightcoveProgress.prototype.onLoadedmetadata = function (event) {
-        var progressPercent= this.player.el().dataset.progress;
+        var progressPercent = this.player.el().dataset.progress;
         var totalDuration = this.player.duration();
         var playedDuration = (totalDuration * (progressPercent / 100)).toFixed(3);
         var startPosition = 0;
