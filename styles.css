@@ -16,7 +16,7 @@
 }
 
 .transcript-line.is-active {
-    background: rgba(0, 55, 104, 0.41);
+    background: rgba(0, 55, 104, 0.2);
 }
 
 .transcript-text mark {
