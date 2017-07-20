@@ -39,10 +39,18 @@ define(['local_activity_progress/user_progress', 'bc'], function (UserProgress) 
     }
 
     BrightcoveProgress.prototype.onLoadedmetadata = function (event) {
-        var progress= this.player.el().dataset.progress;
-        window.console.log('My duration is: ', this.player.duration());
-        window.console.log('My progress percent is: ', progress);
-        // this.player.playFromThisPosition(object)
+        var progressPercent= this.player.el().dataset.progress;
+        var totalDuration = this.player.duration();
+        var playedDuration = (totalDuration * (progressPercent / 100)).toFixed(3);
+        var startPosition = 0;
+
+        if (progressPercent > 98) {
+            startPosition = 0;
+        } else {
+            startPosition = playedDuration;
+        }
+
+        this.player.currentTime(startPosition);
     };
 
     BrightcoveProgress.prototype.onPlay = function () {
