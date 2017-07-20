@@ -24,7 +24,7 @@ define(['local_activity_progress/user_progress', 'bc'], function (UserProgress) 
     /* global videojs */
 
     function BrightcoveProgress(playerid, cmid, userid) {
-        this.updateIntervalMS = 500; // The UserProgress will probably save it less frequent than that.
+        this.updateIntervalMS = 1000 / 24;
         this.player = videojs(playerid);
         this.intervalid = null;
 
@@ -77,7 +77,7 @@ define(['local_activity_progress/user_progress', 'bc'], function (UserProgress) 
     BrightcoveProgress.prototype.updateProgress = function () {
         var current = this.player.currentTime();
         var duration = this.player.duration();
-        var percentage = Math.round(current / duration * 100);
+        var percentage = current / duration * 100;
 
         window.console.debug('BrightcoveProgress', current, duration, percentage);
         this.userProgressAPI.update(percentage);
