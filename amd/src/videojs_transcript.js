@@ -371,6 +371,7 @@ define(['bc'], function () {
                 (plugin.settings.clickArea === 'timestamp' && clickedClasses.contains(plugin.prefix + '-timestamp')) ||
                 (plugin.settings.clickArea === 'text' && clickedClasses.contains(plugin.prefix + '-text'))) {
                 plugin.player.currentTime(clickedTime);
+                plugin.player.play();
               }
             }
           };
@@ -454,6 +455,7 @@ define(['bc'], function () {
               if (time > begin && time < end) {
                 if (!line.classList.contains('is-active')) { // don't update if it hasn't changed
                   line.classList.add('is-active');
+                  line.focus();
                   if (plugin.settings.autoscroll && !(plugin.settings.stopScrollWhenInUse && my.body.scroll.inUse())) {
                       my.body.scroll.to(line);
                   }

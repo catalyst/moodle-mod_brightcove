@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
 function mod_brightcove_supports($feature) {
     switch ($feature) {
         case FEATURE_GRADE_HAS_GRADE:
-            return true;
+            return false;
         case FEATURE_MOD_INTRO:
             return true;
         case FEATURE_SHOW_DESCRIPTION:
@@ -100,109 +100,6 @@ function brightcove_delete_instance($id) {
     $DB->delete_records('brightcove', array('id' => $id));
 
     return true;
-}
-
-/**
- * Is a given scale used by the instance of mod_brightcove?
- *
- * This function returns if a scale is being used by one mod_brightcove
- * if it has support for grading and scales.
- *
- * @param int $moduleinstanceid ID of an instance of this module.
- * @param int $scaleid ID of the scale.
- * @return bool True if the scale is used by the given mod_brightcove instance.
- */
-function brightcove_scale_used($moduleinstanceid, $scaleid) {
-    global $DB;
-
-    if ($scaleid && $DB->record_exists('brightcove', array('id' => $moduleinstanceid, 'grade' => -$scaleid))) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- * Checks if scale is being used by any instance of mod_brightcove.
- *
- * This is used to find out if scale used anywhere.
- *
- * @param int $scaleid ID of the scale.
- * @return bool True if the scale is used by any mod_brightcove instance.
- */
-function brightcove_scale_used_anywhere($scaleid) {
-    global $DB;
-
-    if ($scaleid and $DB->record_exists('brightcove', array('grade' => -$scaleid))) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- * Creates or updates grade item for the given mod_brightcove instance.
- *
- * Needed by {@link grade_update_mod_grades()}.
- *
- * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
- * @param bool $reset Reset grades in the gradebook.
- * @return void.
- */
-function brightcove_grade_item_update($moduleinstance, $reset=false) {
-    global $CFG;
-    require_once($CFG->libdir.'/gradelib.php');
-
-    $item = array();
-    $item['itemname'] = clean_param($moduleinstance->name, PARAM_NOTAGS);
-    $item['gradetype'] = GRADE_TYPE_VALUE;
-
-    if ($moduleinstance->grade > 0) {
-        $item['gradetype'] = GRADE_TYPE_VALUE;
-        $item['grademax']  = $moduleinstance->grade;
-        $item['grademin']  = 0;
-    } else if ($moduleinstance->grade < 0) {
-        $item['gradetype'] = GRADE_TYPE_SCALE;
-        $item['scaleid']   = -$moduleinstance->grade;
-    } else {
-        $item['gradetype'] = GRADE_TYPE_NONE;
-    }
-    if ($reset) {
-        $item['reset'] = true;
-    }
-
-    grade_update('/mod/brightcove', $moduleinstance->course, 'mod', 'mod_brightcove', $moduleinstance->id, 0, null, $item);
-}
-
-/**
- * Delete grade item for given mod_brightcove instance.
- *
- * @param stdClass $moduleinstance Instance object.
- * @return grade_item.
- */
-function brightcove_grade_item_delete($moduleinstance) {
-    global $CFG;
-    require_once($CFG->libdir.'/gradelib.php');
-
-    return grade_update('/mod/brightcove', $moduleinstance->course, 'mod', 'brightcove',
-                        $moduleinstance->id, 0, null, array('deleted' => 1));
-}
-
-/**
- * Update mod_brightcove grades in the gradebook.
- *
- * Needed by {@link grade_update_mod_grades()}.
- *
- * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
- * @param int $userid Update grade of specific user only, 0 means all participants.
- */
-function brightcove_update_grades($moduleinstance, $userid = 0) {
-    global $CFG, $DB;
-    require_once($CFG->libdir.'/gradelib.php');
-
-    // Populate array of grade objects indexed by userid.
-    $grades = array();
-    grade_update('/mod/brightcove', $moduleinstance->course, 'mod', 'mod_brightcove', $moduleinstance->id, 0, $grades);
 }
 
 /**
