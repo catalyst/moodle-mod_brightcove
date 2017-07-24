@@ -55,7 +55,7 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, U
                 $('.vjs-poster').show();
             }
         });
-        $('.vjs-big-play-button').show();
+        $('.vjs-big-play-button').show().focus();
 
         this.player.currentTime(startPosition);
     };
