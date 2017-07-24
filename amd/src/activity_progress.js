@@ -20,25 +20,20 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @module      mod_brightcove/activity_progress
  */
-define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, UserProgress) {
+define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, userProgress) {
     /* global videojs */
 
-    function BrightcoveProgress(playerid, cmid, userid) {
-        this.playerid = playerid;
+    function BrightcoveProgress() {
+        window.console.debug('BrightcoveProgress [new]');
+
+        this.playerid = null;
+        this.player = null;
+        this.userProgressAPI = userProgress;
         this.updateIntervalMS = 1000 / 24;
-        this.player = videojs(playerid);
         this.intervalid = null;
-        this.userProgressAPI = new UserProgress(cmid, userid);
-
-        this.player.on('play', this.onPlay.bind(this));
-        this.player.on('pause', this.onPause.bind(this));
-        this.player.on('ended', this.onEnded.bind(this));
-        this.player.on('loadedmetadata', this.onLoadedmetadata.bind(this));
-
-        window.console.debug('BrightcoveProgress [new]', this);
     }
 
-    BrightcoveProgress.prototype.onLoadedmetadata = function (event) {
+    BrightcoveProgress.prototype.onLoadedmetadata = function () {
         var progressPercent = this.player.el().dataset.progress;
         var totalDuration = this.player.duration();
         var playedDuration = (totalDuration * (progressPercent / 100)).toFixed(3);
@@ -51,7 +46,7 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, U
         }
 
         $('#' + this.playerid).removeClass('notHover vjs-paused ').addClass('vjs-has-started').each(function(){
-            if (startPosition == 0){
+            if (startPosition == 0) {
                 $('.vjs-poster').show();
             }
         });
@@ -99,13 +94,24 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, U
         var percentage = current / duration * 100;
 
         window.console.debug('BrightcoveProgress', current, duration, percentage);
-        this.userProgressAPI.update(percentage);
-    };
 
-    return {
-        init: function (parameters) {
-            window.console.debug('BrightcoveProgress [init]', parameters);
-            new BrightcoveProgress(parameters.playerid, parameters.cmid, parameters.userid);
+        if (!isNaN(percentage)) {
+            this.userProgressAPI.update(percentage);
         }
     };
+
+    BrightcoveProgress.prototype.init = function (parameters) {
+        window.console.debug('BrightcoveProgress.init', parameters);
+
+        this.playerid = parameters.playerid;
+        this.player = videojs(this.playerid);
+        this.userProgressAPI.initialise(parameters.cmid, parameters.userid);
+
+        this.player.on('play', this.onPlay.bind(this));
+        this.player.on('pause', this.onPause.bind(this));
+        this.player.on('ended', this.onEnded.bind(this));
+        this.player.on('loadedmetadata', this.onLoadedmetadata.bind(this));
+    };
+
+    return new BrightcoveProgress();
 });
