@@ -30,6 +30,6 @@ $plugin->release = 2017072000;      // Same as version.
 $plugin->requires = 2016052304;
 $plugin->maturity = MATURITY_BETA;
 $plugin->dependencies = array(
-    'local_activity_progress' => 2017072401,
+    'local_activity_progress' => 2017072500,
     'local_aws'               => 2017030100
 );
