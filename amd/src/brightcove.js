@@ -39,8 +39,6 @@ define(['bc'], function() {
                     mp4Ara = [],
                     highestQuality;
 
-                myPlayer.el().dataset.player
-
                 myPlayer.on('loadstart',function(){
 
                     // Reinitialize array of MP4 renditions in case used with playlist.
@@ -62,7 +60,7 @@ define(['bc'], function() {
                     // Set the highest rendition.
                     highestQuality = mp4Ara[0].src;
 
-                    downloadString = "<a class='btn btn-secondary href='" + highestQuality + "' download='" + videoName + "'>Download</a>";
+                    downloadString = "<a class='btn btn-secondary' href='" + highestQuality + "' download='" + videoName + "'>Download</a>";
                     document.getElementById('insertionPoint').innerHTML = downloadString;
                 });
             });
@@ -97,13 +95,51 @@ define(['bc'], function() {
             });
         }
 
+     // Construct the download transcript plugin.
+        function constructDownloadTranscriptPlugin(playerid) {
+            videojs.registerPlugin('downloadTranscriptPlugin', function() {
+
+                // Create variables and new div, anchor and image for download icon.
+                var myPlayer = this;
+
+                myPlayer.on('loadstart',function(){
+                    var transcriptUrl = myPlayer.el().dataset.captions;
+                    var xhr = new XMLHttpRequest();
+                    var re = new RegExp('[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+\s\-\-\>\s[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+'); // Probably should use capture groups to make this nicer
+                    xhr.onreadystatechange = function(){
+                        if (this.readyState == 4 && this.status == 200){
+                            // Some horrible RegEx based string replacement
+                            var downloadableText = this.response.replace(/WEBVTT(\n|\r)/, '');
+                            downloadableText = downloadableText.replace(/[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+\s\-\-\>\s[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+/g, '');
+                            downloadableText = downloadableText.replace(/\n|\r/g, '');
+                            downloadableText = downloadableText.replace(/\?/g, '?\n');
+                            downloadableText = downloadableText.replace(/(\.\s)|(\.)/g, '.\n');
+
+                            var textBlob = new Blob([downloadableText], {type: "text/plain"});
+                            var textUrl = window.URL.createObjectURL(textBlob);
+                            var textDownload = 'transcript.txt';
+
+                            transcriptDownloadString = "<a class='btn btn-secondary' href='" + textUrl + "' download='" + textDownload + "'>Transcript Download</a>";
+                            document.getElementById('downloadTranscript').innerHTML = transcriptDownloadString;
+
+                        }
+                    }
+                    xhr.open('GET', transcriptUrl);
+                    xhr.responseType = 'text';
+                    xhr.send();
+                });
+            });
+        }
+
         // Call the plugin constructors.
         constructDownloadPlugin(playerid);
         constructTranscriptPlugin(playerid);
+        constructDownloadTranscriptPlugin(playerid);
 
         // Attach the plugins to videoJS.
         videojs(playerid).downloadVideoPlugin();
         videojs(playerid).interactiveTranscriptPlugin();
+        videojs(playerid).downloadTranscriptPlugin();
     };
 
     return Brightcove;
