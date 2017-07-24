@@ -155,4 +155,17 @@ class brightcove_api {
         return $texttracks[0];
 
     }
+
+    /**
+     * Returns video name for the given video ID.
+     *
+     * @param string $videoid The Brightcove ID of the video.
+     * @return string $videoname Video name.
+     */
+    public function get_videoname($videoid) {
+        $videoobj = $this->get_video($videoid);
+        $videoname = $videoobj['name'];
+
+        return $videoname;
+    }
 }

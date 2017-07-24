@@ -61,6 +61,7 @@ if ($moduleinstance->aspectratio != 169) {
 
 $brightcove = new brightcove_api();
 $videotranscript = $brightcove->get_transcript($moduleinstance->videoid);
+$videoname = $brightcove->get_videoname($moduleinstance->videoid);
 
 $playervalues = new stdClass();
 $playervalues->accountid = $moduleconfig->accountid;
@@ -71,8 +72,8 @@ $playervalues->transcripturl = $videotranscript['src'];
 $playervalues->progress = $activityobject['progress'];
 
 $PAGE->set_url('/mod/brightcove/view.php', array('id' => $cm->id));
-$PAGE->set_title(format_string($moduleinstance->name));
-$PAGE->set_heading(format_string($course->fullname));
+$PAGE->set_title(format_string($videoname));
+$PAGE->set_heading(format_string($videoname));
 $PAGE->set_context($modulecontext);
 
 $brightcoveurl = '//players.brightcove.net/' . $moduleconfig->accountid . '/' . $moduleconfig->playerid . '_default/index';
@@ -89,6 +90,7 @@ $PAGE->requires->js_call_amd('mod_brightcove/activity_progress', 'init', [
 ]);
 
 echo $OUTPUT->header();
+echo $OUTPUT->heading(format_string($videoname), 2);
 echo html_helper::progress_bar($cm->id);
 echo $OUTPUT->render_from_template('mod_brightcove/player', $playervalues);
 echo $OUTPUT->footer();
