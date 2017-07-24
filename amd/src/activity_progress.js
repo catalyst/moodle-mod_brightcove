@@ -28,8 +28,6 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, U
         this.updateIntervalMS = 1000 / 24;
         this.player = videojs(playerid);
         this.intervalid = null;
-
-
         this.userProgressAPI = new UserProgress(cmid, userid);
 
         this.player.on('play', this.onPlay.bind(this));
