@@ -52,15 +52,19 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, U
             startPosition = playedDuration;
         }
 
-        if (startPosition != 0){
-            $('#' + this.playerid).removeClass('notHover vjs-paused ').addClass('vjs-has-started');
-            $('.vjs-big-play-button').show();
-        }
+        $('#' + this.playerid).removeClass('notHover vjs-paused ').addClass('vjs-has-started').each(function(){
+            if (startPosition == 0){
+                $('.vjs-poster').show();
+            }
+        });
+        $('.vjs-big-play-button').show();
+
         this.player.currentTime(startPosition);
     };
 
     BrightcoveProgress.prototype.onPlay = function () {
         $('.vjs-big-play-button').hide();
+        $('.vjs-poster').hide();
         window.console.debug('BrightcoveProgress.onPlay');
         this.startMonitoring();
     };
