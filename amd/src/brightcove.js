@@ -95,7 +95,7 @@ define(['bc'], function() {
             });
         }
 
-     // Construct the download transcript plugin.
+        // Construct the download transcript plugin.
         function constructDownloadTranscriptPlugin(playerid) {
             videojs.registerPlugin('downloadTranscriptPlugin', function() {
 
@@ -105,10 +105,9 @@ define(['bc'], function() {
                 myPlayer.on('loadstart',function(){
                     var transcriptUrl = myPlayer.el().dataset.captions;
                     var xhr = new XMLHttpRequest();
-                    var re = new RegExp('[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+\s\-\-\>\s[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+'); // Probably should use capture groups to make this nicer
                     xhr.onreadystatechange = function(){
                         if (this.readyState == 4 && this.status == 200){
-                            // Some horrible RegEx based string replacement
+                            // Some horrible RegEx based string replacement.
                             var downloadableText = this.response.replace(/WEBVTT(\n|\r)/, '');
                             downloadableText = downloadableText.replace(/[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+\s\-\-\>\s[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+/g, '');
                             downloadableText = downloadableText.replace(/\n|\r/g, '');
