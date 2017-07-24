@@ -20,13 +20,15 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @module      mod_brightcove/activity_progress
  */
-define(['local_activity_progress/user_progress', 'bc'], function (UserProgress) {
+define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, UserProgress) {
     /* global videojs */
 
     function BrightcoveProgress(playerid, cmid, userid) {
+        this.playerid = playerid;
         this.updateIntervalMS = 1000 / 24;
         this.player = videojs(playerid);
         this.intervalid = null;
+
 
         this.userProgressAPI = new UserProgress(cmid, userid);
 
@@ -50,15 +52,21 @@ define(['local_activity_progress/user_progress', 'bc'], function (UserProgress) 
             startPosition = playedDuration;
         }
 
+        if (startPosition != 0){
+            $('#' + this.playerid).removeClass('notHover vjs-paused ').addClass('vjs-has-started');
+            $('.vjs-big-play-button').show();
+        }
         this.player.currentTime(startPosition);
     };
 
     BrightcoveProgress.prototype.onPlay = function () {
+        $('.vjs-big-play-button').hide();
         window.console.debug('BrightcoveProgress.onPlay');
         this.startMonitoring();
     };
 
     BrightcoveProgress.prototype.onPause = function () {
+        $('.vjs-big-play-button').show();
         window.console.debug('BrightcoveProgress.onPause');
         this.stopMonitoring();
     };
