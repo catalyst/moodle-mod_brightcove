@@ -456,6 +456,7 @@ define(['bc'], function () {
                 if (!line.classList.contains('is-active')) { // don't update if it hasn't changed
                   line.classList.add('is-active');
                   line.blur();
+                  line.scrollIntoView({block: "start", behavior: "smooth"});
                   if (plugin.settings.autoscroll && !(plugin.settings.stopScrollWhenInUse && my.body.scroll.inUse())) {
                       my.body.scroll.to(line);
                   }
