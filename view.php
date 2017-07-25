@@ -95,6 +95,4 @@ echo $OUTPUT->render_from_template('mod_brightcove/player', $playervalues);
 
 echo html_helper::emoticon();
 
-echo html_helper::next_previous_links();
-
 echo $OUTPUT->footer();
