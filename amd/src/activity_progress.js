@@ -54,24 +54,22 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, u
         $('.vjs-play-control').focus();
 
         this.player.currentTime(startPosition);
-    };
-
-    BrightcoveProgress.prototype.onPlay = function () {
-        $('.vjs-big-play-button').hide();
-        $('.vjs-poster').hide();
-        window.console.debug('BrightcoveProgress.onPlay');
         this.startMonitoring();
     };
 
+    BrightcoveProgress.prototype.onPlay = function () {
+        window.console.debug('BrightcoveProgress.onPlay');
+        $('.vjs-big-play-button').hide();
+        $('.vjs-poster').hide();
+    };
+
     BrightcoveProgress.prototype.onPause = function () {
-        $('.vjs-big-play-button').show();
         window.console.debug('BrightcoveProgress.onPause');
-        this.stopMonitoring();
+        $('.vjs-big-play-button').show();
     };
 
     BrightcoveProgress.prototype.onEnded = function () {
         window.console.debug('BrightcoveProgress.onEnded');
-        this.stopMonitoring();
         this.userProgressAPI.update(100);
         this.userProgressAPI.saveNow();
     };
