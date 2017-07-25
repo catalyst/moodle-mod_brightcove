@@ -66,6 +66,7 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, u
     BrightcoveProgress.prototype.onPause = function () {
         window.console.debug('BrightcoveProgress.onPause');
         $('.vjs-big-play-button').show();
+        this.userProgressAPI.saveNow();
     };
 
     BrightcoveProgress.prototype.onEnded = function () {
