@@ -72,7 +72,6 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, u
     BrightcoveProgress.prototype.onEnded = function () {
         window.console.debug('BrightcoveProgress.onEnded');
         this.userProgressAPI.update(100);
-        this.userProgressAPI.saveNow();
     };
 
     BrightcoveProgress.prototype.stopMonitoring = function () {
