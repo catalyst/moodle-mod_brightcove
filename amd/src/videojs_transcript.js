@@ -5,7 +5,7 @@
 
 /*! videojs-transcript - v0.8.1 - 2017-04-21
 * Copyright (c) 2017 Matthew Walsh; Licensed MIT */
-define(['bc'], function () {
+define(['jquery', 'bc'], function ($) {
 
     var videojsTranscript = {};
     videojsTranscript.init = function (){
@@ -456,10 +456,9 @@ define(['bc'], function () {
                 if (!line.classList.contains('is-active')) { // don't update if it hasn't changed
                   line.classList.add('is-active');
                   line.blur();
-                  line.scrollIntoView({block: "start", behavior: "smooth"});
-                  if (plugin.settings.autoscroll && !(plugin.settings.stopScrollWhenInUse && my.body.scroll.inUse())) {
-                      my.body.scroll.to(line);
-                  }
+                  //line.scrollIntoView({block: "start", behavior: "smooth"});
+                  var target = document.getElementById("transcript");
+                  target.scrollTop = line.offsetTop;
                 }
               } else {
                 line.classList.remove('is-active');
