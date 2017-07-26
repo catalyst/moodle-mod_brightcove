@@ -45,6 +45,7 @@ $string['brightcove:addinstance'] = 'Add Brightcove activity';
 $string['brightcovename'] = 'Activity name';
 $string['brightcovename_help'] = 'This is the name that will be displayed to users.';
 $string['cachedef_apitoken'] = 'Brightcove API token cache';
+$string['notconfigured'] = 'The Brightcove plugin is missing required site level configuration. Please contact your Administrator.';
 $string['oauthendpoint'] = 'Brightcove OAuth Endpoint';
 $string['oauthendpoint_help'] = 'The endpoint URL for the Brightcove Oauth API, used to generate tokens';
 $string['playerid'] = 'Player ID';

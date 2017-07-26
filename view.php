@@ -53,46 +53,62 @@ $modulecontext = context_module::instance($cm->id);
 $moduleconfig = get_config('brightcove');
 $activityobject = local_activity_progress_external::get_user_progress($cm->id, $USER->id);
 
-// Calulate video aspect ratio.
-$aspectratio = "56.25";
-if ($moduleinstance->aspectratio != 169) {
-    $aspectratio = "75";
-}
-
-$brightcove = new brightcove_api();
-$videotranscript = $brightcove->get_transcript($moduleinstance->videoid);
-
-$playervalues = new stdClass();
-$playervalues->accountid = $moduleconfig->accountid;
-$playervalues->playerid = $moduleconfig->playerid;
-$playervalues->videoid = $moduleinstance->videoid;
-$playervalues->aspectratio = $aspectratio;
-$playervalues->transcripturl = $videotranscript;
-$playervalues->progress = $activityobject['progress'];
+// Check if we have a configured Brightcove instance
+$pluginconfigured = true;
+if ($moduleconfig->accountid == ''
+        || $moduleconfig->playerid == ''
+        || $moduleconfig->apikey == ''
+        || $moduleconfig->apisecret == ''
+        || $moduleconfig->oauthendpoint == ''
+        || $moduleconfig->apiendpoint == '') {
+            $pluginconfigured = false;
+        }
 
 $PAGE->set_url('/mod/brightcove/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($moduleinstance->name));
 $PAGE->set_context($modulecontext);
 
-$brightcoveurl = '//players.brightcove.net/' . $moduleconfig->accountid . '/' . $moduleconfig->playerid . '_default/index';
-$PAGE->requires->js_amd_inline("requirejs.config({paths:{'bc':['{$brightcoveurl}']}});");
-$PAGE->requires->js_call_amd('mod_brightcove/brightcove', 'init', array($moduleconfig->playerid));
-$PAGE->requires->js_call_amd('mod_brightcove/videojs_transcript', 'init');
-$PAGE->requires->js_call_amd('mod_brightcove/mark_transcript', 'init');
-$PAGE->requires->js_call_amd('mod_brightcove/activity_progress', 'init', [
-    [
-        'playerid' => $playervalues->playerid,
-        'cmid'     => $cm->id,
-        'userid'   => $USER->id,
-    ],
-]);
+if ($pluginconfigured) {
+    // Calulate video aspect ratio.
+    $aspectratio = "56.25";
+    if ($moduleinstance->aspectratio != 169) {
+        $aspectratio = "75";
+    }
+
+    $brightcove = new brightcove_api();
+    $videotranscript = $brightcove->get_transcript($moduleinstance->videoid);
+
+    $playervalues = new stdClass();
+    $playervalues->accountid = $moduleconfig->accountid;
+    $playervalues->playerid = $moduleconfig->playerid;
+    $playervalues->videoid = $moduleinstance->videoid;
+    $playervalues->aspectratio = $aspectratio;
+    $playervalues->transcripturl = $videotranscript;
+    $playervalues->progress = $activityobject['progress'];
+
+    $brightcoveurl = '//players.brightcove.net/' . $moduleconfig->accountid . '/' . $moduleconfig->playerid . '_default/index';
+    $PAGE->requires->js_amd_inline("requirejs.config({paths:{'bc':['{$brightcoveurl}']}});");
+    $PAGE->requires->js_call_amd('mod_brightcove/brightcove', 'init', array($moduleconfig->playerid));
+    $PAGE->requires->js_call_amd('mod_brightcove/videojs_transcript', 'init');
+    $PAGE->requires->js_call_amd('mod_brightcove/mark_transcript', 'init');
+    $PAGE->requires->js_call_amd('mod_brightcove/activity_progress', 'init', [
+        [
+            'playerid' => $playervalues->playerid,
+            'cmid'     => $cm->id,
+            'userid'   => $USER->id,
+        ],
+    ]);
+}
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($moduleinstance->name), 2);
 echo html_helper::progress_bar($cm->id);
-echo $OUTPUT->render_from_template('mod_brightcove/player', $playervalues);
-
+if ($pluginconfigured) {
+ echo $OUTPUT->render_from_template('mod_brightcove/player', $playervalues);
+} else {
+    echo $OUTPUT->heading(get_string('notconfigured', 'brightcove'), 5);
+}
 echo html_helper::emoticon();
 
 echo $OUTPUT->footer();
