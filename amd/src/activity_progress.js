@@ -24,8 +24,6 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, u
     /* global videojs */
 
     function BrightcoveProgress() {
-        window.console.debug('BrightcoveProgress [new]');
-
         this.playerid = null;
         this.player = null;
         this.userProgressAPI = userProgress;
@@ -58,19 +56,16 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, u
     };
 
     BrightcoveProgress.prototype.onPlay = function () {
-        window.console.debug('BrightcoveProgress.onPlay');
         $('.vjs-big-play-button').hide();
         $('.vjs-poster').hide();
     };
 
     BrightcoveProgress.prototype.onPause = function () {
-        window.console.debug('BrightcoveProgress.onPause');
         $('.vjs-big-play-button').show();
         this.userProgressAPI.saveNow();
     };
 
     BrightcoveProgress.prototype.onEnded = function () {
-        window.console.debug('BrightcoveProgress.onEnded');
         this.userProgressAPI.update(100);
     };
 
@@ -91,16 +86,12 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, u
         var duration = this.player.duration();
         var percentage = current / duration * 100;
 
-        window.console.debug('BrightcoveProgress', current, duration, percentage);
-
         if (!isNaN(percentage)) {
             this.userProgressAPI.update(percentage);
         }
     };
 
     BrightcoveProgress.prototype.init = function (parameters) {
-        window.console.debug('BrightcoveProgress.init', parameters);
-
         this.playerid = parameters.playerid;
         this.player = videojs(this.playerid);
         this.userProgressAPI.initialise(parameters.cmid, parameters.userid);
