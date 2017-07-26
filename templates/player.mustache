@@ -56,20 +56,23 @@
             </video>
         </div>
     </div>
+
     <div class="mod_brightcove__transcript_control">
         <div class="header form-inline">
-<!--
-            <label class="mr-sm-2" for="bc-search">Search:</label>
--->
-            <input id="bc-search" type="search" placeholder="Search transcript" class="form-control mb-2 mr-sm-2 mb-sm-0">
-            <button class="btn btn-secondary" data-search="next">&darr;</button>
-            <button class="btn btn-secondary" data-search="prev">&uarr;</button>
-            <button class="btn btn-secondary" data-search="clear">✖</button>
+            {{#transcripturl }}
+                <input id="bc-search" type="search" placeholder="Search transcript" class="form-control mb-2 mr-sm-2 mb-sm-0">
+                <button class="btn btn-secondary" data-search="next">&darr;</button>
+                <button class="btn btn-secondary" data-search="prev">&uarr;</button>
+                <button class="btn btn-secondary" data-search="clear">✖</button>
+                <span id="downloadTranscript"></span>
+            {{/transcripturl }}
             <span id="insertionPoint"></span>
-            <span id="downloadTranscript"></span>
         </div>
-        <div class="mod_brightcover__transcript" id="transcript"></div>
+        {{#transcripturl }}
+            <div class="mod_brightcover__transcript" id="transcript"></div>
+        {{/transcripturl }}
     </div>
+
 </div>
 
 </p>

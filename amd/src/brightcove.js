@@ -60,7 +60,7 @@ define(['bc'], function() {
                     // Set the highest rendition.
                     highestQuality = mp4Ara[0].src;
 
-                    downloadString = "<a class='btn btn-secondary' href='" + highestQuality + "' download='" + videoName + "'>Download</a>";
+                    downloadString = "<a class='btn btn-secondary' href='" + highestQuality + "' download='" + videoName + "'>Download Video</a>";
                     document.getElementById('insertionPoint').innerHTML = downloadString;
                 });
             });
@@ -77,20 +77,23 @@ define(['bc'], function() {
                         showTitle: false,
                         showTrackSelector: false,
                     };
-                    // Initialize the plugin.
-                    var transcript = myPlayer.transcript(options);
+
                     var transcriptUrl = myPlayer.el().dataset.captions
 
-                    var overlay = document.createElement('track');
-                    overlay.kind = 'captions';
-                    overlay.src = transcriptUrl;
-                    overlay.srclang = "en";
-                    overlay.label = "English";
-                    myPlayer.el().getElementsByTagName("video")[0].appendChild(overlay);
+                    if (transcriptUrl != ''){
+                     // Initialize the plugin.
+                        var transcript = myPlayer.transcript(options);
+                        var overlay = document.createElement('track');
+                        overlay.kind = 'captions';
+                        overlay.src = transcriptUrl;
+                        overlay.srclang = "en";
+                        overlay.label = "English";
+                        myPlayer.el().getElementsByTagName("video")[0].appendChild(overlay);
 
-                    // Then attach the widget to the page.
-                    var transcriptContainer = document.querySelector('#transcript');
-                    transcriptContainer.appendChild(transcript.el());
+                        // Then attach the widget to the page.
+                        var transcriptContainer = document.querySelector('#transcript');
+                        transcriptContainer.appendChild(transcript.el());
+                    }
                 });
             });
         }
@@ -123,9 +126,11 @@ define(['bc'], function() {
 
                         }
                     }
-                    xhr.open('GET', transcriptUrl);
-                    xhr.responseType = 'text';
-                    xhr.send();
+                    if (transcriptUrl != ''){
+                        xhr.open('GET', transcriptUrl);
+                        xhr.responseType = 'text';
+                        xhr.send();
+                    }
                 });
             });
         }

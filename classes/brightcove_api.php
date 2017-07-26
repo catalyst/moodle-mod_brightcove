@@ -151,8 +151,13 @@ class brightcove_api {
     public function get_transcript($videoid) {
         $videoobj = $this->get_video($videoid);
         $texttracks = $videoobj['text_tracks'];
+        $texttrack= '';
 
-        return $texttracks[0];
+        if (array_key_exists(0, $texttracks)) {
+            $texttrack = $texttracks[0]['src'];
+        }
+
+        return $texttrack;
 
     }
 

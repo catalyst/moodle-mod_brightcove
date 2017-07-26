@@ -67,7 +67,7 @@ $playervalues->accountid = $moduleconfig->accountid;
 $playervalues->playerid = $moduleconfig->playerid;
 $playervalues->videoid = $moduleinstance->videoid;
 $playervalues->aspectratio = $aspectratio;
-$playervalues->transcripturl = $videotranscript['src'];
+$playervalues->transcripturl = $videotranscript;
 $playervalues->progress = $activityobject['progress'];
 
 $PAGE->set_url('/mod/brightcove/view.php', array('id' => $cm->id));
