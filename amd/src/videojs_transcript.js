@@ -456,7 +456,6 @@ define(['jquery', 'bc'], function ($) {
                 if (!line.classList.contains('is-active')) { // don't update if it hasn't changed
                   line.classList.add('is-active');
                   line.blur();
-                  //line.scrollIntoView({block: "start", behavior: "smooth"});
                   var target = document.getElementById("transcript");
                   target.scrollTop = line.offsetTop;
                 }
