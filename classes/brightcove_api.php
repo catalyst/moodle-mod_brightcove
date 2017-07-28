@@ -146,7 +146,7 @@ class brightcove_api {
      * Only details for the first track are returned.
      *
      * @param string $videoid The Brightcove ID of the video.
-     * @return array $texttracks Array of details for the first found text track.
+     * @return string $texttrack URL of first found track location.
      */
     public function get_transcript($videoid) {
         $videoobj = $this->get_video($videoid);
@@ -159,6 +159,42 @@ class brightcove_api {
 
         return $texttrack;
 
+    }
+
+    /**
+     * Formats a given transcript ready for user download.
+     * Transcript timming information etc is stripped out.
+     *
+     * @param string $transcript The transcript content to clean.
+     * @return string $cleantranscript Cleaned transcript content.
+     */
+    public function transcript_format_for_download($transcript) {
+
+        return $transcript;
+    }
+
+    /**
+     * Gets transcript content for a given video
+     * Only details for the first track are returned.
+     *
+     * @param string $videoid The Brightcove ID of the video.
+     * @param bool $format Should the returned copntent be formatted for download or raw.
+     * @return string $trackcontent Content of the first found text track.
+     */
+    public function get_transcript_content($videoid, $format=false) {
+        $trackurl = $this->get_transcript($videoid);
+        $trackcontent = '';
+
+        $response = $this->client->request('GET', $trackurl);
+
+        if ($format){
+            $trackcontent = $this->transcript_format_for_download($response->getBody());
+        } else {
+            $trackcontent = $response->getBody();
+        }
+
+
+        return $trackcontent;
     }
 
     /**

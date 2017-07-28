@@ -78,6 +78,7 @@ if ($pluginconfigured) {
 
     $brightcove = new brightcove_api();
     $videotranscript = $brightcove->get_transcript($moduleinstance->videoid);
+    $transcriptdownload = new \moodle_url('/mod/brightcove/export.php', array('id' => $id, 'type' => 1));
 
     $playervalues = new stdClass();
     $playervalues->accountid = $moduleconfig->accountid;
@@ -85,6 +86,7 @@ if ($pluginconfigured) {
     $playervalues->videoid = $moduleinstance->videoid;
     $playervalues->aspectratio = $aspectratio;
     $playervalues->transcripturl = $videotranscript;
+    $playervalues->transcriptdownload = $transcriptdownload->out(false);
     $playervalues->progress = $activityobject['progress'];
 
     $brightcoveurl = '//players.brightcove.net/' . $moduleconfig->accountid . '/' . $moduleconfig->playerid . '_default/index';
