@@ -97,8 +97,6 @@ define(['bc'], function() {
             });
         }
 
-<<<<<<< Updated upstream
-=======
         // Construct the download transcript plugin.
         function constructDownloadTranscriptPlugin(playerid) {
             videojs.registerPlugin('downloadTranscriptPlugin', function() {
@@ -117,7 +115,6 @@ define(['bc'], function() {
                             downloadableText = downloadableText.replace(/\n|\r/g, '');
                             downloadableText = downloadableText.replace(/\?/g, '?\n');
                             downloadableText = downloadableText.replace(/(\.\s)|(\.)/g, '.\n');
-
                             var textBlob = new Blob([downloadableText], {type: "text/plain"});
                             var textUrl = window.URL.createObjectURL(textBlob);
                             var textDownload = 'transcript.txt';
@@ -135,7 +132,6 @@ define(['bc'], function() {
             });
         }
 
->>>>>>> Stashed changes
         // Call the plugin constructors.
         constructDownloadPlugin(playerid);
         constructTranscriptPlugin(playerid);
