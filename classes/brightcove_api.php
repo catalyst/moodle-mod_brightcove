@@ -169,6 +169,11 @@ class brightcove_api {
      * @return string $cleantranscript Cleaned transcript content.
      */
     public function transcript_format_for_download($transcript) {
+        $transcript = preg_replace('/WEBVTT[\n\r]+/', '', $transcript);
+        $transcript = preg_replace('/[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+\s\-\-\>\s[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+/', '', $transcript);
+        $transcript = preg_replace('/[\n\r]+/', "\n", $transcript);
+        $transcript = preg_replace('/\,[\n\r]/', ", ", $transcript);
+        $transcript = strip_tags($transcript);
 
         return $transcript;
     }
