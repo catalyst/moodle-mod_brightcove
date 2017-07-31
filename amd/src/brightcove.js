@@ -59,6 +59,7 @@ define(['bc'], function() {
                     });
                     // Set the highest rendition.
                     highestQuality = mp4Ara[0].src;
+
                     downloadString = "<a class='dropdown-item' href='" + highestQuality + "' download='" + videoName + "' title='Download video'><i class='fa fa-file-video-o' aria-hidden='true'></i></a>";
                     document.getElementById('insertionPoint').innerHTML = downloadString;
                 });
@@ -92,41 +93,6 @@ define(['bc'], function() {
                         // Then attach the widget to the page.
                         var transcriptContainer = document.querySelector('#transcript');
                         transcriptContainer.appendChild(transcript.el());
-                    }
-                });
-            });
-        }
-
-        // Construct the download transcript plugin.
-        function constructDownloadTranscriptPlugin(playerid) {
-            videojs.registerPlugin('downloadTranscriptPlugin', function() {
-
-                // Create variables and new div, anchor and image for download icon.
-                var myPlayer = this;
-
-                myPlayer.on('loadstart',function(){
-                    var transcriptUrl = myPlayer.el().dataset.captions;
-                    var xhr = new XMLHttpRequest();
-                    xhr.onreadystatechange = function(){
-                        if (this.readyState == 4 && this.status == 200){
-                            // Some horrible RegEx based string replacement.
-                            var downloadableText = this.response.replace(/WEBVTT(\n|\r)/, '');
-                            downloadableText = downloadableText.replace(/[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+\s\-\-\>\s[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+/g, '');
-                            downloadableText = downloadableText.replace(/\n|\r/g, '');
-                            downloadableText = downloadableText.replace(/\?/g, '?\n');
-                            downloadableText = downloadableText.replace(/(\.\s)|(\.)/g, '.\n');
-                            var textBlob = new Blob([downloadableText], {type: "text/plain"});
-                            var textUrl = window.URL.createObjectURL(textBlob);
-                            var textDownload = 'transcript.txt';
-                            transcriptDownloadString = "<a class='dropdown-item' href='" + textUrl + "' download='" + textDownload + "' title='Download transcript'><i class='fa fa-file-text-o' aria-hidden='true'></i></a>";
-                            document.getElementById('downloadTranscript').innerHTML = transcriptDownloadString;
-
-                        }
-                    }
-                    if (transcriptUrl != ''){
-                        xhr.open('GET', transcriptUrl);
-                        xhr.responseType = 'text';
-                        xhr.send();
                     }
                 });
             });
