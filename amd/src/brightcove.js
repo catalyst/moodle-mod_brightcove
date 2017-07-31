@@ -60,7 +60,7 @@ define(['bc'], function() {
                     // Set the highest rendition.
                     highestQuality = mp4Ara[0].src;
 
-                    downloadString = "<a class='dropdown-item' href='" + highestQuality + "' download='" + videoName + "' title='Download video'><i class='fa fa-file-video-o' aria-hidden='true'></i></a>";
+                    downloadString = "<a class='dropdown-item' href='" + highestQuality + "' download='" + videoName + "' title='Download video'><i class='fa fa-file-video-o' aria-hidden='true'></i> Video</a>";
                     document.getElementById('insertionPoint').innerHTML = downloadString;
                 });
             });
