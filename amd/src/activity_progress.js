@@ -37,27 +37,31 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, u
         var playedDuration = (totalDuration * (progressPercent / 100)).toFixed(3);
         var startPosition = 0;
 
-        if (progressPercent > 98) {
-            startPosition = 0;
-        } else {
-            startPosition = playedDuration;
-        }
+//        if (progressPercent > 98) {
+//            startPosition = 0;
+//        } else {
+//            startPosition = playedDuration;
+//        }
 
-        $('#' + this.playerid).removeClass('notHover vjs-paused ').addClass('vjs-has-started').each(function(){
-            if (startPosition == 0) {
-                $('.vjs-poster').show();
-            }
+        $('#' + this.playerid).removeClass('notHover vjs-paused ').each(function(){
+//            if (startPosition == 0) {
+   //             $('.vjs-poster').removeClass('vjs-hidden');
+ //           }
+//           / $('.vjs-big-play-button').removeClass('vjs-hidden');
+            $('.vjs-play-control').focus();
+
         });
-        $('.vjs-big-play-button').show();
-        $('.vjs-play-control').focus();
+
 
         this.player.currentTime(startPosition);
         this.startMonitoring();
     };
 
     BrightcoveProgress.prototype.onPlay = function () {
-        $('.vjs-big-play-button').hide();
-        $('.vjs-poster').hide();
+            $('.vjs-big-play-button').hide();
+//            $('.vjs-poster').addClass('vjs-hidden');
+
+
     };
 
     BrightcoveProgress.prototype.onPause = function () {
