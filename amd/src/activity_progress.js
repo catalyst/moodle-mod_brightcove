@@ -43,17 +43,22 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, u
 //            startPosition = playedDuration;
 //        }
 
-        $('#' + this.playerid).removeClass('notHover vjs-paused ').each(function(){
-//            if (startPosition == 0) {
+        this.player.currentTime(startPosition);
+
+        if (startPosition > 0) {
+     //       $('#' + this.playerid).removeClass('notHover vjs-paused ').each(function(){
+//
    //             $('.vjs-poster').removeClass('vjs-hidden');
  //           }
 //           / $('.vjs-big-play-button').removeClass('vjs-hidden');
-            $('.vjs-play-control').focus();
-
-        });
 
 
-        this.player.currentTime(startPosition);
+  //      });
+        }
+       // $('.video-js .vjs-control-bar').show();
+        $('.video-js .vjs-play-control').focus();
+
+
         this.startMonitoring();
     };
 
