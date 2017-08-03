@@ -50,6 +50,10 @@
     overflow-y: scroll;
 }
 
+.video-js .vjs-control-bar.vjs-onload {
+    display: flex;
+}
+
 /**
  * Mobile in landscape mode
  * Focus just on video?

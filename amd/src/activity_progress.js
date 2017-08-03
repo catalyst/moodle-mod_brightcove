@@ -42,6 +42,8 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, u
 //        } else {
 //            startPosition = playedDuration;
 //        }
+        $('.video-js .vjs-control-bar').addClass("vjs-onload");
+        $('.video-js .vjs-play-control').focus();
 
         this.player.currentTime(startPosition);
 
@@ -55,8 +57,7 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, u
 
   //      });
         }
-       // $('.video-js .vjs-control-bar').show();
-        $('.video-js .vjs-play-control').focus();
+        
 
 
         this.startMonitoring();
@@ -64,6 +65,7 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, u
 
     BrightcoveProgress.prototype.onPlay = function () {
             $('.vjs-big-play-button').hide();
+            $('.video-js .vjs-control-bar').removeClass("vjs-onload");
 //            $('.vjs-poster').addClass('vjs-hidden');
 
 
