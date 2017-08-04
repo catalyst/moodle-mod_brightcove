@@ -37,38 +37,22 @@ define(['jquery', 'local_activity_progress/user_progress', 'bc'], function ($, u
         var playedDuration = (totalDuration * (progressPercent / 100)).toFixed(3);
         var startPosition = 0;
 
-//        if (progressPercent > 98) {
-//            startPosition = 0;
-//        } else {
-//            startPosition = playedDuration;
-//        }
+        if (progressPercent > 98) {
+            startPosition = 0;
+        } else {
+            startPosition = playedDuration;
+        }
+
         $('.video-js .vjs-control-bar').addClass("vjs-onload");
         $('.video-js .vjs-play-control').focus();
 
         this.player.currentTime(startPosition);
-
-        if (startPosition > 0) {
-     //       $('#' + this.playerid).removeClass('notHover vjs-paused ').each(function(){
-//
-   //             $('.vjs-poster').removeClass('vjs-hidden');
- //           }
-//           / $('.vjs-big-play-button').removeClass('vjs-hidden');
-
-
-  //      });
-        }
-        
-
-
         this.startMonitoring();
     };
 
     BrightcoveProgress.prototype.onPlay = function () {
-            $('.vjs-big-play-button').hide();
-            $('.video-js .vjs-control-bar').removeClass("vjs-onload");
-//            $('.vjs-poster').addClass('vjs-hidden');
-
-
+        $('.vjs-big-play-button').hide();
+        $('.video-js .vjs-control-bar').removeClass("vjs-onload");
     };
 
     BrightcoveProgress.prototype.onPause = function () {
