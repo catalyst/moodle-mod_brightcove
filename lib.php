@@ -59,6 +59,7 @@ function mod_brightcove_supports($feature) {
 function brightcove_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
+    // Handle downloading the transcript file from Brgithcove and savingin locally
     $moduleinstance->timecreated = time();
 
     $id = $DB->insert_record('brightcove', $moduleinstance);
@@ -79,6 +80,7 @@ function brightcove_add_instance($moduleinstance, $mform = null) {
 function brightcove_update_instance($moduleinstance, $mform = null) {
     global $DB;
 
+    // Handle downloading the transcript file from Brgithcove and savingin locally
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
 
@@ -98,10 +100,16 @@ function brightcove_delete_instance($id) {
     if (!$exists) {
         return false;
     }
-
+    // Handle removing the local transcript file
     $DB->delete_records('brightcove', array('id' => $id));
 
     return true;
+}
+
+
+function brightcove_coursemodule_validation(moodleform_mod $modform, array $data) {
+    error_log('foo');
+    return array();
 }
 
 /**
