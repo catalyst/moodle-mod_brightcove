@@ -22,6 +22,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_brightcove\brightcove_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -64,12 +66,12 @@ function brightcove_add_instance($moduleinstance, $mform = null) {
     $videoid = $moduleinstance->videoid;
     $brightcove = new brightcove_api();
 
-    // Handle downloading the transcript file from Brightcove and saving locally
-    $fileid = $brightcove->save_transcript($context->id, $videoid);
+    // Handle downloading the transcript file from Brightcove and saving locally.
+    // We don't need to save this anywhere and we don't care if a video
+    // does not have a transcript. 
+    $brightcove->save_transcript($context->id, $videoid);
 
     $moduleinstance->timecreated = time();
-    $moduleinstance->transcript = $fileid;
-
     $id = $DB->insert_record('brightcove', $moduleinstance);
 
     return $id;
@@ -93,11 +95,12 @@ function brightcove_update_instance($moduleinstance, $mform = null) {
     $videoid = $moduleinstance->videoid;
     $brightcove = new brightcove_api();
 
-    // Handle downloading the transcript file from Brightcove and saving locally
-    $fileid = $brightcove->save_transcript($context->id, $videoid);
+    // Handle downloading the transcript file from Brightcove and saving locally.
+    // We don't need to save this anywhere and we don't care if a video
+    // does not have a transcript.
+    $brightcove->save_transcript($context->id, $videoid);
 
     $moduleinstance->timecreated = time();
-    $moduleinstance->transcript = $fileid;
     $moduleinstance->id = $moduleinstance->instance;
 
     return $DB->update_record('brightcove', $moduleinstance);

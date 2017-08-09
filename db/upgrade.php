@@ -44,17 +44,19 @@ function xmldb_chat_upgrade($oldversion) {
 
     // Automatically generated Moodle v3.3.0 release upgrade line.
     // Put any upgrade step following this.
-    if ($oldversion < 2017080900) {
+    if ($oldversion < 2017080901) {
 
-        // Changing type of field transcript on table brightcove to int.
+        // Define field transcript to be dropped from brightcove.
         $table = new xmldb_table('brightcove');
-        $field = new xmldb_field('transcript', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'aspectratio');
+        $field = new xmldb_field('transcript');
 
-        // Launch change of type for field transcript.
-        $dbman->change_field_type($table, $field);
+        // Conditionally launch drop field transcript.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
 
         // Brightcove savepoint reached.
-        upgrade_mod_savepoint(true, 2017080900, 'brightcove');
+        upgrade_mod_savepoint(true, 2017080901, 'brightcove');
     }
 
     return true;

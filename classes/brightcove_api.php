@@ -148,14 +148,14 @@ class brightcove_api {
      *
      * @param int $contextid Activity instance context ID.
      * @param int $videoid Brightcove video ID.
-     * @return boolean|int $fileid Id of the file in the file table.
+     * @return void
      */
     public function save_transcript($contextid, $videoid) {
-        $fileid = false;
+        $texttrack = $this->get_transcript($videoid);
         $fs = get_file_storage();
 
         // Prepare file record object
-        $fileinfo = array(
+        $filerecord= array(
                 'contextid' => $contextid,
                 'component' => 'mod_brightcove',
                 'filearea' => 'transcript',
@@ -163,17 +163,25 @@ class brightcove_api {
                 'filepath' => '/',
                 'filename' => 'transcript.vtt');
 
-        $videoobj = $this->get_video($videoid);
-        $texttracks = $videoobj['text_tracks'];
-        $texttrack= '';
+        // Get transcript file
+        $file = $fs->get_file(
+                $filerecord['contextid'],
+                $filerecord['component'],
+                $filerecord['filearea'],
+                $filerecord['itemid'],
+                $filerecord['filepath'],
+                $filerecord['filename']
+                );
 
-        if (array_key_exists(0, $texttracks)) {
-            $texttrack = $texttracks[0]['src'];
-            $file = $fs->create_file_from_url($filerecord, $texttrack);
-            $fileid = $file->id;
+        if ($texttrack == '' && $file) { // Track is empty and file exists: delete file.
+            $file->delete();
+        } else if ($texttrack != '' && $file) { // Track exists and file exists: delete file then add file.
+            $file->delete();
+            $fs->create_file_from_url($filerecord, $texttrack);
+        } else if ($texttrack != '' && !$file) { //Track exists and file doesn't: add file.
+            $fs->create_file_from_url($filerecord, $texttrack);
         }
 
-        return $fileid;
     }
 
     /**
