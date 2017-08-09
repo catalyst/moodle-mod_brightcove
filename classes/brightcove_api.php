@@ -141,6 +141,41 @@ class brightcove_api {
         return $responseobj;
     }
 
+
+    /**
+     * Gets the transcript file from Brightcove via the API
+     * and save it as a local file in Moodle.
+     *
+     * @param int $contextid Activity instance context ID.
+     * @param int $videoid Brightcove video ID.
+     * @return boolean|int $fileid Id of the file in the file table.
+     */
+    public function save_transcript($contextid, $videoid) {
+        $fileid = false;
+        $fs = get_file_storage();
+
+        // Prepare file record object
+        $fileinfo = array(
+                'contextid' => $contextid,
+                'component' => 'mod_brightcove',
+                'filearea' => 'transcript',
+                'itemid' => $videoid,
+                'filepath' => '/',
+                'filename' => 'transcript.vtt');
+
+        $videoobj = $this->get_video($videoid);
+        $texttracks = $videoobj['text_tracks'];
+        $texttrack= '';
+
+        if (array_key_exists(0, $texttracks)) {
+            $texttrack = $texttracks[0]['src'];
+            $file = $fs->create_file_from_url($filerecord, $texttrack);
+            $fileid = $file->id;
+        }
+
+        return $fileid;
+    }
+
     /**
      * Returns text track details for the given video ID.
      * Only details for the first track are returned.

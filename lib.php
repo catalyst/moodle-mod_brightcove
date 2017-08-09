@@ -59,8 +59,16 @@ function mod_brightcove_supports($feature) {
 function brightcove_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
-    // Handle downloading the transcript file from Brgithcove and savingin locally
+    $cmid = $moduleinstance->coursemodule;
+    $context = context_module::instance($cmid);
+    $videoid = $moduleinstance->videoid;
+    $brightcove = new brightcove_api();
+
+    // Handle downloading the transcript file from Brightcove and saving locally
+    $fileid = $brightcove->save_transcript($context->id, $videoid);
+
     $moduleinstance->timecreated = time();
+    $moduleinstance->transcript = $fileid;
 
     $id = $DB->insert_record('brightcove', $moduleinstance);
 
@@ -80,8 +88,16 @@ function brightcove_add_instance($moduleinstance, $mform = null) {
 function brightcove_update_instance($moduleinstance, $mform = null) {
     global $DB;
 
-    // Handle downloading the transcript file from Brgithcove and savingin locally
-    $moduleinstance->timemodified = time();
+    $cmid = $moduleinstance->coursemodule;
+    $context = context_module::instance($cmid);
+    $videoid = $moduleinstance->videoid;
+    $brightcove = new brightcove_api();
+
+    // Handle downloading the transcript file from Brightcove and saving locally
+    $fileid = $brightcove->save_transcript($context->id, $videoid);
+
+    $moduleinstance->timecreated = time();
+    $moduleinstance->transcript = $fileid;
     $moduleinstance->id = $moduleinstance->instance;
 
     return $DB->update_record('brightcove', $moduleinstance);
