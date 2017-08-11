@@ -175,7 +175,6 @@ class brightcove_api {
         return $responseobj;
     }
 
-
     /**
      * Gets the transcript file from Brightcove via the API
      * and save it as a local file in Moodle.
@@ -194,6 +193,17 @@ class brightcove_api {
             $fs->create_file_from_url($this->get_build_transcript_file_record(), $texttrack);
         } else if ($texttrack != '' && !$file) { // Track exists and file doesn't: add file.
             $fs->create_file_from_url($this->get_build_transcript_file_record(), $texttrack);
+        }
+    }
+
+    /**
+     * Delete local transcript file.
+     */
+    public function delete_transcript() {
+        $file = $this->get_transcript_file();
+
+        if ($file) {
+            $file->delete();
         }
     }
 

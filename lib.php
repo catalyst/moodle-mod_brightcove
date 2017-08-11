@@ -107,11 +107,17 @@ function brightcove_update_instance($moduleinstance, $mform = null) {
 function brightcove_delete_instance($id) {
     global $DB;
 
-    $exists = $DB->get_record('brightcove', array('id' => $id));
-    if (!$exists) {
+    $moduleinstance = $DB->get_record('brightcove', array('id' => $id));
+    if (!$moduleinstance) {
         return false;
     }
-    // Handle removing the local transcript file
+
+    $cm = get_coursemodule_from_instance('brightcove', $moduleinstance->id);
+    $context = context_module::instance($cm->id);
+
+    $brightcove = new brightcove_api($moduleinstance, $context);
+    $brightcove->delete_transcript();
+
     $DB->delete_records('brightcove', array('id' => $id));
 
     return true;
