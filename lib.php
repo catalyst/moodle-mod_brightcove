@@ -63,10 +63,9 @@ function brightcove_add_instance($moduleinstance, $mform = null) {
 
     $cmid = $moduleinstance->coursemodule;
     $context = context_module::instance($cmid);
-    $videoid = $moduleinstance->videoid;
-    $brightcove = new brightcove_api($context);
 
-    $brightcove->save_transcript($videoid);
+    $brightcove = new brightcove_api($moduleinstance, $context);
+    $brightcove->save_transcript();
 
     $moduleinstance->timecreated = time();
     $id = $DB->insert_record('brightcove', $moduleinstance);
@@ -89,10 +88,9 @@ function brightcove_update_instance($moduleinstance, $mform = null) {
 
     $cmid = $moduleinstance->coursemodule;
     $context = context_module::instance($cmid);
-    $videoid = $moduleinstance->videoid;
-    $brightcove = new brightcove_api($context);
 
-    $brightcove->save_transcript($videoid);
+    $brightcove = new brightcove_api($moduleinstance, $context);
+    $brightcove->save_transcript();
 
     $moduleinstance->timecreated = time();
     $moduleinstance->id = $moduleinstance->instance;

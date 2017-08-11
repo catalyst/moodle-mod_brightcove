@@ -76,14 +76,14 @@ if ($pluginconfigured) {
         $aspectratio = "75";
     }
 
-    $brightcove = new brightcove_api($modulecontext);
+    $brightcove = new brightcove_api($moduleinstance, $modulecontext);
 
     $playervalues = new stdClass();
     $playervalues->accountid = $moduleconfig->accountid;
     $playervalues->playerid = $moduleconfig->playerid;
     $playervalues->videoid = $moduleinstance->videoid;
     $playervalues->aspectratio = $aspectratio;
-    $playervalues->transcripturl = $brightcove->get_transcript_url($moduleinstance->videoid, true);
+    $playervalues->transcripturl = $brightcove->get_transcript_url(true);
     $playervalues->transcriptdownload = $brightcove->get_transcript_download_url();
     $playervalues->progress = $activityobject['progress'];
 

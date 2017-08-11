@@ -36,12 +36,11 @@ $moduleinstance = $DB->get_record('brightcove', array('id' => $cm->instance), '*
 require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
-$moduleconfig = get_config('brightcove');
 
-$brightcove = new brightcove_api($modulecontext);
-$transcript = $brightcove->get_transcript_content($moduleinstance->videoid, true, true);
+$brightcove = new brightcove_api($moduleinstance, $modulecontext);
+$transcript = $brightcove->get_transcript_content(true, true);
 
-if ($type == 1) { // Type 1: is for transcript
+if ($type == 1) { // Type 1: is for transcript.
     $filename = format_string($moduleinstance->name) . '_transcript';
     $mimetype = 'text/plain';
 }
