@@ -83,7 +83,7 @@ if ($pluginconfigured) {
     $playervalues->playerid = $moduleconfig->playerid;
     $playervalues->videoid = $moduleinstance->videoid;
     $playervalues->aspectratio = $aspectratio;
-    $playervalues->transcripturl = $brightcove->get_transcript_url(true);
+    $playervalues->transcripturl = $brightcove->get_transcript_url();
     $playervalues->transcriptdownload = $brightcove->get_transcript_download_url();
     $playervalues->progress = $activityobject['progress'];
 

@@ -183,7 +183,7 @@ class brightcove_api {
      * @return void
      */
     public function save_transcript() {
-        $texttrack = $this->get_transcript_url();
+        $texttrack = $this->get_transcript_url(false);
         $fs = get_file_storage();
         $file = $this->get_transcript_file();
 
@@ -239,7 +239,7 @@ class brightcove_api {
      * @param bool $internal True if we want an internal transcript URL.
      * @return string $texttrack URL of first found track location.
      */
-    public function get_transcript_url($internal = false) {
+    public function get_transcript_url($internal = true) {
         $texttrack = '';
 
         if ($internal) {
@@ -318,7 +318,7 @@ class brightcove_api {
      *
      * @return string $trackcontent Content of the first found text track.
      */
-    public function get_transcript_content($format=false, $internal = false) {
+    public function get_transcript_content($format = true, $internal = true) {
         if ($internal) {
             $content = $this->get_transcript_file()->get_content();
         } else {
