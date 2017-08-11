@@ -66,9 +66,6 @@ function brightcove_add_instance($moduleinstance, $mform = null) {
     $videoid = $moduleinstance->videoid;
     $brightcove = new brightcove_api($context);
 
-    // Handle downloading the transcript file from Brightcove and saving locally.
-    // We don't need to save this anywhere and we don't care if a video
-    // does not have a transcript. 
     $brightcove->save_transcript($videoid);
 
     $moduleinstance->timecreated = time();
@@ -95,9 +92,6 @@ function brightcove_update_instance($moduleinstance, $mform = null) {
     $videoid = $moduleinstance->videoid;
     $brightcove = new brightcove_api($context);
 
-    // Handle downloading the transcript file from Brightcove and saving locally.
-    // We don't need to save this anywhere and we don't care if a video
-    // does not have a transcript.
     $brightcove->save_transcript($videoid);
 
     $moduleinstance->timecreated = time();

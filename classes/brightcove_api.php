@@ -242,20 +242,12 @@ class brightcove_api {
     /**
      * Returns transcript download URL for the given video ID.
      *
-     * @param string $videoid The Brightcove ID of the video.
-     * @param bool $internal True if we want an internal transcript file.
-     *
      * @return string URL of first found track location.
      */
-    public function get_transcript_download_url($videoid, $internal = false) {
-        if ($internal) {
-            $url = $this->make_transcript_file_url($videoid, true);
-        } else {
-            $download = new \moodle_url('/mod/brightcove/export.php', array('id' => $this->context->instanceid, 'type' => 1));
-            $url = $download->out(false);
-        }
+    public function get_transcript_download_url() {
+        $downloadurl = new moodle_url('/mod/brightcove/export.php', array('id' => $this->context->instanceid, 'type' => 1));
 
-        return $url;
+        return $downloadurl->out(false);
     }
 
     /**
@@ -307,20 +299,24 @@ class brightcove_api {
      *
      * @param string $videoid The Brightcove ID of the video.
      * @param bool $format Should the returned copntent be formatted for download or raw.
+     * @param bool $internal True if we want an internal transcript URL.
+     *
      * @return string $trackcontent Content of the first found text track.
      */
-    public function get_transcript_content($videoid, $format=false) {
-        $trackurl = $this->get_transcript_url($videoid);
-        $trackcontent = '';
-
-        $response = $this->client->request('GET', $trackurl);
-
-        if ($format){
-            $trackcontent = $this->transcript_format_for_download($response->getBody());
+    public function get_transcript_content($videoid, $format=false, $internal = false) {
+        if ($internal) {
+            $content = $this->get_transcript_file($videoid)->get_content();
         } else {
-            $trackcontent = $response->getBody();
+            $trackurl = $this->get_transcript_url($videoid, $internal);
+            $response = $this->client->request('GET', $trackurl);
+            $content = $response->getBody();
         }
 
+        if ($format) {
+            $trackcontent = $this->transcript_format_for_download($content);
+        } else {
+            $trackcontent = $content;
+        }
 
         return $trackcontent;
     }

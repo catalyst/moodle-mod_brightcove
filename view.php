@@ -84,7 +84,7 @@ if ($pluginconfigured) {
     $playervalues->videoid = $moduleinstance->videoid;
     $playervalues->aspectratio = $aspectratio;
     $playervalues->transcripturl = $brightcove->get_transcript_url($moduleinstance->videoid, true);
-    $playervalues->transcriptdownload = $brightcove->get_transcript_download_url($moduleinstance->videoid, false);
+    $playervalues->transcriptdownload = $brightcove->get_transcript_download_url();
     $playervalues->progress = $activityobject['progress'];
 
     $brightcoveurl = '//players.brightcove.net/' . $moduleconfig->accountid . '/' . $moduleconfig->playerid . '_default/index';
