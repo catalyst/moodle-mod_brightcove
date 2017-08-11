@@ -223,24 +223,13 @@ class brightcove_api {
      * @return string $texttrack URL of first found track location.
      */
     public function get_transcript_url($videoid, $internal = false) {
+        $texttrack = '';
+
         if ($internal) {
-            $file = $this->get_transcript_file($videoid);
-            $texttrack = '';
-            if ($file) {
-                $texttrack = moodle_url::make_pluginfile_url(
-                    $file->get_contextid(),
-                    $file->get_component(),
-                    $file->get_filearea(),
-                    $file->get_itemid(),
-                    $file->get_filepath(),
-                    $file->get_filename(),
-                    false
-                )->out();
-            }
+            $texttrack = $this->make_transcript_file_url($videoid, false);
         } else {
             $videoobj = $this->get_video($videoid);
             $texttracks = $videoobj['text_tracks'];
-            $texttrack = '';
 
             if (array_key_exists(0, $texttracks)) {
                 $texttrack = $texttracks[0]['src'];
@@ -248,7 +237,51 @@ class brightcove_api {
         }
 
         return $texttrack;
+    }
 
+    /**
+     * Returns transcript download URL for the given video ID.
+     *
+     * @param string $videoid The Brightcove ID of the video.
+     * @param bool $internal True if we want an internal transcript file.
+     *
+     * @return string URL of first found track location.
+     */
+    public function get_transcript_download_url($videoid, $internal = false) {
+        if ($internal) {
+            $url = $this->make_transcript_file_url($videoid, true);
+        } else {
+            $download = new \moodle_url('/mod/brightcove/export.php', array('id' => $this->context->instanceid, 'type' => 1));
+            $url = $download->out(false);
+        }
+
+        return $url;
+    }
+
+    /**
+     * Male transctipt file URL.
+     *
+     * @param string $videoid The Brightcove ID of the video.
+     * @param bool $forcedownload
+     *
+     * @return string
+     */
+    public function make_transcript_file_url($videoid, $forcedownload = false) {
+        $fileurl = '';
+        $file = $this->get_transcript_file($videoid);
+        if ($file) {
+            $fileurl = moodle_url::make_pluginfile_url(
+                $file->get_contextid(),
+                $file->get_component(),
+                $file->get_filearea(),
+                $file->get_itemid(),
+                $file->get_filepath(),
+                $file->get_filename(),
+                $forcedownload
+            )->out();
+        }
+
+        return $fileurl;
     }
 
     /**
