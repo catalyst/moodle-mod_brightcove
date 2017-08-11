@@ -46,6 +46,7 @@ class backup_brightcove_activity_structure_step extends backup_activity_structur
 
         $brightcove->set_source_table('brightcove', array('id' => backup::VAR_ACTIVITYID));
         $brightcove->annotate_files('mod_brightcove', 'intro', null);
+        $brightcove->annotate_files('mod_brightcove', 'transcript', null);
 
         return $this->prepare_activity_structure($brightcove);
     }

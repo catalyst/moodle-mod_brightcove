@@ -68,5 +68,6 @@ class restore_brightcove_activity_structure_step extends restore_activity_struct
      */
     protected function after_execute() {
         $this->add_related_files('mod_brightcove', 'intro', null);
+        $this->add_related_files('mod_brightcove', 'transcript', null);
     }
 }
