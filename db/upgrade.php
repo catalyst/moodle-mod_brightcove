@@ -15,35 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Upgrade code for the chat activity
+ * Upgrade code for the brightcove activity
  *
- * @package   mod_chat
- * @copyright 2006 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_brightcove
+ * @copyright   2017 Matt Porritt <mattp@catalyst-au.net>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-function xmldb_chat_upgrade($oldversion) {
-    global $CFG;
+function xmldb_brightcove_upgrade($oldversion) {
+    global $DB;
 
-    // Moodle v2.8.0 release upgrade line.
-    // Put any upgrade step following this.
+    $dbman = $DB->get_manager();
 
-    // Moodle v2.9.0 release upgrade line.
-    // Put any upgrade step following this.
-
-    // Moodle v3.0.0 release upgrade line.
-    // Put any upgrade step following this.
-
-    // Moodle v3.1.0 release upgrade line.
-    // Put any upgrade step following this.
-
-    // Automatically generated Moodle v3.2.0 release upgrade line.
-    // Put any upgrade step following this.
-
-    // Automatically generated Moodle v3.3.0 release upgrade line.
-    // Put any upgrade step following this.
     if ($oldversion < 2017080901) {
 
         // Define field transcript to be dropped from brightcove.
