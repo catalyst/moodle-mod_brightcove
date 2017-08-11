@@ -76,8 +76,8 @@ if ($pluginconfigured) {
         $aspectratio = "75";
     }
 
-    $brightcove = new brightcove_api();
-    $videotranscript = $brightcove->get_transcript($moduleinstance->videoid);
+    $brightcove = new brightcove_api($modulecontext);
+    $videotranscript = $brightcove->get_transcript_url($moduleinstance->videoid, true);
     $transcriptdownload = new \moodle_url('/mod/brightcove/export.php', array('id' => $id, 'type' => 1));
 
     $playervalues = new stdClass();

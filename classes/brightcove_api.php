@@ -24,6 +24,9 @@
 
 namespace mod_brightcove;
 
+use context_module;
+use moodle_url;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/local/aws/sdk/aws-autoloader.php');
@@ -36,14 +39,22 @@ require_once($CFG->dirroot . '/local/aws/sdk/aws-autoloader.php');
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class brightcove_api {
+
+    /**
+     * Activity context.
+     * @var \context_module
+     */
+    protected $context;
+
     /**
      * Initialises the class.
      * Makes relevant configuration from config available and
      * creates Guzzle client.
      *
-     * @return void
+     * @param \context_module $context Activity context.
      */
-    public function __construct() {
+    public function __construct(context_module $context) {
+        $this->context = $context;
         $this->config = get_config('brightcove');
         $this->accountid = $this->config->accountid;
         $this->apikey = $this->config->apikey;
@@ -146,42 +157,61 @@ class brightcove_api {
      * Gets the transcript file from Brightcove via the API
      * and save it as a local file in Moodle.
      *
-     * @param int $contextid Activity instance context ID.
      * @param int $videoid Brightcove video ID.
      * @return void
      */
-    public function save_transcript($contextid, $videoid) {
-        $texttrack = $this->get_transcript($videoid);
+    public function save_transcript($videoid) {
+        $texttrack = $this->get_transcript_url($videoid);
         $fs = get_file_storage();
-
-        // Prepare file record object
-        $filerecord= array(
-                'contextid' => $contextid,
-                'component' => 'mod_brightcove',
-                'filearea' => 'transcript',
-                'itemid' => $videoid,
-                'filepath' => '/',
-                'filename' => 'transcript.vtt');
-
-        // Get transcript file
-        $file = $fs->get_file(
-                $filerecord['contextid'],
-                $filerecord['component'],
-                $filerecord['filearea'],
-                $filerecord['itemid'],
-                $filerecord['filepath'],
-                $filerecord['filename']
-                );
+        $file = $this->get_transcript_file($videoid);
 
         if ($texttrack == '' && $file) { // Track is empty and file exists: delete file.
             $file->delete();
         } else if ($texttrack != '' && $file) { // Track exists and file exists: delete file then add file.
             $file->delete();
-            $fs->create_file_from_url($filerecord, $texttrack);
-        } else if ($texttrack != '' && !$file) { //Track exists and file doesn't: add file.
-            $fs->create_file_from_url($filerecord, $texttrack);
+            $fs->create_file_from_url($this->get_build_transcript_file_record($videoid), $texttrack);
+        } else if ($texttrack != '' && !$file) { // Track exists and file doesn't: add file.
+            $fs->create_file_from_url($this->get_build_transcript_file_record($videoid), $texttrack);
         }
+    }
 
+    /**
+     * Return transcript file.
+     *
+     * @param int $videoid Video ID.
+     *
+     * @return bool|\stored_file False if not found.
+     */
+    public function get_transcript_file($videoid) {
+        $fs = get_file_storage();
+        $filerecord = $this->get_build_transcript_file_record($videoid);
+
+        return $fs->get_file(
+            $filerecord['contextid'],
+            $filerecord['component'],
+            $filerecord['filearea'],
+            $filerecord['itemid'],
+            $filerecord['filepath'],
+            $filerecord['filename']
+        );
+    }
+
+    /**
+     * Build transcript file record.
+     *
+     * @param int $videoid Video ID.
+     *
+     * @return array
+     */
+    public function get_build_transcript_file_record($videoid) {
+        return array(
+            'contextid' => $this->context->id,
+            'component' => 'mod_brightcove',
+            'filearea' => 'transcript',
+            'itemid' => $videoid,
+            'filepath' => '/',
+            'filename' => 'transcript.vtt'
+        );
     }
 
     /**
@@ -189,15 +219,32 @@ class brightcove_api {
      * Only details for the first track are returned.
      *
      * @param string $videoid The Brightcove ID of the video.
+     * @param bool $internal True if we want an internal transcript URL.
      * @return string $texttrack URL of first found track location.
      */
-    public function get_transcript($videoid) {
-        $videoobj = $this->get_video($videoid);
-        $texttracks = $videoobj['text_tracks'];
-        $texttrack= '';
+    public function get_transcript_url($videoid, $internal = false) {
+        if ($internal) {
+            $file = $this->get_transcript_file($videoid);
+            $texttrack = '';
+            if ($file) {
+                $texttrack = moodle_url::make_pluginfile_url(
+                    $file->get_contextid(),
+                    $file->get_component(),
+                    $file->get_filearea(),
+                    $file->get_itemid(),
+                    $file->get_filepath(),
+                    $file->get_filename(),
+                    false
+                )->out();
+            }
+        } else {
+            $videoobj = $this->get_video($videoid);
+            $texttracks = $videoobj['text_tracks'];
+            $texttrack = '';
 
-        if (array_key_exists(0, $texttracks)) {
-            $texttrack = $texttracks[0]['src'];
+            if (array_key_exists(0, $texttracks)) {
+                $texttrack = $texttracks[0]['src'];
+            }
         }
 
         return $texttrack;
@@ -230,7 +277,7 @@ class brightcove_api {
      * @return string $trackcontent Content of the first found text track.
      */
     public function get_transcript_content($videoid, $format=false) {
-        $trackurl = $this->get_transcript($videoid);
+        $trackurl = $this->get_transcript_url($videoid);
         $trackcontent = '';
 
         $response = $this->client->request('GET', $trackurl);
