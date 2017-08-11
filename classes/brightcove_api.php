@@ -190,9 +190,9 @@ class brightcove_api {
             $file->delete();
         } else if ($texttrack != '' && $file) { // Track exists and file exists: delete file then add file.
             $file->delete();
-            $fs->create_file_from_url($this->get_build_transcript_file_record(), $texttrack);
+            $fs->create_file_from_url($this->build_transcript_file_record(), $texttrack);
         } else if ($texttrack != '' && !$file) { // Track exists and file doesn't: add file.
-            $fs->create_file_from_url($this->get_build_transcript_file_record(), $texttrack);
+            $fs->create_file_from_url($this->build_transcript_file_record(), $texttrack);
         }
     }
 
@@ -214,7 +214,7 @@ class brightcove_api {
      */
     public function get_transcript_file() {
         $fs = get_file_storage();
-        $filerecord = $this->get_build_transcript_file_record();
+        $filerecord = $this->build_transcript_file_record();
 
         return $fs->get_file(
             $filerecord['contextid'],
@@ -231,7 +231,7 @@ class brightcove_api {
      *
      * @return array
      */
-    public function get_build_transcript_file_record() {
+    public function build_transcript_file_record() {
         return array(
             'contextid' => $this->context->id,
             'component' => 'mod_brightcove',
