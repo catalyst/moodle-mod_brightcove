@@ -24,8 +24,6 @@
 
 namespace mod_brightcove\search;
 
-use mod_brightcove\brightcove_api;
-
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -65,7 +63,7 @@ class activity extends \core_search\base_activity {
     }
 
     /**
-     * Add the main file to the index.
+     * Add transcript file to the index.
      *
      * @param \core_search\document $document The current document
      * @return null
