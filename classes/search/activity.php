@@ -48,7 +48,10 @@ class activity extends \core_search\base_activity {
      */
     public function get_document($record, $options = array()) {
         $doc = parent::get_document($record, $options);
-        $doc->set('description2', content_to_text($record->videoname, false));
+
+        if (!empty($record->videoname)) {
+            $doc->set('description1', content_to_text($record->videoname, false));
+        }
 
         return $doc;
     }
