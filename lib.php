@@ -152,3 +152,107 @@ function brightcove_extend_navigation($brightcovenode, $course, $module, $cm) {
  */
 function brightcove_extend_settings_navigation($settingsnav, $brightcovenode = null) {
 }
+
+/**
+ * Returns the lists of all browsable file areas within the given module context
+ *
+ * The file area 'intro' for the activity introduction field is added automatically
+ * by {@link file_browser::get_file_info_context_module()}
+ *
+ * @param stdClass $course
+ * @param stdClass $cm
+ * @param stdClass $context
+ * @return array of [(string)filearea] => (string)description
+ */
+function brightcove_get_file_areas($course, $cm, $context) {
+    return array(
+        'transcript' => get_string('filearea_transcript', 'brightcove'),
+    );
+}
+
+/**
+ * File browsing support.
+ *
+ * @package mod_fancybox
+ * @category files
+ *
+ * @param file_browser $browser
+ * @param array $areas
+ * @param stdClass $course
+ * @param stdClass $cm
+ * @param context $context
+ * @param string $filearea
+ * @param int $itemid
+ * @param string $filepath
+ * @param string $filename
+ *
+ * @return file_info instance or null if not found
+ */
+function brightcove_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename) {
+    global $CFG;
+
+    if ($context->contextlevel != CONTEXT_MODULE) {
+        return null;
+    }
+
+    if (!has_capability('moodle/course:managefiles', $context)) {
+        return null;
+    }
+
+    if ($filearea === 'transcript' ) {
+        $fs = get_file_storage();
+
+        $urlbase = $CFG->wwwroot . '/pluginfile.php';
+
+        $filepath = is_null($filepath) ? '/' : $filepath;
+        $filename = is_null($filename) ? '.' : $filename;
+
+        if (!$storedfile = $fs->get_file($context->id, 'mod_brightcove', $filearea, 0, $filepath, $filename)) {
+            return null;
+        }
+
+        return new file_info_stored($browser, $context, $storedfile, $urlbase, $areas[$filearea], false, true, false, true);
+    }
+
+    return null;
+}
+
+/**
+ * Serves the files.
+ *
+ * @package mod_fancybox
+ * @category files
+ *
+ * @param stdClass $course the course object
+ * @param stdClass $cm the course module object
+ * @param context $context the fancybox's context
+ * @param string $filearea the name of the file area
+ * @param array $args extra arguments (itemid, path)
+ * @param bool $forcedownload whether or not force download
+ * @param array $options additional options affecting the file serving
+ *
+ * @return null script execution stopped unless $options['dontdie'] is true
+ */
+function brightcove_pluginfile($course, $cm, $context, $filearea, array $args, $forcedownload, array $options=array()) {
+    if ($context->contextlevel != CONTEXT_MODULE) {
+        send_file_not_found();
+    }
+
+    require_login($course, true, $cm);
+
+    if ($filearea !== 'transcript') {
+        return false;
+    }
+
+    $fs = get_file_storage();
+    $relativepath = implode('/', $args);
+    $fullpath = rtrim('/' . $context->id . '/mod_brightcove/' . $filearea . '/' . $relativepath, '/');
+
+    $file = $fs->get_file_by_hash(sha1($fullpath));
+
+    if (!$file || $file->is_directory()) {
+        return false;
+    }
+
+    send_stored_file($file, null, 0, $forcedownload, $options);
+}
