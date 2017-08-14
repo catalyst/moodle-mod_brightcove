@@ -42,9 +42,10 @@ class backup_brightcove_activity_structure_step extends backup_activity_structur
 
         $brightcove = new backup_nested_element('brightcove', array('id'), array(
             'name', 'intro', 'introformat', 'videoid', 'aspectratio',
-            'transcript', 'videoname', 'timemodified'));
+            'videoname', 'timemodified'));
 
         $brightcove->set_source_table('brightcove', array('id' => backup::VAR_ACTIVITYID));
+
         $brightcove->annotate_files('mod_brightcove', 'intro', null);
         $brightcove->annotate_files('mod_brightcove', 'transcript', null);
 
