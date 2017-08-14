@@ -186,12 +186,13 @@ class brightcove_api {
         $fs = get_file_storage();
         $file = $this->get_transcript_file();
 
-        if ($texttrack == '' && $file) { // Track is empty and file exists: delete file.
+        // Delete existing file.
+        if ($file) {
             $file->delete();
-        } else if ($texttrack != '' && $file) { // Track exists and file exists: delete file then add file.
-            $file->delete();
-            $fs->create_file_from_url($this->build_transcript_file_record(), $texttrack);
-        } else if ($texttrack != '' && !$file) { // Track exists and file doesn't: add file.
+        }
+
+        // Create a new file from external track URL if it exists.
+        if ($texttrack != '') {
             $fs->create_file_from_url($this->build_transcript_file_record(), $texttrack);
         }
     }

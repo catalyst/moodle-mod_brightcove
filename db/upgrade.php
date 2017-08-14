@@ -22,6 +22,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_brightcove\brightcove_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 function xmldb_brightcove_upgrade($oldversion) {
@@ -42,6 +44,22 @@ function xmldb_brightcove_upgrade($oldversion) {
 
         // Brightcove savepoint reached.
         upgrade_mod_savepoint(true, 2017080901, 'brightcove');
+    }
+
+    if ($oldversion < 2017081400) {
+        $instances = $DB->get_records('brightcove');
+
+        // Create local transcript files for all brightcove instances.
+        foreach ($instances as $instance) {
+            $cm = get_coursemodule_from_instance('brightcove', $instance->id);
+            $context = context_module::instance($cm->id);
+
+            $brightcove = new brightcove_api($instance, $context);
+            $brightcove->save_transcript();
+        }
+
+        // Brightcove savepoint reached.
+        upgrade_mod_savepoint(true, 2017081400, 'brightcove');
     }
 
     return true;

@@ -47,37 +47,38 @@ class activity extends \core_search\base_activity {
      * @return \core_search\document
      */
     public function get_document($record, $options = array()) {
-
-        try {
-            $cm = $this->get_cm($this->get_module_name(), $record->id, $record->course);
-            $context = \context_module::instance($cm->id);
-        } catch (\dml_missing_record_exception $ex) {
-            // Notify it as we run here as admin, we should see everything.
-            debugging('Error retrieving ' . $this->areaid . ' ' . $record->id . ' document, not all required data is available: ' .
-                $ex->getMessage(), DEBUG_DEVELOPER);
-            return false;
-        } catch (\dml_exception $ex) {
-            // Notify it as we run here as admin, we should see everything.
-            debugging('Error retrieving ' . $this->areaid . ' ' . $record->id . ' document: ' . $ex->getMessage(), DEBUG_DEVELOPER);
-            return false;
-        }
-
-        // Prepare associative array with data from DB.
-        $doc = \core_search\document_factory::instance($record->id, $this->componentname, $this->areaname);
-        $doc->set('title', content_to_text($record->name, false));
-        $doc->set('content', content_to_text($record->intro, $record->introformat));
-        $doc->set('contextid', $context->id);
-        $doc->set('courseid', $record->course);
-        $doc->set('owneruserid', \core_search\manager::NO_OWNER_ID);
-        $doc->set('modified', $record->timemodified);
-
-        // There are a defined set of fields you can use when indexing things in search,
-        // this is why the fileds below don't match the schema of the activity.
-        // Each search engine can define their own fields, but then this actity type would be
-        // locked to a particular search engine plugin. This is dumb.
-        $doc->set('description1', content_to_text($record->transcript, $record->introformat));
+        $doc = parent::get_document($record, $options);
         $doc->set('description2', content_to_text($record->videoname, false));
 
         return $doc;
     }
+
+    /**
+     * Returns true if this area uses file indexing.
+     *
+     * @return bool
+     */
+    public function uses_file_indexing() {
+        return true;
+    }
+
+    /**
+     * Add transcript file to the index.
+     *
+     * @param \core_search\document $document The current document
+     * @return null
+     */
+    public function attach_files($document) {
+        $fs = get_file_storage();
+
+        $cm = $this->get_cm($this->get_module_name(), $document->get('itemid'), $document->get('courseid'));
+        $context = \context_module::instance($cm->id);
+
+        $files = $fs->get_area_files($context->id, 'mod_brightcove', 'transcript', false, 'sortorder DESC, id ASC', false);
+
+        foreach ($files as $file) {
+            $document->add_stored_file($file);
+        }
+    }
+
 }
