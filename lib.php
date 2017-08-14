@@ -22,6 +22,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_brightcove\brightcove_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -59,8 +61,13 @@ function mod_brightcove_supports($feature) {
 function brightcove_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
-    $moduleinstance->timecreated = time();
+    $cmid = $moduleinstance->coursemodule;
+    $context = context_module::instance($cmid);
 
+    $brightcove = new brightcove_api($moduleinstance, $context);
+    $brightcove->save_transcript();
+
+    $moduleinstance->timecreated = time();
     $id = $DB->insert_record('brightcove', $moduleinstance);
 
     return $id;
@@ -79,7 +86,13 @@ function brightcove_add_instance($moduleinstance, $mform = null) {
 function brightcove_update_instance($moduleinstance, $mform = null) {
     global $DB;
 
-    $moduleinstance->timemodified = time();
+    $cmid = $moduleinstance->coursemodule;
+    $context = context_module::instance($cmid);
+
+    $brightcove = new brightcove_api($moduleinstance, $context);
+    $brightcove->save_transcript();
+
+    $moduleinstance->timecreated = time();
     $moduleinstance->id = $moduleinstance->instance;
 
     return $DB->update_record('brightcove', $moduleinstance);
@@ -94,14 +107,25 @@ function brightcove_update_instance($moduleinstance, $mform = null) {
 function brightcove_delete_instance($id) {
     global $DB;
 
-    $exists = $DB->get_record('brightcove', array('id' => $id));
-    if (!$exists) {
+    $moduleinstance = $DB->get_record('brightcove', array('id' => $id));
+    if (!$moduleinstance) {
         return false;
     }
+
+    $cm = get_coursemodule_from_instance('brightcove', $moduleinstance->id);
+    $context = context_module::instance($cm->id);
+
+    $brightcove = new brightcove_api($moduleinstance, $context);
+    $brightcove->delete_transcript();
 
     $DB->delete_records('brightcove', array('id' => $id));
 
     return true;
+}
+
+
+function brightcove_coursemodule_validation(moodleform_mod $modform, array $data) {
+    return array();
 }
 
 /**

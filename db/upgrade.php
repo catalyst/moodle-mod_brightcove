@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Upgrade code for the brightcove activity
  *
  * @package     mod_brightcove
  * @copyright   2017 Matt Porritt <mattp@catalyst-au.net>
@@ -24,12 +24,25 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_brightcove';
-$plugin->version = 2017080901;
-$plugin->release = 2017080901;      // Same as version.
-$plugin->requires = 2016052304;
-$plugin->maturity = MATURITY_BETA;
-$plugin->dependencies = array(
-    'local_activity_progress' => 2017072501,
-    'local_aws'               => 2017030100
-);
+function xmldb_brightcove_upgrade($oldversion) {
+    global $DB;
+
+    $dbman = $DB->get_manager();
+
+    if ($oldversion < 2017080901) {
+
+        // Define field transcript to be dropped from brightcove.
+        $table = new xmldb_table('brightcove');
+        $field = new xmldb_field('transcript');
+
+        // Conditionally launch drop field transcript.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Brightcove savepoint reached.
+        upgrade_mod_savepoint(true, 2017080901, 'brightcove');
+    }
+
+    return true;
+}

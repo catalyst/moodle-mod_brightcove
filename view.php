@@ -40,7 +40,7 @@ if ($id) {
     $course         = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
     $moduleinstance = $DB->get_record('brightcove', array('id' => $cm->instance), '*', MUST_EXIST);
 } else if ($b) {
-    $moduleinstance = $DB->get_record('brightcove', array('id' => $n), '*', MUST_EXIST);
+    $moduleinstance = $DB->get_record('brightcove', array('id' => $b), '*', MUST_EXIST);
     $course         = $DB->get_record('course', array('id' => $moduleinstance->course), '*', MUST_EXIST);
     $cm             = get_coursemodule_from_instance('brightcove', $moduleinstance->id, $course->id, false, MUST_EXIST);
 } else {
@@ -76,17 +76,15 @@ if ($pluginconfigured) {
         $aspectratio = "75";
     }
 
-    $brightcove = new brightcove_api();
-    $videotranscript = $brightcove->get_transcript($moduleinstance->videoid);
-    $transcriptdownload = new \moodle_url('/mod/brightcove/export.php', array('id' => $id, 'type' => 1));
+    $brightcove = new brightcove_api($moduleinstance, $modulecontext);
 
     $playervalues = new stdClass();
     $playervalues->accountid = $moduleconfig->accountid;
     $playervalues->playerid = $moduleconfig->playerid;
     $playervalues->videoid = $moduleinstance->videoid;
     $playervalues->aspectratio = $aspectratio;
-    $playervalues->transcripturl = $videotranscript;
-    $playervalues->transcriptdownload = $transcriptdownload->out(false);
+    $playervalues->transcripturl = $brightcove->get_transcript_url();
+    $playervalues->transcriptdownload = $brightcove->get_transcript_download_url();
     $playervalues->progress = $activityobject['progress'];
 
     $brightcoveurl = '//players.brightcove.net/' . $moduleconfig->accountid . '/' . $moduleconfig->playerid . '_default/index';
