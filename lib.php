@@ -173,9 +173,6 @@ function brightcove_get_file_areas($course, $cm, $context) {
 /**
  * File browsing support.
  *
- * @package mod_fancybox
- * @category files
- *
  * @param file_browser $browser
  * @param array $areas
  * @param stdClass $course
@@ -220,12 +217,9 @@ function brightcove_get_file_info($browser, $areas, $course, $cm, $context, $fil
 /**
  * Serves the files.
  *
- * @package mod_fancybox
- * @category files
- *
  * @param stdClass $course the course object
  * @param stdClass $cm the course module object
- * @param context $context the fancybox's context
+ * @param context $context the module context
  * @param string $filearea the name of the file area
  * @param array $args extra arguments (itemid, path)
  * @param bool $forcedownload whether or not force download
