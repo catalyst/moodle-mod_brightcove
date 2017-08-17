@@ -32,8 +32,14 @@ defined('MOODLE_INTERNAL') || die();
  */
 function mod_brightcove_supports($feature) {
     switch ($feature) {
+        case FEATURE_GRADE_HAS_GRADE:
+            return false;
         case FEATURE_MOD_INTRO:
             return true;
+        case FEATURE_SHOW_DESCRIPTION:
+            return true;
+        case FEATURE_BACKUP_MOODLE2:
+            return false;
         default:
             return null;
     }
@@ -96,4 +102,34 @@ function mod_brightcove_delete_instance($id) {
     $DB->delete_records('mod_brightcove', array('id' => $id));
 
     return true;
+}
+
+
+function brightcove_coursemodule_validation(moodleform_mod $modform, array $data) {
+    return array();
+}
+
+/**
+ * Extends the global navigation tree by adding mod_brightcove nodes if there is a relevant content.
+ *
+ * This can be called by an AJAX request so do not rely on $PAGE as it might not be set up properly.
+ *
+ * @param navigation_node $brightcovenode An object representing the navigation tree node.
+ * @param stdClass $course course.
+ * @param stdClass $module module.
+ * @param cm_info $cm cm.
+ */
+function brightcove_extend_navigation($brightcovenode, $course, $module, $cm) {
+}
+
+/**
+ * Extends the settings navigation with the mod_brightcove settings.
+ *
+ * This function is called when the context for the page is a mod_brightcove module.
+ * This is not called by AJAX so it is safe to rely on the $PAGE.
+ *
+ * @param settings_navigation $settingsnav {@link settings_navigation}
+ * @param navigation_node $brightcovenode {@link navigation_node}
+ */
+function brightcove_extend_settings_navigation($settingsnav, $brightcovenode = null) {
 }
