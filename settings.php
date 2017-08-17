@@ -18,7 +18,6 @@
  * Plugin administration pages are defined here.
  *
  * @package     mod_brightcove
- * @category    admin
  * @copyright   2017 Matt Porritt <mattp@catalyst-au.net>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,6 +25,36 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
-   // TODO: Define the plugin settings page.
-   // https://docs.moodle.org/dev/Admin_settings
+
+    // Brightcove API and account settiings.
+    $settings->add(new admin_setting_configtext('brightcove/accountid',
+            get_string('accountid',             'brightcove'),
+            get_string('accountid_help',        'brightcove'),
+            null, PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('brightcove/playerid',
+            get_string('playerid',             'brightcove'),
+            get_string('playerid_help',        'brightcove'),
+            null, PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('brightcove/apikey',
+            get_string('apikey',      'brightcove'),
+            get_string('apikey_help', 'brightcove'),
+            null, PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('brightcove/apisecret',
+            get_string('apisecret',      'brightcove'),
+            get_string('apisecret_help', 'brightcove'),
+            null, PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('brightcove/oauthendpoint',
+            get_string('oauthendpoint',      'brightcove'),
+            get_string('oauthendpoint_help', 'brightcove'),
+            'https://oauth.brightcove.com/v4/', PARAM_URL));
+
+    $settings->add(new admin_setting_configtext('brightcove/apiendpoint',
+            get_string('apiendpoint',      'brightcove'),
+            get_string('apiendpoint_help', 'brightcove'),
+            'https://cms.api.brightcove.com/v1/', PARAM_URL));
+
 }
