@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
+require_once(__DIR__.'/lib.php');
 
 /**
  * Module instance settings form.
@@ -39,9 +40,14 @@ class mod_brightcove_mod_form extends moodleform_mod {
      * Defines forms elements
      */
     public function definition() {
-        global $CFG;
+        global $CFG, $PAGE, $OUTPUT;
 
         $mform = $this->_form;
+
+        if (!mod_brightcove_is_configured()){
+        $mform->addElement('static', 'noconfig', '',
+                $OUTPUT->notification(get_string('noconfig', 'mod_brightcove'), 'notifyerror'));
+        }
 
         // Adding the "general" fieldset, where all the common settings are showed.
         $mform->addElement('header', 'general', get_string('general', 'form'));
@@ -59,22 +65,24 @@ class mod_brightcove_mod_form extends moodleform_mod {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('name', 'brightcovename', 'mod_brightcove');
 
-        // Adding the standard "intro" and "introformat" fields.
-        if ($CFG->branch >= 29) {
-            $this->standard_intro_elements();
-        } else {
-            $this->add_intro_editor();
-        }
+        $this->standard_intro_elements();
 
-        // Adding the rest of mod_brightcove settings, spreading all them into this fieldset
-        // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        $mform->addElement('static', 'label1', 'brightcovesettings', get_string('brightcovesettings', 'mod_brightcove'));
-        $mform->addElement('header', 'brightcovefieldset', get_string('brightcovefieldset', 'mod_brightcove'));
+        // Brightcove Modal and video ID.
+        $mform->addElement('button', 'brightcove_modal', get_string('brightcovemodal', 'mod_brightcove'));
+
+        $mform->addElement('hidden', 'videoid', '');
+        $mform->setType('videoid', PARAM_INT);
+
+        // Add standard grading elements.
+        $this->standard_grading_coursemodule_elements();
 
         // Add standard elements.
         $this->standard_coursemodule_elements();
 
         // Add standard buttons.
         $this->add_action_buttons();
+
+        // load the require JS for the modal.
+        $PAGE->requires->js_call_amd('mod_brightcove/brightcove_select', 'init');
     }
 }
