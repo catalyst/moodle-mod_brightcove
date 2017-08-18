@@ -46,6 +46,28 @@ function mod_brightcove_supports($feature) {
 }
 
 /**
+ * Returns if brightcove plugin has valid
+ * configuration at site level.
+ *
+ * @return boolean
+ */
+function mod_brightcove_is_configured() {
+    $isconfigured = true;
+    $moduleconfig = get_config('brightcove');
+
+    if ($moduleconfig->accountid == ''
+            || $moduleconfig->playerid == ''
+            || $moduleconfig->apikey == ''
+            || $moduleconfig->apisecret == ''
+            || $moduleconfig->oauthendpoint == ''
+            || $moduleconfig->apiendpoint == '') {
+                $isconfigured= false;
+            }
+
+    return $isconfigured;
+}
+
+/**
  * Saves a new instance of the mod_brightcove into the database.
  *
  * Given an object containing all the necessary data, (defined by the form
