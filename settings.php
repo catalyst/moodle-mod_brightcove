@@ -42,7 +42,7 @@ if ($ADMIN->fulltree) {
             get_string('apikey_help', 'brightcove'),
             null, PARAM_TEXT));
 
-    $settings->add(new admin_setting_configtext('brightcove/apisecret',
+    $settings->add(new admin_setting_configpasswordunmask('brightcove/apisecret',
             get_string('apisecret',      'brightcove'),
             get_string('apisecret_help', 'brightcove'),
             null, PARAM_TEXT));
