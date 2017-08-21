@@ -39,7 +39,11 @@ class mod_brightcove_external extends external_api {
      * @return external_function_parameters
      */
     public static function video_list_parameters() {
-
+        return new external_function_parameters(
+                array(
+                        // If I had any parameters, they would be described here. But I don't have any, so this array is empty.
+                )
+            );
     }
 
     /**
