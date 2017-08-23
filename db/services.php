@@ -36,3 +36,12 @@ $functions = array(
                 'ajax' => true
         ),
 );
+
+// We define the services to install as pre-build services. A pre-build service is not editable by administrator.
+$services = array(
+        'Brightcove service' => array(
+                'functions' => array('mod_brightcove_video_list'),
+                'restrictedusers' => 0,
+                'enabled' => 1,
+        )
+);
