@@ -12,8 +12,11 @@
 .bc-sl-data > .row {
     padding: 5px 0;
 }
-.bc-sl-data > .row:nth-of-type(even) {
+.bc-sl-data > .row:hover {
     background-color: #efefef;
+}
+.bc-sl-data > .row.selected {
+    background-color: #dddddd;
 }
 @media (max-width: 543px) {
     .bc-sl-header {
