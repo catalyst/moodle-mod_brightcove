@@ -19,9 +19,24 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @module      mod_brightcove/brightcove_select
  */
-define(['jquery', 'core/str', 'core/modal_factory', 'core/templates'], function ($, Str, ModalFactory, Templates) {
+define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'core/ajax'],
+        function ($, Str, ModalFactory, Templates, ajax) {
 
     var BrightcoveSelect = {};
+    var modalObj;
+
+    function updateBody() {
+        var promises = ajax.call([
+            { methodname: 'mod_brightcove_video_list', args: {} },
+        ]);
+
+       promises[0].done(function(response) {
+           console.log(response);
+           modalObj.setBody(Templates.render('mod_brightcove/video_list', {}));
+       }).fail(function(ex) {
+           // do something with the exception
+       });
+    }
 
     /**
      * Initialise the class.
@@ -38,10 +53,11 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates'], function 
             ModalFactory.create({
                 type: ModalFactory.types.SAVE_CANCEL,
                 title: title,
-                body: '<p>test body content</p>'
+                body: '<p>Loading... (I wish I was a spinner)</p>'
             }, trigger)
             .done(function(modal) {
-                modal.setBody(Templates.render('mod_brightcove/video_list', {}));
+                modalObj = modal;
+                updateBody();
             });
         });
 
