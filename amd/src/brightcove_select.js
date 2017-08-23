@@ -19,7 +19,7 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @module      mod_brightcove/brightcove_select
  */
-define(['jquery', 'core/str', 'core/modal_factory'], function ($, Str, ModalFactory) {
+define(['jquery', 'core/str', 'core/modal_factory', 'core/templates'], function ($, Str, ModalFactory, Templates) {
 
     var BrightcoveSelect = {};
 
@@ -41,7 +41,7 @@ define(['jquery', 'core/str', 'core/modal_factory'], function ($, Str, ModalFact
                 body: '<p>test body content</p>'
             }, trigger)
             .done(function(modal) {
-                modal.setBody('foo');
+                modal.setBody(Templates.render('mod_brightcove/video_list', {}));
             });
         });
 
