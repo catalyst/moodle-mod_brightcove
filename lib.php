@@ -51,7 +51,7 @@ function mod_brightcove_supports($feature) {
  *
  * @return boolean
  */
-function mod_brightcove_is_configured() {
+function brightcove_is_configured() {
     $isconfigured = true;
     $moduleconfig = get_config('brightcove');
 
@@ -78,12 +78,12 @@ function mod_brightcove_is_configured() {
  * @param mod_brightcove_mod_form $mform The form.
  * @return int The id of the newly inserted record.
  */
-function mod_brightcove_add_instance($moduleinstance, $mform = null) {
+function brightcove_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
     $moduleinstance->timecreated = time();
 
-    $id = $DB->insert_record('mod_brightcove', $moduleinstance);
+    $id = $DB->insert_record('brightcove', $moduleinstance);
 
     return $id;
 }
@@ -98,13 +98,13 @@ function mod_brightcove_add_instance($moduleinstance, $mform = null) {
  * @param mod_brightcove_mod_form $mform The form.
  * @return bool True if successful, false otherwise.
  */
-function mod_brightcove_update_instance($moduleinstance, $mform = null) {
+function brightcove_update_instance($moduleinstance, $mform = null) {
     global $DB;
 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
 
-    return $DB->update_record('mod_brightcove', $moduleinstance);
+    return $DB->update_record('brightcove', $moduleinstance);
 }
 
 /**
@@ -113,15 +113,15 @@ function mod_brightcove_update_instance($moduleinstance, $mform = null) {
  * @param int $id Id of the module instance.
  * @return bool True if successful, false on failure.
  */
-function mod_brightcove_delete_instance($id) {
+function brightcove_delete_instance($id) {
     global $DB;
 
-    $exists = $DB->get_record('mod_brightcove', array('id' => $id));
+    $exists = $DB->get_record('brightcove', array('id' => $id));
     if (!$exists) {
         return false;
     }
 
-    $DB->delete_records('mod_brightcove', array('id' => $id));
+    $DB->delete_records('brightcove', array('id' => $id));
 
     return true;
 }

@@ -44,7 +44,7 @@ class mod_brightcove_mod_form extends moodleform_mod {
 
         $mform = $this->_form;
 
-        if (!mod_brightcove_is_configured()){
+        if (!brightcove_is_configured()){
         $mform->addElement('static', 'noconfig', '',
                 $OUTPUT->notification(get_string('noconfig', 'mod_brightcove'), 'notifyerror'));
         }
