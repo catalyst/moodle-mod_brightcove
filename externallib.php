@@ -51,6 +51,32 @@ class mod_brightcove_external extends external_api {
      *
      */
     public static function video_list() {
+        global $USER;
+
+        // Context validation.
+        $context = context_user::instance($USER->id);
+        self::validate_context($context);
+
+        // Capability checking.
+        if (!has_capability('mod/brightcove:addinstance', $context)) {
+            throw new moodle_exception('cannot_access_api');
+        }
+
+        // Execute API call.
+        $results = array(
+                array(
+                   'id' => 123456,
+                   'name' => 'Video title',
+                   'complete' => 'whether processing is complete',
+                   'created_at' => 'when the video was created',
+                   'description' => 'video short description',
+                   'duration' => 123456,
+                   'thumbnail_url' => 'URL for the default thumbnail source image',
+                )
+        );
+
+
+        return $results;
 
     }
 
@@ -59,7 +85,19 @@ class mod_brightcove_external extends external_api {
      * @return external_description
      */
     public static function video_list_returns() {
-
+        return new external_multiple_structure(
+                new external_single_structure(
+                    array(
+                        'id' => new external_value(PARAM_TEXT, 'Brightcove video ID'),
+                        'name' => new external_value(PARAM_TEXT, 'Video title'),
+                        'complete' => new external_value(PARAM_RAW, 'whether processing is complete'),
+                        'created_at' => new external_value(PARAM_TEXT, 'when the video was created'),
+                        'description' => new external_value(PARAM_TEXT, 'video short description'),
+                        'duration' => new external_value(PARAM_INT, 'video duration in milliseconds'),
+                        'thumbnail_url' => new external_value(PARAM_RAW, 'URL for the default thumbnail source image'),
+                        )
+                    )
+                );
     }
 
 }
