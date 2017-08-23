@@ -1,0 +1,50 @@
+.bc-selectlist-container span {
+    display: block;
+}
+.bc-selectlist-container .bc-sl-d-1-thumbnail {
+    position: relative;
+}
+.bc-selectlist-container .bc-sl-d-1-timestamp {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+.bc-sl-data > .row {
+    padding: 5px 0;
+}
+.bc-sl-data > .row:hover {
+    background-color: #efefef;
+}
+.bc-sl-data > .row.selected {
+    background-color: #dddddd;
+}
+@media (max-width: 543px) {
+    .bc-sl-header {
+        display: none;
+    }
+    .bc-sl-data .row > div {
+        position: relative;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .bc-sl-data .row > div > span:not(.bc-sl-d-1-thumbnail) {
+        padding-left: 30%;
+    }
+    .bc-sl-data .bc-sl-d-2:before,
+    .bc-sl-data .bc-sl-d-3:before,
+    .bc-sl-data .bc-sl-d-4:before {
+        display: block;
+        position: absolute;
+        width: 25%;
+        left: 15px;
+    }
+    .bc-sl-data .bc-sl-d-2:before {
+        content: "Name";
+    }
+    .bc-sl-data .bc-sl-d-3:before {
+        content: "Status";
+    }
+    .bc-sl-data .bc-sl-d-4:before {
+        content: "Created";
+    }
+}
