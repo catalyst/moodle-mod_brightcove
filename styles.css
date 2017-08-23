@@ -7,7 +7,8 @@
 .bc-selectlist-container .bc-sl-d-1-timestamp {
     position: absolute;
     bottom: 0;
-    left: 0;
+    right: 0;
+    background: rgba(170, 170, 170, 0.7);
 }
 .bc-sl-data > .row {
     padding: 5px 0;
