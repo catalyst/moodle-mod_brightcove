@@ -63,18 +63,8 @@ class mod_brightcove_external extends external_api {
         }
 
         // Execute API call.
-        $results = array(
-                array(
-                   'id' => 123456,
-                   'name' => 'Video title',
-                   'complete' => 'whether processing is complete',
-                   'created_at' => 'when the video was created',
-                   'description' => 'video short description',
-                   'duration' => 123456,
-                   'thumbnail_url' => 'URL for the default thumbnail source image',
-                )
-        );
-
+        $brightcove = new \mod_brightcove\brightcove_api();
+        $results = $brightcove->get_video_list();
 
         return $results;
 
@@ -92,7 +82,6 @@ class mod_brightcove_external extends external_api {
                         'name' => new external_value(PARAM_TEXT, 'Video title'),
                         'complete' => new external_value(PARAM_RAW, 'whether processing is complete'),
                         'created_at' => new external_value(PARAM_TEXT, 'when the video was created'),
-                        'description' => new external_value(PARAM_TEXT, 'video short description'),
                         'duration' => new external_value(PARAM_INT, 'video duration in milliseconds'),
                         'thumbnail_url' => new external_value(PARAM_RAW, 'URL for the default thumbnail source image'),
                         )

@@ -133,13 +133,13 @@ class brightcove_api {
     }
 
     /**
-     * Get video object from Brightcove API.
-     * Returns data about video based on given video ID.
+     * Calls the brightcove CMS API.
      *
-     * @param bool $retry Set true if we are retying based on auth denied condition.
+     * @param string $url Brightcove service endpoint to call
+     * @param bool $retry
+     * @return object $responseobj The response recevied from the API
      */
-    public function get_video_list($retry=true) {
-        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/videos';
+    public function call_api($url, $retry=true) {
         $token = $this->get_token();
         $params = ['headers' => ['Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $token]];
@@ -162,11 +162,43 @@ class brightcove_api {
         // In this case we generate a new token and retry getting video details.
         // We only retry once.
         if ($responsecode == 401 && $retry == true) {
+            error_log('RETRYHHHHHHH');
             $this->generate_token();
-            $responseobj = $this->get_video(false);
+            $responseobj = $this->call_api($url, false);
         }
 
         return $responseobj;
+    }
+
+    /**
+     * Get video list details from Brightcove API.
+     *
+     * @return array $results array of video info objects.
+     */
+    public function get_video_list() {
+        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/videos';
+        $videos = $this->call_api($url);
+        $results = array();
+        $thumbnailurl = '';
+
+        // Format response
+        foreach ($videos as $video){
+            if (isset($video['images']['thumbnail']['src'])) {
+                $thumbnailurl= $video['images']['thumbnail']['src'];
+            }
+
+            $record = new \stdClass();
+            $record->id = $video['id'];
+            $record->name = $video['name'];
+            $record->complete = $video['complete'];
+            $record->created_at = $video['created_at'];
+            $record->duration = $video['duration'];
+            $record->thumbnail_url = $thumbnailurl;
+
+            $results[] = $record;
+        }
+
+            return $results;
     }
 
 
