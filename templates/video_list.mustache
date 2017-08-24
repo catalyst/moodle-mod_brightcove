@@ -30,11 +30,6 @@
 
     Example context (json):
     {
-        "accountid" : "123456789",
-        "playerid" : "abcd13245",
-        "videoid" : "123456",
-        "aspectratio" : "56.25",
-        "transcripturl" : "http://brightcove.vo.llnwd.net/v1/unsecured/media/"
     }
 
 }}
@@ -47,22 +42,23 @@
     </div>
     <div class="bc-sl-data">
         <!-- START LOOP -->
+        {{#videos}}
         <div class="bc-sl-d-container row">
             <div class="bc-sl-d-1 col-sm-2">
                 <span class="bc-sl-d-1-thumbnail">
-                    <!-- IMG THUMBNAIL REQUIRES CLASS "img-responsive" -->
-                    <img src="http://www.pinga.nl/dl/html5/r/silly-ways-to-die-party-576742227280302373/silly-ways-to-die-party-576742227280302373-200x120.jpg" class="img-responsive" />
-                    <span class="bc-sl-d-1-timestamp">03:25</span>
+                    <img src="{{thumbnail_url}}" class="img-responsive" />
+                    <span class="bc-sl-d-1-timestamp">{{duration}}</span>
                 </span>
             </div>
             <div class="bc-sl-d-2 col-sm-4">
-                <span class="bc-sl-d-2-title">Test video one</span>
-                <span class="bc-sl-d-2-id">5526240613001</span>
+                <span class="bc-sl-d-2-title">{{name}}</span>
+                <span class="bc-sl-d-2-id">{{id}}</span>
             </div>
             <!-- TO CHANGE ICON, REPLACE fa- WITH ICON NAME eg "check, warning" -->
             <div class="bc-sl-d-3 col-sm-2"><span><i class="icon fa fa-check"></i></span></div>
-            <div class="bc-sl-d-4 col-sm-4"><span>08/09/2017 10:45 AM</span></div>
+            <div class="bc-sl-d-4 col-sm-4"><span>{{created_at}}</span></div>
         </div>
+        {{/videos}}
         <!-- END LOOP -->
 
         <div class="bc-sl-d-container row selected"> <!-- CLASS 'selected' ADDED BY CLICK EVENT -->

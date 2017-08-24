@@ -32,7 +32,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'core/ajax
 
        promises[0].done(function(response) {
            console.log(response);
-           modalObj.setBody(Templates.render('mod_brightcove/video_list', {}));
+           modalObj.setBody(Templates.render('mod_brightcove/video_list', {videos : response}));
        }).fail(function(ex) {
            // do something with the exception
        });
