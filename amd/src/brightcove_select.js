@@ -53,7 +53,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'core/ajax
             ModalFactory.create({
                 type: ModalFactory.types.SAVE_CANCEL,
                 title: title,
-                body: '<p>Loading... (I wish I was a spinner)</p>'
+                body: '<p class="text-center"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i><span class="sr-only">Loading...</span></p>'
             }, trigger)
             .done(function(modal) {
                 modalObj = modal;

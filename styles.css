@@ -1,14 +1,30 @@
+.bc-sl-d-container {
+    border-top: 1px solid #efefef;
+}
+.bc-sl-d-container:first-of-type {
+    border-top: none;
+}
 .bc-selectlist-container span {
     display: block;
 }
-.bc-selectlist-container .bc-sl-d-1-thumbnail {
+.bc-selectlist-container span.bc-sl-d-2-title {
+    font-weight: 600;
+}
+.bc-selectlist-container span.bc-sl-d-2-id {
+    font-size: 95%;
+}
+.bc-selectlist-container .bc-sl-d-1-thumbnail .thumbnail-position {
     position: relative;
+    float: left;
 }
 .bc-selectlist-container .bc-sl-d-1-timestamp {
     position: absolute;
     bottom: 0;
     right: 0;
-    background: rgba(170, 170, 170, 0.7);
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1px 2px;
+    color: #fff;
+    font-size: 80%;
 }
 .bc-sl-data > .row {
     padding: 5px 0;
@@ -28,8 +44,12 @@
         padding-top: 5px;
         padding-bottom: 5px;
     }
-    .bc-sl-data .row > div > span:not(.bc-sl-d-1-thumbnail) {
+    .bc-sl-data .row > div > span:not(.bc-sl-d-1-thumbnail),
+    .bc-sl-data .row > div > span > span.thumbnail-position {
         padding-left: 30%;
+    }
+    .bc-sl-data .bc-sl-d-2 {
+        clear: both;
     }
     .bc-sl-data .bc-sl-d-2:before,
     .bc-sl-data .bc-sl-d-3:before,
