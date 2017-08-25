@@ -80,9 +80,9 @@ class mod_brightcove_external extends external_api {
                     array(
                         'id' => new external_value(PARAM_TEXT, 'Brightcove video ID'),
                         'name' => new external_value(PARAM_TEXT, 'Video title'),
-                        'complete' => new external_value(PARAM_RAW, 'whether processing is complete'),
+                        'complete' => new external_value(PARAM_TEXT, 'whether processing is complete'),
                         'created_at' => new external_value(PARAM_TEXT, 'when the video was created'),
-                        'duration' => new external_value(PARAM_INT, 'video duration in milliseconds'),
+                        'duration' => new external_value(PARAM_TEXT, 'video duration'),
                         'thumbnail_url' => new external_value(PARAM_RAW, 'URL for the default thumbnail source image'),
                         )
                     )

@@ -112,6 +112,22 @@ class brightcove_api {
     }
 
     /**
+     * Convert video duration in milliseconds to string
+     * of minutes and seconds
+     *
+     * @param string $duration video duration in milliseconds
+     */
+    private function video_duration($duration) {
+        $rawseconds = $duration / 1000;
+        $minutes = intval($rawseconds/ 60);
+        $seconds = $rawseconds % 60;
+
+        $durationstring = $minutes . ':' . str_pad($seconds, 2, '0', STR_PAD_LEFT);;
+
+        return $durationstring;
+    }
+
+    /**
      * Get the current API token.
      * Tries to get token from cache first, if cache isn't set
      * token is generated.
@@ -162,7 +178,6 @@ class brightcove_api {
         // In this case we generate a new token and retry getting video details.
         // We only retry once.
         if ($responsecode == 401 && $retry == true) {
-            error_log('RETRYHHHHHHH');
             $this->generate_token();
             $responseobj = $this->call_api($url, false);
         }
@@ -176,7 +191,7 @@ class brightcove_api {
      * @return array $results array of video info objects.
      */
     public function get_video_list() {
-        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/videos';
+        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/videos?limit=5';
         $videos = $this->call_api($url);
         $results = array();
         $thumbnailurl = '';
@@ -187,12 +202,19 @@ class brightcove_api {
                 $thumbnailurl= $video['images']['thumbnail']['src'];
             }
 
+            if ($video['complete']){
+                $complete = 'check';
+            }
+            else {
+                $complete = 'warning';
+            }
+
             $record = new \stdClass();
             $record->id = $video['id'];
             $record->name = $video['name'];
-            $record->complete = $video['complete'];
-            $record->created_at = $video['created_at'];
-            $record->duration = $video['duration'];
+            $record->complete = $complete;
+            $record->created_at = date('d/m/Y h:i:s A', strtotime($video['created_at']));
+            $record->duration = $this->video_duration($video['duration']);
             $record->thumbnail_url = $thumbnailurl;
 
             $results[] = $record;
