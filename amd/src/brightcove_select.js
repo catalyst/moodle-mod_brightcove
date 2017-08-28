@@ -45,6 +45,10 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
 
     function updateForm() {
         $("[name='videoid']").val(videoId);
+        Templates.render('mod_brightcove/video_list_form', {}).done(function(response) {
+            console.log('loaded');
+            $('#bc-selected-video').html(response);
+        });
     }
 
     /**
