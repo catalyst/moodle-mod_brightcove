@@ -1,0 +1,61 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_brightcove/video_list_form
+
+    Displays Brightcove video player
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * none
+
+    Example context (json):
+    {
+    }
+
+}}
+ <div class="bc-sl-header row">
+    <div class="bc-sl-h-1 col-sm-2"></div>
+    <div class="bc-sl-h-2 col-sm-4">Name</div>
+    <div class="bc-sl-h-3 col-sm-2">Status</div>
+    <div class="bc-sl-h-4 col-sm-4">Created</div>
+</div>
+<div class="bc-sl-data">
+    <div class="bc-sl-d-container row" data-video-id="{{id}}">
+        <div class="bc-sl-d-1 col-sm-2">
+            <span class="bc-sl-d-1-thumbnail">
+            <span class="thumbnail-position">
+                <img src="http://images6.fanpop.com/image/photos/36500000/Rose-Hathaway-image-rose-hathaway-36536323-120-80.jpg" class="img-responsive" />
+                <span class="bc-sl-d-1-timestamp">03:33</span>
+            </span>
+            </span>
+        </div>
+        <div class="bc-sl-d-2 col-sm-4">
+            <span class="bc-sl-d-2-title">Some title</span>
+            <span class="bc-sl-d-2-id">5508508545</span>
+        </div>
+        <div class="bc-sl-d-3 col-sm-2"><span><i class="icon fa fa-check"></i></span></div>
+        <div class="bc-sl-d-4 col-sm-4"><span>5th September 2001</span></div>
+    </div>
+</div>
+
+

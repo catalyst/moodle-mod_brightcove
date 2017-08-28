@@ -68,7 +68,7 @@ class mod_brightcove_mod_form extends moodleform_mod {
         $this->standard_intro_elements();
 
         // Brightcove Modal and video ID.
-        $mform->addElement('html', '<div id="bc-selected-video"></div>');
+        $mform->addElement('html', '<div id="bc-selected-video" class="bc-selectlist-container form-group row fitem"></div>');
         $mform->addElement('button', 'brightcove_modal', get_string('brightcovemodal', 'mod_brightcove'));
 
         $mform->addElement('hidden', 'videoid', '');
