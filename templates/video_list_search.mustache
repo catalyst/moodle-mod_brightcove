@@ -33,25 +33,11 @@
     }
 
 }}
-<div class="bc-selectlist-container">
-    <!-- TOP PAGINATION START -->
-    <div class="bc-sl-nav">
-        {{> mod_brightcove/video_list_search }}
-        {{> mod_brightcove/video_list_pager }}
+<div class="bc-sl-search col-sm-6">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search for...">
+        <span class="input-group-btn">
+           <button class="btn btn-secondary" type="button">Go</button>
+        </span>
     </div>
-    <!-- TOP PAGINATION END -->
-    <div class="bc-sl-header row">
-        <div class="bc-sl-h-1 col-sm-2"></div>
-        <div class="bc-sl-h-2 col-sm-4">Name</div>
-        <div class="bc-sl-h-3 col-sm-2">Status</div>
-        <div class="bc-sl-h-4 col-sm-4">Created</div>
-    </div>
-    <div class="bc-sl-data">
-        {{#videos}}
-            {{> mod_brightcove/video_list_row }}
-        {{/videos}}
-    </div>
-        {{> mod_brightcove/video_list_pager }}
 </div>
-
-

@@ -33,25 +33,19 @@
     }
 
 }}
-<div class="bc-selectlist-container">
-    <!-- TOP PAGINATION START -->
-    <div class="bc-sl-nav">
-        {{> mod_brightcove/video_list_search }}
-        {{> mod_brightcove/video_list_pager }}
+<div class="bc-sl-d-container row" data-video-id="{{id}}">
+    <div class="bc-sl-d-1 col-sm-2">
+        <span class="bc-sl-d-1-thumbnail">
+           <span class="thumbnail-position">
+               <img src="{{thumbnail_url}}" class="img-responsive" />
+               <span class="bc-sl-d-1-timestamp">{{duration}}</span>
+           </span>
+        </span>
     </div>
-    <!-- TOP PAGINATION END -->
-    <div class="bc-sl-header row">
-        <div class="bc-sl-h-1 col-sm-2"></div>
-        <div class="bc-sl-h-2 col-sm-4">Name</div>
-        <div class="bc-sl-h-3 col-sm-2">Status</div>
-        <div class="bc-sl-h-4 col-sm-4">Created</div>
+    <div class="bc-sl-d-2 col-sm-4">
+          <span class="bc-sl-d-2-title">{{name}}</span>
+          <span class="bc-sl-d-2-id">{{id}}</span>
     </div>
-    <div class="bc-sl-data">
-        {{#videos}}
-            {{> mod_brightcove/video_list_row }}
-        {{/videos}}
-    </div>
-        {{> mod_brightcove/video_list_pager }}
+    <div class="bc-sl-d-3 col-sm-2"><span><i class="icon fa fa-{{complete}}"></i></span></div>
+    <div class="bc-sl-d-4 col-sm-4"><span>{{created_at}}</span></div>
 </div>
-
-
