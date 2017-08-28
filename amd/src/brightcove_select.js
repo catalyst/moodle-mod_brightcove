@@ -19,11 +19,12 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @module      mod_brightcove/brightcove_select
  */
-define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'core/ajax'],
-        function ($, Str, ModalFactory, Templates, ajax) {
+define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/templates', 'core/ajax'],
+        function ($, Str, ModalFactory, ModalEvents, Templates, ajax) {
 
     var BrightcoveSelect = {};
     var modalObj;
+    var videoId;
 
     function updateBody() {
         var promises = ajax.call([
@@ -33,9 +34,17 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'core/ajax
        promises[0].done(function(response) {
            console.log(response);
            modalObj.setBody(Templates.render('mod_brightcove/video_list', {videos : response}));
+           $('body').on('click', '.bc-sl-d-container.row', function() {
+               $(this).addClass( "selected" ).siblings().removeClass('selected');
+               videoId = $(this).data("video-id");
+           });
        }).fail(function(ex) {
            // do something with the exception
        });
+    }
+
+    function updateForm() {
+        $("[name='videoid']").val(videoId);
     }
 
     /**
@@ -53,10 +62,12 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'core/ajax
             ModalFactory.create({
                 type: ModalFactory.types.SAVE_CANCEL,
                 title: title,
-                body: '<p class="text-center"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i><span class="sr-only">Loading...</span></p>'
+                body: '<p class="text-center"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i><span class="sr-only">Loading...</span></p>',
+                large: true
             }, trigger)
             .done(function(modal) {
                 modalObj = modal;
+                modalObj.getRoot().on(ModalEvents.save, updateForm);
                 updateBody();
             });
         });
