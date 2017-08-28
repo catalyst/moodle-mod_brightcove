@@ -25,19 +25,33 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
     var BrightcoveSelect = {};
     var modalObj;
     var videoId;
+    var page = 1;
+
+    function clickHandlers() {
+        // Click handerl for video select.
+        $('body').on('click', '.bc-sl-d-container.row', function() {
+            $(this).addClass( "selected" ).siblings().removeClass('selected');
+            videoId = $(this).data("video-id");
+        });
+
+        // Click handler for paging.
+        $('body').on('click', 'a.page-link', function() {
+            event.preventDefault();
+            page = $(this).data("page-id");
+            updateBody();
+        });
+    }
 
     function updateBody() {
+        modalObj.setBody('<p class="text-center"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i><span class="sr-only">Loading...</span></p>');
         var promises = ajax.call([
-            { methodname: 'mod_brightcove_video_list', args: {} },
+            { methodname: 'mod_brightcove_video_list', args: {page: page} },
         ]);
 
        promises[0].done(function(response) {
            console.log(response);
-           modalObj.setBody(Templates.render('mod_brightcove/video_list', {videos : response}));
-           $('body').on('click', '.bc-sl-d-container.row', function() {
-               $(this).addClass( "selected" ).siblings().removeClass('selected');
-               videoId = $(this).data("video-id");
-           });
+           modalObj.setBody(Templates.render('mod_brightcove/video_list', {videos : response.videos, pages: response.pages}));
+
        }).fail(function(ex) {
            // do something with the exception
        });
@@ -46,7 +60,6 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
     function updateForm() {
         $("[name='videoid']").val(videoId);
         Templates.render('mod_brightcove/video_list_form', {}).done(function(response) {
-            console.log('loaded');
             $('#bc-selected-video').html(response);
         });
     }
@@ -72,6 +85,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
             .done(function(modal) {
                 modalObj = modal;
                 modalObj.getRoot().on(ModalEvents.save, updateForm);
+                clickHandlers();
                 updateBody();
             });
         });

@@ -57,4 +57,9 @@ if ($ADMIN->fulltree) {
             get_string('apiendpoint_help', 'brightcove'),
             'https://cms.api.brightcove.com/v1/', PARAM_URL));
 
+    $settings->add(new admin_setting_configtext('brightcove/perpage',
+            get_string('perpage',      'brightcove'),
+            get_string('perpage_help', 'brightcove'),
+            5, PARAM_INT));
+
 }

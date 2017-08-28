@@ -73,6 +73,7 @@ class brightcove_api {
         $this->apisecret = $this->config->apisecret;
         $this->oauthendpoint = $this->config->oauthendpoint;
         $this->apiendpoint = $this->config->apiendpoint;
+        $this->limit = $this->config->perpage;
 
         // Allow the caller to instansite the Guzzle client
         // with a custom handler.
@@ -186,15 +187,37 @@ class brightcove_api {
     }
 
     /**
+     * Get the number of pages of videos for a given Brightcove account.
+     * @return int $pages Number of pages.
+     */
+    public function get_video_pages() {
+        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/counts/videos';
+        $count = $this->call_api($url);
+        $pages = ceil($count['count'] / $this->limit);
+
+        return $pages;
+    }
+
+    /**
      * Get video list details from Brightcove API.
      *
      * @return array $results array of video info objects.
      */
-    public function get_video_list() {
-        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/videos?limit=5';
-        $videos = $this->call_api($url);
+    public function get_video_list($page) {
+        $pages = $this->get_video_pages();
         $results = array();
+        $results['videos'] = array();
+        $results['pages'] = array();
         $thumbnailurl = '';
+
+        // Handle paging and offset.
+        if ($page == 0) {
+            $page = $pages;
+        }
+        $offset = ($page - 1) * $this->limit;
+
+        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/videos?limit='. $this->limit . '&offset=' . $offset;
+        $videos = $this->call_api($url);
 
         // Format response
         foreach ($videos as $video){
@@ -217,10 +240,14 @@ class brightcove_api {
             $record->duration = $this->video_duration($video['duration']);
             $record->thumbnail_url = $thumbnailurl;
 
-            $results[] = $record;
+            $results['videos'][] = $record;
         }
 
-            return $results;
+        for ($i = 1; $i <= $pages; $i++) {
+            $results['pages'][] = array('page' => $i);
+        }
+
+        return $results;
     }
 
 

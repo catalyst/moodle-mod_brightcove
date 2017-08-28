@@ -41,7 +41,9 @@ class mod_brightcove_external extends external_api {
     public static function video_list_parameters() {
         return new external_function_parameters(
                 array(
-                        // If I had any parameters, they would be described here. But I don't have any, so this array is empty.
+                        'q' => new external_value(PARAM_TEXT, 'The search query', VALUE_DEFAULT, '*'),
+                        'page' => new external_value(PARAM_INT,
+                                'Page number of results to return', VALUE_DEFAULT, 1),
                 )
             );
     }
@@ -50,8 +52,15 @@ class mod_brightcove_external extends external_api {
      * Returns available videos
      *
      */
-    public static function video_list() {
+    public static function video_list($q, $page) {
         global $USER;
+
+        // Parameter validation.
+        // This feels dumb and the docs are vague, buy it is required.
+        $params = self::validate_parameters(self::video_list_parameters(),
+                array('q' => $q,
+                      'page' => $page,
+                ));
 
         // Context validation.
         $context = context_user::instance($USER->id);
@@ -64,7 +73,7 @@ class mod_brightcove_external extends external_api {
 
         // Execute API call.
         $brightcove = new \mod_brightcove\brightcove_api();
-        $results = $brightcove->get_video_list();
+        $results = $brightcove->get_video_list($page);
 
         return $results;
 
@@ -75,18 +84,28 @@ class mod_brightcove_external extends external_api {
      * @return external_description
      */
     public static function video_list_returns() {
-        return new external_multiple_structure(
-                new external_single_structure(
-                    array(
-                        'id' => new external_value(PARAM_TEXT, 'Brightcove video ID'),
-                        'name' => new external_value(PARAM_TEXT, 'Video title'),
-                        'complete' => new external_value(PARAM_TEXT, 'whether processing is complete'),
-                        'created_at' => new external_value(PARAM_TEXT, 'when the video was created'),
-                        'duration' => new external_value(PARAM_TEXT, 'video duration'),
-                        'thumbnail_url' => new external_value(PARAM_RAW, 'URL for the default thumbnail source image'),
+        return new external_single_structure(
+            array(
+                'videos' => new external_multiple_structure(
+                    new external_single_structure(
+                        array(
+                            'id' => new external_value(PARAM_TEXT, 'Brightcove video ID'),
+                            'name' => new external_value(PARAM_TEXT, 'Video title'),
+                            'complete' => new external_value(PARAM_TEXT, 'whether processing is complete'),
+                            'created_at' => new external_value(PARAM_TEXT, 'when the video was created'),
+                            'duration' => new external_value(PARAM_TEXT, 'video duration'),
+                            'thumbnail_url' => new external_value(PARAM_RAW, 'URL for the default thumbnail source image'),
                         )
                     )
-                );
+                ),
+                'pages' => new external_multiple_structure(
+                    new external_single_structure(
+                        array(
+                            'page' => new external_value(PARAM_INT, 'page'),
+                        )
+                    )
+                ),
+            )
+        );
     }
-
 }
