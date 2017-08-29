@@ -22,16 +22,31 @@
 define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/templates', 'core/ajax'],
         function ($, Str, ModalFactory, ModalEvents, Templates, ajax) {
 
+    /**
+     * Module level variables.
+     */
     var BrightcoveSelect = {};
     var modalObj;
-    var videoId;
     var page = 1;
+    var videosObj;
+    var selected = {};
 
+    /**
+     * Add click handlers to dynamically create
+     * page and modal elements.
+     *
+     * @private
+     */
     function clickHandlers() {
-        // Click handerl for video select.
+        // Click hander for video select.
         $('body').on('click', '.bc-sl-d-container.row', function() {
             $(this).addClass( "selected" ).siblings().removeClass('selected');
-            videoId = $(this).data("video-id");
+            var videoId = $(this).data("video-id");
+            var video = videosObj.filter(function( obj ) {
+                return obj.id == videoId;
+              });
+            selected = video[0]
+
         });
 
         // Click handler for paging.
@@ -42,6 +57,12 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
         });
     }
 
+    /**
+     * Updates the body of the modal window,
+     * when a paging event is triggered.
+     *
+     * @private
+     */
     function updateBody() {
         modalObj.setBody('<p class="text-center"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i><span class="sr-only">Loading...</span></p>');
         var promises = ajax.call([
@@ -49,7 +70,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
         ]);
 
        promises[0].done(function(response) {
-           console.log(response);
+           videosObj = response.videos;
            modalObj.setBody(Templates.render('mod_brightcove/video_list', {videos : response.videos, pages: response.pages}));
 
        }).fail(function(ex) {
@@ -57,9 +78,13 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
        });
     }
 
+    /**
+     * Updates Moodle form with slected video information.
+     * @private
+     */
     function updateForm() {
-        $("[name='videoid']").val(videoId);
-        Templates.render('mod_brightcove/video_list_form', {}).done(function(response) {
+        $("[name='videoid']").val(selected.id);
+        Templates.render('mod_brightcove/video_list_form', selected).done(function(response) {
             $('#bc-selected-video').html(response);
         });
     }
@@ -68,7 +93,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
      * Initialise the class.
      *
      * @param {videoid} selector used to find triggers for the new group modal.
-     * @private
+     * @public
      */
     BrightcoveSelect.init = function(videoid) {
         var trigger = $('#id_brightcove_modal'); // form button to trigger modal
