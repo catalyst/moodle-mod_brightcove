@@ -66,6 +66,10 @@
 .bc-sl-data > .row.selected {
     background-color: #dddddd;
 }
+#bc-selected-video .bc-sl-data > .row.selected,
+#bc-selected-video .bc-sl-data > .row:hover {
+    background-color: transparent;
+}
 @media (max-width: 543px) {
     .bc-sl-nav .bc-sl-search {
         padding-right: 0;
