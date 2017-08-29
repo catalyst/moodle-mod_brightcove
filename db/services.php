@@ -35,12 +35,21 @@ $functions = array(
                 'capabilities'  => 'mod/brightcove:addinstance',
                 'ajax' => true
         ),
+        'mod_brightcove_video' => array(
+                'classname'   => 'mod_brightcove_external',
+                'methodname'  => 'video',
+                'classpath'   => 'mod/brightcove/externallib.php',
+                'description' => 'Returns video via the Brightcove API',
+                'type'        => 'read',
+                'capabilities'  => 'mod/brightcove:addinstance',
+                'ajax' => true
+        ),
 );
 
 // We define the services to install as pre-build services. A pre-build service is not editable by administrator.
 $services = array(
         'Brightcove service' => array(
-                'functions' => array('mod_brightcove_video_list'),
+                'functions' => array('mod_brightcove_video_list', 'mod_brightcove_video'),
                 'restrictedusers' => 0,
                 'enabled' => 1,
         )

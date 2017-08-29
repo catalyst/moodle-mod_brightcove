@@ -108,4 +108,62 @@ class mod_brightcove_external extends external_api {
             )
         );
     }
+
+    /**
+     * Returns description of method parameters
+     * @return external_function_parameters
+     */
+    public static function video_parameters() {
+        return new external_function_parameters(
+            array(
+                'id' => new external_value(PARAM_INT, 'The Brightcove video ID', VALUE_REQUIRED),
+            )
+        );
+    }
+
+    /**
+     * Returns video
+     *
+     */
+    public static function video($id) {
+        global $USER;
+
+        // Parameter validation.
+        // This feels dumb and the docs are vague, buy it is required.
+        $params = self::validate_parameters(self::video_parameters(),
+            array('id' => $id));
+
+        // Context validation.
+        $context = context_user::instance($USER->id);
+        self::validate_context($context);
+
+        // Capability checking.
+        if (!has_capability('mod/brightcove:addinstance', $context)) {
+            throw new moodle_exception('cannot_access_api');
+        }
+
+        // Execute API call.
+        $brightcove = new \mod_brightcove\brightcove_api();
+        $results = $brightcove->get_video_by_id($id);
+
+        return $results;
+
+    }
+
+    /**
+     * Returns description of method result value
+     * @return external_description
+     */
+    public static function video_returns() {
+        return new external_single_structure(
+            array(
+                'id' => new external_value(PARAM_TEXT, 'Brightcove video ID'),
+                'name' => new external_value(PARAM_TEXT, 'Video title'),
+                'complete' => new external_value(PARAM_TEXT, 'whether processing is complete'),
+                'created_at' => new external_value(PARAM_TEXT, 'when the video was created'),
+                'duration' => new external_value(PARAM_TEXT, 'video duration'),
+                'thumbnail_url' => new external_value(PARAM_RAW, 'URL for the default thumbnail source image'),
+             )
+        );
+    }
 }

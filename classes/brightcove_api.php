@@ -250,5 +250,35 @@ class brightcove_api {
         return $results;
     }
 
+    /**
+     * Given a Video ID return Brightcove video object.
+     *
+     * @param int $id The Brightcove ID of the video.
+     * @return \stdClass $record The video record details.
+     */
+    public function get_video_by_id($id) {
+        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/videos/' . $id;
+        $video = $this->call_api($url);
 
+        if (isset($video['images']['thumbnail']['src'])) {
+            $thumbnailurl= $video['images']['thumbnail']['src'];
+        }
+
+        if ($video['complete']){
+            $complete = 'check';
+        }
+        else {
+            $complete = 'warning';
+        }
+
+        $record = new \stdClass();
+        $record->id = $video['id'];
+        $record->name = $video['name'];
+        $record->complete = $complete;
+        $record->created_at = date('d/m/Y h:i:s A', strtotime($video['created_at']));
+        $record->duration = $this->video_duration($video['duration']);
+        $record->thumbnail_url = $thumbnailurl;
+
+        return $record;
+    }
 }
