@@ -32,6 +32,12 @@
 .bc-sl-pagination .pagination {
     margin: 0;
 }
+.bc-sl-data + .bc-sl-pagination {
+    float: none;
+    text-align: right;
+    width: 100%;
+    margin-top: 15px;
+}
 .bc-sl-d-container:first-of-type {
     border-top: none;
 }
