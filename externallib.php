@@ -73,7 +73,7 @@ class mod_brightcove_external extends external_api {
 
         // Execute API call.
         $brightcove = new \mod_brightcove\brightcove_api();
-        $results = $brightcove->get_video_list($page);
+        $results = $brightcove->get_video_list($q, $page);
 
         return $results;
 

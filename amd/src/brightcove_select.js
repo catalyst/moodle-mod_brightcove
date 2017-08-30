@@ -28,6 +28,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
     var BrightcoveSelect = {};
     var modalObj;
     var page = 1;
+    var q = '';
     var videosObj;
     var selected = {};
     var spinner = '<p class="text-center"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i><span class="sr-only">Loading...</span></p>';
@@ -56,6 +57,32 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
             page = $(this).data("page-id");
             updateBody();
         });
+
+        // Click handlers for search.
+        $('body').on('click', "[name='bc_search_go']", function() {
+            event.preventDefault();
+            search($("[name='bc_search']").val());
+        });
+
+        $('body').on('keypress', "[name='bc_search']", function() {
+            if (event.key == 'Enter') {
+                event.preventDefault();
+                search($("[name='bc_search']").val());
+            }
+        });
+    }
+
+    /**
+     * Perform search of videos.
+     *
+     * @param query
+     * @private
+     */
+    function search(query) {
+        if (query !== '') {
+            q = query;
+            updateBody();
+        }
     }
 
     /**
@@ -67,12 +94,12 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
     function updateBody() {
         modalObj.setBody(spinner);
         var promises = ajax.call([
-            { methodname: 'mod_brightcove_video_list', args: {page: page} },
+            { methodname: 'mod_brightcove_video_list', args: {q: q, page: page} },
         ]);
 
        promises[0].done(function(response) {
            videosObj = response.videos;
-           modalObj.setBody(Templates.render('mod_brightcove/video_list', {videos : response.videos, pages: response.pages}));
+           modalObj.setBody(Templates.render('mod_brightcove/video_list', {videos : response.videos, pages: response.pages, q: q}));
 
        }).fail(function(ex) {
            // do something with the exception

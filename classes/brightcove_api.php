@@ -188,10 +188,19 @@ class brightcove_api {
 
     /**
      * Get the number of pages of videos for a given Brightcove account.
+     *
+     * @param string $q the search query to match
      * @return int $pages Number of pages.
      */
-    public function get_video_pages() {
-        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/counts/videos';
+    public function get_video_pages($q) {
+        // Handle searching
+        if ($q != '*') {
+            $query = '?q=' . urlencode($q);
+        } else {
+            $query = '';
+        }
+
+        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/counts/videos' . $query;
         $count = $this->call_api($url);
         $pages = ceil($count['count'] / $this->limit);
 
@@ -201,10 +210,12 @@ class brightcove_api {
     /**
      * Get video list details from Brightcove API.
      *
+     * @param int $page the result page to return
+     * @param string $q the search query to match
      * @return array $results array of video info objects.
      */
-    public function get_video_list($page) {
-        $pages = $this->get_video_pages();
+    public function get_video_list($q, $page) {
+        $pages = $this->get_video_pages($q);
         $results = array();
         $results['videos'] = array();
         $results['pages'] = array();
@@ -216,7 +227,14 @@ class brightcove_api {
         }
         $offset = ($page - 1) * $this->limit;
 
-        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/videos?limit='. $this->limit . '&offset=' . $offset;
+        // Handle searching
+        if ($q != '*') {
+            $query = '&q=' . urlencode($q);
+        } else {
+            $query = '';
+        }
+
+        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/videos?limit='. $this->limit . '&offset=' . $offset . $query;
         $videos = $this->call_api($url);
 
         // Format response
