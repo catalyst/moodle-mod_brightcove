@@ -30,6 +30,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
     var page = 1;
     var videosObj;
     var selected = {};
+    var spinner = '<p class="text-center"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i><span class="sr-only">Loading...</span></p>';
 
     /**
      * Add click handlers to dynamically create
@@ -64,7 +65,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
      * @private
      */
     function updateBody() {
-        modalObj.setBody('<p class="text-center"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i><span class="sr-only">Loading...</span></p>');
+        modalObj.setBody(spinner);
         var promises = ajax.call([
             { methodname: 'mod_brightcove_video_list', args: {page: page} },
         ]);
@@ -72,6 +73,30 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
        promises[0].done(function(response) {
            videosObj = response.videos;
            modalObj.setBody(Templates.render('mod_brightcove/video_list', {videos : response.videos, pages: response.pages}));
+
+       }).fail(function(ex) {
+           // do something with the exception
+       });
+    }
+
+    /**
+     * Add video details to Moodle form if we are editing
+     * an existing activity.
+     *
+     * @param videoId
+     * @private
+     */
+    function initForm(videoId) {
+        $('#bc-selected-video').html(spinner);
+        var promises = ajax.call([
+            { methodname: 'mod_brightcove_video', args: {id: videoId} },
+        ]);
+
+       promises[0].done(function(response) {
+           selected = response
+           Templates.render('mod_brightcove/video_list_form', selected).done(function(RenderResp) {
+               $('#bc-selected-video').html(RenderResp);
+           });
 
        }).fail(function(ex) {
            // do something with the exception
@@ -97,6 +122,12 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
      */
     BrightcoveSelect.init = function(videoid) {
         var trigger = $('#id_brightcove_modal'); // form button to trigger modal
+        var videoId = $("[name='videoid']").val();
+
+        if (videoId !== '') {
+           initForm(videoId);
+        }
+
 
         //Get the Title String
         Str.get_string('modaltitle', 'mod_brightcove').then(function(title) {
@@ -104,7 +135,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
             ModalFactory.create({
                 type: ModalFactory.types.SAVE_CANCEL,
                 title: title,
-                body: '<p class="text-center"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i><span class="sr-only">Loading...</span></p>',
+                body: spinner,
                 large: true
             }, trigger)
             .done(function(modal) {
@@ -114,8 +145,6 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
                 updateBody();
             });
         });
-
-
     };
  
     return BrightcoveSelect;
