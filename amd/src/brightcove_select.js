@@ -64,17 +64,18 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
             search($("[name='bc_search']").val());
         });
 
-        // Click handlers for clearing search.
-        $('body').on('click', "[name='bc_search_clear']", function() {
-            event.preventDefault();
-            $("[name='bc_search']").val("");
-        });
-
         $('body').on('keypress', "[name='bc_search']", function() {
             if (event.key == 'Enter') {
                 event.preventDefault();
                 search($("[name='bc_search']").val());
             }
+        });
+
+        // Click handlers for clearing search.
+        $('body').on('click', "[name='bc_search_clear']", function() {
+            event.preventDefault();
+            $("[name='bc_search']").val("");
+            search('*');
         });
     }
 
@@ -85,7 +86,10 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events', 'core/t
      * @private
      */
     function search(query) {
-        if (query !== '') {
+        if (query == '*') {
+            q = '';
+            updateBody();
+        } else if (query !== '') {
             q = query;
             updateBody();
         }
