@@ -46,6 +46,18 @@ if ($id) {
 require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
+$moduleconfig = get_config('brightcove');
+
+// Check if we have a configured Brightcove instance
+$pluginconfigured = true;
+if ($moduleconfig->accountid == ''
+        || $moduleconfig->playerid == ''
+        || $moduleconfig->apikey == ''
+        || $moduleconfig->apisecret == ''
+        || $moduleconfig->oauthendpoint == ''
+        || $moduleconfig->apiendpoint == '') {
+            $pluginconfigured = false;
+        }
 
 $PAGE->set_url('/mod/brightcove/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($moduleinstance->name));
@@ -53,5 +65,12 @@ $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
 echo $OUTPUT->header();
+echo $OUTPUT->heading(format_string($moduleinstance->name), 2);
+
+if ($pluginconfigured) {
+    // TODO: add renderer.
+} else {
+    echo $OUTPUT->heading(get_string('noconfig', 'brightcove'), 5);
+}
 
 echo $OUTPUT->footer();
