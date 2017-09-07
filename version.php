@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_brightcove';
-$plugin->release = '2017083100';
-$plugin->version = 2017083100;
+$plugin->release = '2017090700';
+$plugin->version = 2017090700;
 $plugin->requires = 2017051500;
 $plugin->maturity = MATURITY_ALPHA;

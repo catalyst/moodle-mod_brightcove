@@ -22,6 +22,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_brightcove\brightcove_api;
+
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
@@ -64,11 +66,23 @@ $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
+$brightcove = new brightcove_api();
+$brightcoveurl = $brightcove->get_videoplayer_js_url();
+
+$player = new stdClass();
+$player->accountid = $moduleconfig->accountid;
+$player->playerid = $moduleconfig->playerid;
+$player->videoid = $moduleinstance->videoid;
+
+$PAGE->requires->js_amd_inline("requirejs.config({paths:{'bc':['{$brightcoveurl}']}});");
+$PAGE->requires->js_call_amd('mod_brightcove/brightcove', 'init', array($moduleconfig->playerid));
+
+
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($moduleinstance->name), 2);
 
 if ($pluginconfigured) {
-    // TODO: add renderer.
+    echo $OUTPUT->render_from_template('mod_brightcove/player', $player);
 } else {
     echo $OUTPUT->heading(get_string('noconfig', 'brightcove'), 5);
 }

@@ -69,6 +69,7 @@ class brightcove_api {
     public function __construct($handler = false) {
         $this->config = get_config('brightcove');
         $this->accountid = $this->config->accountid;
+        $this->playerid = $this->config->playerid;
         $this->apikey = $this->config->apikey;
         $this->apisecret = $this->config->apisecret;
         $this->oauthendpoint = $this->config->oauthendpoint;
@@ -200,7 +201,7 @@ class brightcove_api {
             $query = '';
         }
 
-        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/counts/videos' . $query;
+        $url = $this->apiendpoint. 'accounts/' . $this->accountid . '/counts/videos' . $query;
         $count = $this->call_api($url);
         $pages = ceil($count['count'] / $this->limit);
 
@@ -234,7 +235,7 @@ class brightcove_api {
             $query = '';
         }
 
-        $url = $this->config->apiendpoint. 'accounts/' . $this->accountid . '/videos?limit='. $this->limit . '&offset=' . $offset . $query;
+        $url = $this->apiendpoint. 'accounts/' . $this->accountid . '/videos?limit='. $this->limit . '&offset=' . $offset . $query;
         $videos = $this->call_api($url);
 
         // Format response
@@ -266,6 +267,16 @@ class brightcove_api {
         }
 
         return $results;
+    }
+
+    public function get_videoplayer_js_url() {
+        $videoplayerurl = '//players.brightcove.net/';
+        $videoplayerurl .= $this->accountid;
+        $videoplayerurl .= '/';
+        $videoplayerurl .= $this->playerid;
+        $videoplayerurl .= '_default/index';
+
+        return $videoplayerurl;
     }
 
     /**
