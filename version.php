@@ -29,3 +29,6 @@ $plugin->release = '2017090800';
 $plugin->version = 2017090800;
 $plugin->requires = 2017051500;
 $plugin->maturity = MATURITY_ALPHA;
+$plugin->dependencies = [
+    'local_aws' => 2017071501,
+];
