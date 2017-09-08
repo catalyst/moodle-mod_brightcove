@@ -65,17 +65,21 @@ $PAGE->set_url('/mod/brightcove/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
+$PAGE->set_pagelayout('embedded');
 
-$iframeurl= new stdClass();
-$iframeurl->url = new moodle_url('/mod/brightcove/iframe.php', array('id' => $cm->id));
+$brightcove = new brightcove_api();
+$brightcoveurl = $brightcove->get_videoplayer_js_url();
 
-echo $OUTPUT->header();
-echo $OUTPUT->heading(format_string($moduleinstance->name), 2);
+$player = new stdClass();
+$player->accountid = $moduleconfig->accountid;
+$player->playerid = $moduleconfig->playerid;
+$player->videoid = $moduleinstance->videoid;
 
-if ($pluginconfigured) {
-    echo $OUTPUT->render_from_template('mod_brightcove/parent', $iframeurl);
-} else {
-    echo $OUTPUT->heading(get_string('noconfig', 'brightcove'), 5);
-}
+$PAGE->requires->js_amd_inline("requirejs.config({paths:{'bc':['{$brightcoveurl}']}});");
+$PAGE->requires->js_call_amd('mod_brightcove/brightcove', 'init', array($moduleconfig->playerid));
 
-echo $OUTPUT->footer();
+$output = $PAGE->get_renderer('mod_brightcove');
+
+echo $output->header();
+echo $OUTPUT->render_from_template('mod_brightcove/player', $player);
+echo $output->footer();
