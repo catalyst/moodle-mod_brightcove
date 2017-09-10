@@ -23,5 +23,15 @@
         <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
       </INDEXES>
     </TABLE>
+    <TABLE NAME="brightcove_progress" COMMENT="Defines brightcove view progress">
+      <FIELDS>
+        <FIELD NAME="id"           TYPE="int"  LENGTH="10"      NOTNULL="true"                              SEQUENCE="true"  />
+        <FIELD NAME="cmid"         TYPE="int"  LENGTH="10"      NOTNULL="true"                              SEQUENCE="true"  />
+        <FIELD NAME="userid"       TYPE="int"  LENGTH="10"      NOTNULL="true"                              SEQUENCE="true"  />
+        <FIELD NAME="timecreated"  TYPE="int"  LENGTH="10"      NOTNULL="true"                  DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="timemodified" TYPE="int"  LENGTH="10"      NOTNULL="true"                  DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="duration"     TYPE="int"  LENGTH="10"      NOTNULL="true"                  DEFAULT="0" SEQUENCE="false" />
+      </FIELDS>
+    </TABLE>
   </TABLES>
 </XMLDB>
