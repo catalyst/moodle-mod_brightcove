@@ -33,6 +33,9 @@
         <FIELD NAME="duration"     TYPE="int"    LENGTH="10" NOTNULL="true"              DEFAULT="0" SEQUENCE="false" />
         <FIELD NAME="progress"     TYPE="number" LENGTH="5"  NOTNULL="true" DECIMALS="2" DEFAULT="0" SEQUENCE="false" />
       </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
     </TABLE>
   </TABLES>
 </XMLDB>
