@@ -27,6 +27,7 @@ use mod_brightcove\progress;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
+require_once($CFG->dirroot . '/mod/brightcove/externallib.php');
 
 // Course_module ID, or
 $id = optional_param('id', 0, PARAM_INT);
@@ -50,6 +51,7 @@ require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
 $moduleconfig = get_config('brightcove');
+$activityobject = mod_brightcove_external::get_user_progress($cm->id, $USER->id);
 
 // Check if we have a configured Brightcove instance
 $pluginconfigured = true;
@@ -75,8 +77,7 @@ $player = new stdClass();
 $player->accountid = $moduleconfig->accountid;
 $player->playerid = $moduleconfig->playerid;
 $player->videoid = $moduleinstance->videoid;
-
-$progress = new progress([$cm->id, $USER->id]);
+$player->progress = $activityobject['progress'];
 
 $PAGE->requires->js_amd_inline("requirejs.config({paths:{'bc':['{$brightcoveurl}']}});");
 $PAGE->requires->js_call_amd('mod_brightcove/brightcove', 'init', array($moduleconfig->playerid));
@@ -85,7 +86,7 @@ $PAGE->requires->js_call_amd('mod_brightcove/activity_progress', 'init', [
         'playerid' => $player->playerid,
         'cmid'     => $cm->id,
         'userid'   => $USER->id,
-        'maximumProgress' => $progress->progress,
+        'maximumProgress' => $activityobject['progress'],
     ],
 ]);
 
