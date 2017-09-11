@@ -46,4 +46,29 @@ class renderer extends core_renderer {
         $output = $this->page->requires->get_top_of_body_code($this);
         return $output;
     }
+
+    /**
+     * The standard tags (meta tags, links to stylesheets and JavaScript, etc.)
+     * that should be included in the <head> tag. Designed to be called in theme
+     * layout.php files.
+     *
+     * @return string HTML fragment.
+     */
+    public function standard_head_html() {
+        global $CFG, $SESSION;
+
+        $output = '';
+        $output .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' . "\n";
+        $output .= '<meta name="keywords" content="moodle, ' . $this->page->title . '" />' . "\n";
+
+        // Get the theme javascript head and footer
+        if ($jsurl = $this->page->theme->javascript_url(true)) {
+            $this->page->requires->js($jsurl, true);
+        }
+        if ($jsurl = $this->page->theme->javascript_url(false)) {
+            $this->page->requires->js($jsurl);
+        }
+
+        return $output;
+    }
 }
