@@ -26,31 +26,49 @@ defined('MOODLE_INTERNAL') || die();
 
 // We defined the web service functions to install.
 $functions = array(
-        'mod_brightcove_video_list' => array(
-                'classname'   => 'mod_brightcove_external',
-                'methodname'  => 'video_list',
-                'classpath'   => 'mod/brightcove/externallib.php',
-                'description' => 'Returns available videos via the Brightcove API',
-                'type'        => 'read',
-                'capabilities'  => 'mod/brightcove:addinstance',
-                'ajax' => true
-        ),
-        'mod_brightcove_video' => array(
-                'classname'   => 'mod_brightcove_external',
-                'methodname'  => 'video',
-                'classpath'   => 'mod/brightcove/externallib.php',
-                'description' => 'Returns video via the Brightcove API',
-                'type'        => 'read',
-                'capabilities'  => 'mod/brightcove:addinstance',
-                'ajax' => true
-        ),
+    'mod_brightcove_video_list' => array(
+        'classname'   => 'mod_brightcove_external',
+        'methodname'  => 'video_list',
+        'classpath'   => 'mod/brightcove/externallib.php',
+        'description' => 'Returns available videos via the Brightcove API',
+        'type'        => 'read',
+        'capabilities'  => 'mod/brightcove:addinstance',
+        'ajax' => true
+    ),
+    'mod_brightcove_video' => array(
+        'classname'   => 'mod_brightcove_external',
+        'methodname'  => 'video',
+        'classpath'   => 'mod/brightcove/externallib.php',
+        'description' => 'Returns video via the Brightcove API',
+        'type'        => 'read',
+        'capabilities'  => 'mod/brightcove:addinstance',
+        'ajax' => true
+    ),
+    'mod_brightcove_get_user_progress' => array(
+        'classname'     => 'mod_brightcove_external',
+        'methodname'    => 'get_user_progress',
+        'classpath'     => 'mod/brightcove/externallib.php',
+        'description'   => 'Get user activity progress record.',
+        'type'          => 'read',
+        'ajax'          => true,
+        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
+    ),
+    'mod_brightcove_update_user_progress' => array(
+        'classname'     => 'mod_brightcove_external',
+        'methodname'    => 'update_user_progress',
+        'classpath'     => 'mod/brightcove/externallib.php',
+        'description'   => 'Create/Update user activity progress record.',
+        'type'          => 'write',
+        'ajax'          => true,
+        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
+    ),
 );
 
 // We define the services to install as pre-build services. A pre-build service is not editable by administrator.
 $services = array(
-        'Brightcove service' => array(
-                'functions' => array('mod_brightcove_video_list', 'mod_brightcove_video'),
-                'restrictedusers' => 0,
-                'enabled' => 1,
-        )
+    'Brightcove service' => array(
+        'functions' => array('mod_brightcove_video_list', 'mod_brightcove_video'),
+        'restrictedusers' => 0,
+        'enabled' => 1,
+    ),
 );

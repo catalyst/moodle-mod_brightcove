@@ -6,15 +6,15 @@
   <TABLES>
     <TABLE NAME="brightcove" COMMENT="Defines brightcove">
       <FIELDS>
-        <FIELD NAME="id"           TYPE="int"  LENGTH="10"      NOTNULL="true"                              SEQUENCE="true"  />
-        <FIELD NAME="course"       TYPE="int"  LENGTH="10"      NOTNULL="true"                  DEFAULT="0" SEQUENCE="false" />
-        <FIELD NAME="name"         TYPE="char" LENGTH="255"     NOTNULL="true"                              SEQUENCE="false" />
-        <FIELD NAME="intro"        TYPE="text" LENGTH="small"   NOTNULL="false"                             SEQUENCE="false" />
-        <FIELD NAME="introformat"  TYPE="int"  LENGTH="4"       NOTNULL="true"  UNSIGNED="true" DEFAULT="0" SEQUENCE="false" />
-        <FIELD NAME="videoid"      TYPE="char" LENGTH="20"      NOTNULL="false"                             SEQUENCE="false" />
-        <FIELD NAME="aspectratio"  TYPE="int"  LENGTH="10"      NOTNULL="true"                  DEFAULT="1" SEQUENCE="false" />
-        <FIELD NAME="videoname"    TYPE="char" LENGTH="255"     NOTNULL="false"                             SEQUENCE="false" />
-        <FIELD NAME="timemodified" TYPE="int"  LENGTH="10"      NOTNULL="true"                  DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="id"           TYPE="int"  LENGTH="10"    NOTNULL="true"                              SEQUENCE="true"  />
+        <FIELD NAME="course"       TYPE="int"  LENGTH="10"    NOTNULL="true"                  DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="name"         TYPE="char" LENGTH="255"   NOTNULL="true"                              SEQUENCE="false" />
+        <FIELD NAME="intro"        TYPE="text" LENGTH="small" NOTNULL="false"                             SEQUENCE="false" />
+        <FIELD NAME="introformat"  TYPE="int"  LENGTH="4"     NOTNULL="true"  UNSIGNED="true" DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="videoid"      TYPE="char" LENGTH="20"    NOTNULL="false"                             SEQUENCE="false" />
+        <FIELD NAME="aspectratio"  TYPE="int"  LENGTH="10"    NOTNULL="true"                  DEFAULT="1" SEQUENCE="false" />
+        <FIELD NAME="videoname"    TYPE="char" LENGTH="255"   NOTNULL="false"                             SEQUENCE="false" />
+        <FIELD NAME="timemodified" TYPE="int"  LENGTH="10"    NOTNULL="true"                  DEFAULT="0" SEQUENCE="false" />
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -25,12 +25,13 @@
     </TABLE>
     <TABLE NAME="brightcove_progress" COMMENT="Defines brightcove view progress">
       <FIELDS>
-        <FIELD NAME="id"           TYPE="int"  LENGTH="10"      NOTNULL="true"                              SEQUENCE="true"  />
-        <FIELD NAME="cmid"         TYPE="int"  LENGTH="10"      NOTNULL="true"                              SEQUENCE="true"  />
-        <FIELD NAME="userid"       TYPE="int"  LENGTH="10"      NOTNULL="true"                              SEQUENCE="true"  />
-        <FIELD NAME="timecreated"  TYPE="int"  LENGTH="10"      NOTNULL="true"                  DEFAULT="0" SEQUENCE="false" />
-        <FIELD NAME="timemodified" TYPE="int"  LENGTH="10"      NOTNULL="true"                  DEFAULT="0" SEQUENCE="false" />
-        <FIELD NAME="duration"     TYPE="int"  LENGTH="10"      NOTNULL="true"                  DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="id"           TYPE="int"    LENGTH="10" NOTNULL="true"                          SEQUENCE="true"  />
+        <FIELD NAME="cmid"         TYPE="int"    LENGTH="10" NOTNULL="true"                          SEQUENCE="false" />
+        <FIELD NAME="userid"       TYPE="int"    LENGTH="10" NOTNULL="true"                          SEQUENCE="false" />
+        <FIELD NAME="timecreated"  TYPE="int"    LENGTH="10" NOTNULL="true"              DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="timemodified" TYPE="int"    LENGTH="10" NOTNULL="true"              DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="duration"     TYPE="int"    LENGTH="10" NOTNULL="true"              DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="progress"     TYPE="number" LENGTH="5"  NOTNULL="true" DECIMALS="2" DEFAULT="0" SEQUENCE="false" />
       </FIELDS>
     </TABLE>
   </TABLES>

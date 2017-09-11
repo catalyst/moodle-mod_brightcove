@@ -23,6 +23,7 @@
  */
 
 use mod_brightcove\brightcove_api;
+use mod_brightcove\progress;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -75,8 +76,18 @@ $player->accountid = $moduleconfig->accountid;
 $player->playerid = $moduleconfig->playerid;
 $player->videoid = $moduleinstance->videoid;
 
+$progress = new progress([$cm->id, $USER->id]);
+
 $PAGE->requires->js_amd_inline("requirejs.config({paths:{'bc':['{$brightcoveurl}']}});");
 $PAGE->requires->js_call_amd('mod_brightcove/brightcove', 'init', array($moduleconfig->playerid));
+$PAGE->requires->js_call_amd('mod_brightcove/activity_progress', 'init', [
+    [
+        'playerid' => $player->playerid,
+        'cmid'     => $cm->id,
+        'userid'   => $USER->id,
+        'maximumProgress' => $progress->progress,
+    ],
+]);
 
 $output = $PAGE->get_renderer('mod_brightcove');
 
