@@ -17,7 +17,7 @@
 /**
  * Library of interface functions and constants.
  *
- * @package     mod_brightcove
+ * @package     brightcove
  * @copyright   2017 Matt Porritt <mattp@catalyst-au.net>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,10 +30,12 @@ defined('MOODLE_INTERNAL') || die();
  * @param string $feature Constant representing the feature.
  * @return true | null True if the feature is supported, null otherwise.
  */
-function mod_brightcove_supports($feature) {
+function brightcove_supports($feature) {
     switch ($feature) {
         case FEATURE_GRADE_HAS_GRADE:
-            return false;
+            return true;
+        case FEATURE_ADVANCED_GRADING:
+            return true;
         case FEATURE_MOD_INTRO:
             return true;
         case FEATURE_SHOW_DESCRIPTION:
@@ -68,14 +70,14 @@ function brightcove_is_configured() {
 }
 
 /**
- * Saves a new instance of the mod_brightcove into the database.
+ * Saves a new instance of the brightcove into the database.
  *
  * Given an object containing all the necessary data, (defined by the form
  * in mod_form.php) this function will create a new instance and return the id
  * number of the instance.
  *
  * @param object $moduleinstance An object from the form.
- * @param mod_brightcove_mod_form $mform The form.
+ * @param brightcove_mod_form $mform The form.
  * @return int The id of the newly inserted record.
  */
 function brightcove_add_instance($moduleinstance, $mform = null) {
@@ -89,13 +91,13 @@ function brightcove_add_instance($moduleinstance, $mform = null) {
 }
 
 /**
- * Updates an instance of the mod_brightcove in the database.
+ * Updates an instance of the brightcove in the database.
  *
  * Given an object containing all the necessary data (defined in mod_form.php),
  * this function will update an existing instance with new data.
  *
  * @param object $moduleinstance An object from the form in mod_form.php.
- * @param mod_brightcove_mod_form $mform The form.
+ * @param brightcove_mod_form $mform The form.
  * @return bool True if successful, false otherwise.
  */
 function brightcove_update_instance($moduleinstance, $mform = null) {
@@ -108,7 +110,7 @@ function brightcove_update_instance($moduleinstance, $mform = null) {
 }
 
 /**
- * Removes an instance of the mod_brightcove from the database.
+ * Removes an instance of the brightcove from the database.
  *
  * @param int $id Id of the module instance.
  * @return bool True if successful, false on failure.
@@ -132,7 +134,7 @@ function brightcove_coursemodule_validation(moodleform_mod $modform, array $data
 }
 
 /**
- * Extends the global navigation tree by adding mod_brightcove nodes if there is a relevant content.
+ * Extends the global navigation tree by adding brightcove nodes if there is a relevant content.
  *
  * This can be called by an AJAX request so do not rely on $PAGE as it might not be set up properly.
  *
@@ -145,13 +147,96 @@ function brightcove_extend_navigation($brightcovenode, $course, $module, $cm) {
 }
 
 /**
- * Extends the settings navigation with the mod_brightcove settings.
+ * Extends the settings navigation with the brightcove settings.
  *
- * This function is called when the context for the page is a mod_brightcove module.
+ * This function is called when the context for the page is a brightcove module.
  * This is not called by AJAX so it is safe to rely on the $PAGE.
  *
  * @param settings_navigation $settingsnav {@link settings_navigation}
  * @param navigation_node $brightcovenode {@link navigation_node}
  */
 function brightcove_extend_settings_navigation($settingsnav, $brightcovenode = null) {
+}
+
+/**
+ * Checks if scale is being used by any instance of brightcove.
+ *
+ * This is used to find out if scale used anywhere.
+ *
+ * @param int $scaleid ID of the scale.
+ * @return bool True if the scale is used by any brightcove instance.
+ */
+function brightcove_scale_used_anywhere($scaleid) {
+    global $DB;
+
+    if ($scaleid and $DB->record_exists('brightcove', array('grade' => -$scaleid))) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Creates or updates grade item for the given brightcove instance.
+ *
+ * Needed by {@link grade_update_mod_grades()}.
+ *
+ * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
+ * @param bool $reset Reset grades in the gradebook.
+ * @return void.
+ */
+function brightcove_grade_item_update($moduleinstance, $reset=false) {
+    global $CFG;
+    require_once($CFG->libdir.'/gradelib.php');
+
+    $item = array();
+    $item['itemname'] = clean_param($moduleinstance->name, PARAM_NOTAGS);
+    $item['gradetype'] = GRADE_TYPE_VALUE;
+
+    if ($moduleinstance->grade > 0) {
+        $item['gradetype'] = GRADE_TYPE_VALUE;
+        $item['grademax']  = $moduleinstance->grade;
+        $item['grademin']  = 0;
+    } else if ($moduleinstance->grade < 0) {
+        $item['gradetype'] = GRADE_TYPE_SCALE;
+        $item['scaleid']   = -$moduleinstance->grade;
+    } else {
+        $item['gradetype'] = GRADE_TYPE_NONE;
+    }
+    if ($reset) {
+        $item['reset'] = true;
+    }
+
+    grade_update('/mod/brightcove', $moduleinstance->course, 'mod', 'brightcove', $moduleinstance->id, 0, null, $item);
+}
+
+/**
+ * Delete grade item for given brightcove instance.
+ *
+ * @param stdClass $moduleinstance Instance object.
+ * @return grade_item.
+ */
+function brightcove_grade_item_delete($moduleinstance) {
+    global $CFG;
+    require_once($CFG->libdir.'/gradelib.php');
+
+    return grade_update('/mod/brightcove', $moduleinstance->course, 'mod', 'brightcove',
+        $moduleinstance->id, 0, null, array('deleted' => 1));
+}
+
+/**
+ * Update brightcove grades in the gradebook.
+ *
+ * Needed by {@link grade_update_mod_grades()}.
+ *
+ * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
+ * @param int $userid Update grade of specific user only, 0 means all participants.
+ */
+function brightcove_update_grades($moduleinstance, $userid = 0) {
+    global $CFG, $DB;
+    require_once($CFG->libdir.'/gradelib.php');
+
+    // Populate array of grade objects indexed by userid.
+    $grades = array();
+    grade_update('/mod/brightcove', $moduleinstance->course, 'mod', 'brightcove', $moduleinstance->id, 0, $grades);
 }
