@@ -66,14 +66,21 @@ $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
-$iframeurl= new stdClass();
-$iframeurl->url = new moodle_url('/mod/brightcove/iframe.php', array('id' => $cm->id));
+$brightcove = new brightcove_api();
+$brightcove->set_context($modulecontext);
+
+$templateobj= new stdClass();
+$templateobj->iframeurl = new moodle_url('/mod/brightcove/iframe.php', array('id' => $cm->id));
+$templateobj->transcripturl = $brightcove->get_transcript_url();
+$templateobj->transcriptdownload = $brightcove->get_transcript_download_url();
+
+//error_log(print_r($templateobj, true));
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($moduleinstance->name), 2);
 
 if ($pluginconfigured) {
-    echo $OUTPUT->render_from_template('mod_brightcove/parent', $iframeurl);
+    echo $OUTPUT->render_from_template('mod_brightcove/parent', $templateobj);
 } else {
     echo $OUTPUT->heading(get_string('noconfig', 'brightcove'), 5);
 }

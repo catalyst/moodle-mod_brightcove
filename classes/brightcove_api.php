@@ -75,6 +75,7 @@ class brightcove_api {
         $this->oauthendpoint = $this->config->oauthendpoint;
         $this->apiendpoint = $this->config->apiendpoint;
         $this->limit = $this->config->perpage;
+        $this->context = '';
 
         // Allow the caller to instansite the Guzzle client
         // with a custom handler.
@@ -84,6 +85,10 @@ class brightcove_api {
             $this->client = new \GuzzleHttp\Client();
         }
 
+    }
+
+    public function set_context($context) {
+        $this->context = $context;
     }
 
     /**
@@ -307,7 +312,180 @@ class brightcove_api {
         $record->created_at = date('d/m/Y h:i:s A', strtotime($video['created_at']));
         $record->duration = $this->video_duration($video['duration']);
         $record->thumbnail_url = $thumbnailurl;
+        $record->text_tracks = $video['text_tracks'];
 
         return $record;
+    }
+
+    /**
+     * Gets the transcript file from Brightcove via the API
+     * and save it as a local file in Moodle.
+     *
+     * @return void
+     */
+    public function save_transcript($videoid) {
+        $texttrack = $this->get_transcript_url($videoid, false);
+        $fs = get_file_storage();
+        $file = $this->get_transcript_file();
+
+        // Delete existing file.
+        if ($file) {
+            $file->delete();
+        }
+
+        // Create a new file from external track URL if it exists.
+        if ($texttrack != '') {
+            $fs->create_file_from_url($this->build_transcript_file_record(), $texttrack);
+        }
+    }
+
+    /**
+     * Delete local transcript file.
+     */
+    public function delete_transcript() {
+        $file = $this->get_transcript_file();
+
+        if ($file) {
+            $file->delete();
+        }
+    }
+
+    /**
+     * Return transcript file.
+     *
+     * @return bool|\stored_file False if not found.
+     */
+    public function get_transcript_file() {
+        $fs = get_file_storage();
+        $filerecord = $this->build_transcript_file_record();
+
+        return $fs->get_file(
+                $filerecord['contextid'],
+                $filerecord['component'],
+                $filerecord['filearea'],
+                $filerecord['itemid'],
+                $filerecord['filepath'],
+                $filerecord['filename']
+                );
+    }
+
+    /**
+     * Build transcript file record.
+     *
+     * @return array
+     */
+    public function build_transcript_file_record() {
+        return array(
+                'contextid' => $this->context->id,
+                'component' => 'mod_brightcove',
+                'filearea' => 'transcript',
+                'itemid' => $this->videoid,
+                'filepath' => '/',
+                'filename' => 'transcript.vtt'
+        );
+    }
+
+    /**
+     * Returns text track details for the given video ID.
+     * Only details for the first track are returned.
+     *
+     * @param bool $internal True if we want an internal transcript URL.
+     * @return string $texttrack URL of first found track location.
+     */
+    public function get_transcript_url($videoid, $internal = true) {
+        $texttrack = '';
+
+        if ($internal) {
+            $texttrack = $this->make_transcript_file_url(false);
+        } else {
+            $videoobj = $this->get_video_by_id($videoid);
+            $texttracks = $videoobj->text_tracks;
+
+            if (array_key_exists(0, $texttracks)) {
+                $texttrack = $texttracks[0]['src'];
+            }
+        }
+
+        return $texttrack;
+    }
+
+    /**
+     * Returns transcript download URL for the given video ID.
+     *
+     * @return string URL of first found track location.
+     */
+    public function get_transcript_download_url() {
+        $downloadurl = new moodle_url('/mod/brightcove/export.php', array('id' => $this->context->instanceid, 'type' => 1));
+
+        return $downloadurl->out(false);
+    }
+
+    /**
+     * Male transctipt file URL.
+     *
+     * @param bool $forcedownload
+     *
+     * @return string
+     */
+    public function make_transcript_file_url($forcedownload = false) {
+        $fileurl = '';
+        $file = $this->get_transcript_file();
+        if ($file) {
+            $fileurl = moodle_url::make_pluginfile_url(
+                    $file->get_contextid(),
+                    $file->get_component(),
+                    $file->get_filearea(),
+                    $file->get_itemid(),
+                    $file->get_filepath(),
+                    $file->get_filename(),
+                    $forcedownload
+                    )->out();
+        }
+
+        return $fileurl;
+    }
+
+    /**
+     * Formats a given transcript ready for user download.
+     * Transcript timming information etc is stripped out.
+     *
+     * @param string $transcript The transcript content to clean.
+     * @return string $cleantranscript Cleaned transcript content.
+     */
+    public function transcript_format_for_download($transcript) {
+        $transcript = preg_replace('/WEBVTT[\n\r]+/', '', $transcript);
+        $transcript = preg_replace('/[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+\s\-\-\>\s[0-9]+\:[0-9]{2}\:[0-9]{2}\.[0-9]+/', '', $transcript);
+        $transcript = preg_replace('/[\n\r]+/', "\n", $transcript);
+        $transcript = preg_replace('/\,[\n\r]/', ", ", $transcript);
+        $transcript = strip_tags($transcript);
+
+        return $transcript;
+    }
+
+    /**
+     * Gets transcript content for a given video
+     * Only details for the first track are returned.
+     *
+     * @param bool $format Should the returned copntent be formatted for download or raw.
+     * @param bool $internal True if we want an internal transcript URL.
+     *
+     * @return string $trackcontent Content of the first found text track.
+     */
+    public function get_transcript_content($format = true, $internal = true) {
+        if ($internal) {
+            $content = $this->get_transcript_file()->get_content();
+        } else {
+            $trackurl = $this->get_transcript_url($internal);
+            $response = $this->client->request('GET', $trackurl);
+            $content = $response->getBody();
+        }
+
+        if ($format) {
+            $trackcontent = $this->transcript_format_for_download($content);
+        } else {
+            $trackcontent = $content;
+        }
+
+        return $trackcontent;
     }
 }

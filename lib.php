@@ -22,6 +22,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_brightcove\brightcove_api;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -83,7 +85,14 @@ function brightcove_is_configured() {
 function brightcove_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
+    $cmid = $moduleinstance->coursemodule;
+    $context = context_module::instance($cmid);
+
     $moduleinstance->timecreated = time();
+
+    $brightcove = new brightcove_api();
+    $brightcove->set_context($context);
+    $brightcove->save_transcript();
 
     $id = $DB->insert_record('brightcove', $moduleinstance);
 
@@ -103,8 +112,15 @@ function brightcove_add_instance($moduleinstance, $mform = null) {
 function brightcove_update_instance($moduleinstance, $mform = null) {
     global $DB;
 
+    $cmid = $moduleinstance->coursemodule;
+    $context = context_module::instance($cmid);
+
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
+
+    $brightcove = new brightcove_api();
+    $brightcove->set_context($context);
+    $brightcove->save_transcript($moduleinstance->videoid);
 
     return $DB->update_record('brightcove', $moduleinstance);
 }
@@ -122,6 +138,13 @@ function brightcove_delete_instance($id) {
     if (!$exists) {
         return false;
     }
+
+    $cm = get_coursemodule_from_instance('brightcove', $moduleinstance->id);
+    $context = context_module::instance($cm->id);
+
+    $brightcove = new brightcove_api();
+    $brightcove->set_context($context);
+    $brightcove->delete_transcript();
 
     $DB->delete_records('brightcove', array('id' => $id));
 
