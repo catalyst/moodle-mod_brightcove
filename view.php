@@ -71,10 +71,10 @@ $brightcove->set_context($modulecontext);
 
 $templateobj= new stdClass();
 $templateobj->iframeurl = new moodle_url('/mod/brightcove/iframe.php', array('id' => $cm->id));
-$templateobj->transcripturl = $brightcove->get_transcript_url();
+$templateobj->transcripturl = $brightcove->get_transcript_url($moduleinstance->videoid);
 $templateobj->transcriptdownload = $brightcove->get_transcript_download_url();
 
-//error_log(print_r($templateobj, true));
+error_log(print_r($templateobj, true));
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($moduleinstance->name), 2);

@@ -326,7 +326,7 @@ class brightcove_api {
     public function save_transcript($videoid) {
         $texttrack = $this->get_transcript_url($videoid, false);
         $fs = get_file_storage();
-        $file = $this->get_transcript_file();
+        $file = $this->get_transcript_file($videoid);
 
         // Delete existing file.
         if ($file) {
@@ -335,7 +335,7 @@ class brightcove_api {
 
         // Create a new file from external track URL if it exists.
         if ($texttrack != '') {
-            $fs->create_file_from_url($this->build_transcript_file_record(), $texttrack);
+            $fs->create_file_from_url($this->build_transcript_file_record($videoid), $texttrack);
         }
     }
 
@@ -355,9 +355,9 @@ class brightcove_api {
      *
      * @return bool|\stored_file False if not found.
      */
-    public function get_transcript_file() {
+    public function get_transcript_file($videoid) {
         $fs = get_file_storage();
-        $filerecord = $this->build_transcript_file_record();
+        $filerecord = $this->build_transcript_file_record($videoid);
 
         return $fs->get_file(
                 $filerecord['contextid'],
@@ -374,12 +374,12 @@ class brightcove_api {
      *
      * @return array
      */
-    public function build_transcript_file_record() {
+    public function build_transcript_file_record($videoid) {
         return array(
                 'contextid' => $this->context->id,
                 'component' => 'mod_brightcove',
                 'filearea' => 'transcript',
-                'itemid' => $this->videoid,
+                'itemid' => $videoid,
                 'filepath' => '/',
                 'filename' => 'transcript.vtt'
         );
@@ -396,7 +396,7 @@ class brightcove_api {
         $texttrack = '';
 
         if ($internal) {
-            $texttrack = $this->make_transcript_file_url(false);
+            $texttrack = $this->make_transcript_file_url($videoid, false);
         } else {
             $videoobj = $this->get_video_by_id($videoid);
             $texttracks = $videoobj->text_tracks;
@@ -427,9 +427,9 @@ class brightcove_api {
      *
      * @return string
      */
-    public function make_transcript_file_url($forcedownload = false) {
+    public function make_transcript_file_url($videoid, $forcedownload = false) {
         $fileurl = '';
-        $file = $this->get_transcript_file();
+        $file = $this->get_transcript_file($videoid);
         if ($file) {
             $fileurl = moodle_url::make_pluginfile_url(
                     $file->get_contextid(),
