@@ -61,9 +61,6 @@ class renderer extends core_renderer {
         $output .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' . "\n";
         $output .= '<meta name="keywords" content="moodle, ' . $this->page->title . '" />' . "\n";
 
-        // Load the Plugin specific stylesheet
-        $this->page->requires->css('/mod/brightcove/styles.css');
-
         // Get the theme javascript head and footer
         if ($jsurl = $this->page->theme->javascript_url(true)) {
             $this->page->requires->js($jsurl, true);
@@ -72,8 +69,11 @@ class renderer extends core_renderer {
             $this->page->requires->js($jsurl);
         }
 
-        // Get any HTML from the page_requirements_manager.
-        $output .= $this->page->requires->get_head_code($this->page, $this);
+        // Load the Plugin specific stylesheet
+        $url = new \moodle_url('/mod/brightcove/styles.css');
+        $attributes = array('rel'=>'stylesheet', 'type'=>'text/css');
+        $attributes['href'] = $url;
+        $output .= \html_writer::empty_tag('link', $attributes) . "\n";
 
         return $output;
     }
