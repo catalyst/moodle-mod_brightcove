@@ -36,8 +36,46 @@
     }
 
 }}
-<div class="mod_brightcove__iframe">
-     <iframe src="{{url}}"></iframe> 
+<div class="mod_brightcove__layout">
+    <div class="mod_brightcove__iframe">
+         <iframe src="{{url}}"></iframe> 
+    </div>
+
+    <div class="mod_brightcove__transcript_control">
+        <div class="header form-inline row">
+            {{#transcripturl }}
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input id="bc-search" type="search" placeholder="Search transcript" class="form-control mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-btn">
+                            <button class="btn btn-secondary" data-search="next" title="Next"><i class="fa fa-long-arrow-down" aria-hidden="true"></i></button>
+                            <button class="btn btn-secondary" data-search="prev" title="Previous"><i class="fa fa-long-arrow-up" aria-hidden="true"></i></button>
+                            <button class="btn btn-secondary" data-search="clear" title="Clear Search"><i class="fa fa-remove" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+            {{/transcripturl }}
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <div class="input-group-btn download">
+                        <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-search="download" title="Download"><i class="fa fa-download" aria-hidden="true"></i></button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <div class="dropdown-header">Download as:</div>
+                            <span id="insertionPoint"></span>
+                            {{#transcripturl }}
+                                <span id="downloadTranscript">
+                                    <a class="dropdown-item" href="{{ transcriptdownload }}" title="Download transcript"><i class='fa fa-file-text-o' aria-hidden='true'></i> Transcript</a>
+                                </span>
+                            {{/transcripturl }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{#transcripturl }}
+            <div class="mod_brightcover__transcript" id="transcript"></div>
+        {{/transcripturl }}
+    </div>
+    
 </div>
 
-</p>
