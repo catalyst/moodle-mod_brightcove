@@ -44,6 +44,7 @@ $string['brightcove:update_progress'] = 'Update user progress';
 $string['brightcovemodal'] = 'Select Video';
 $string['brightcovename'] = 'Activity name';
 $string['brightcovename_help'] = 'This is the name that will be displayed to users.';
+$string['cachedef_apitoken'] = 'Brightcove API token cache';
 $string['modaltitle'] = 'Select Video';
 $string['noconfig'] = 'There is missing or incorrect configuration, please fix in administration settings. ';
 $string['oauthendpoint'] = 'Brightcove OAuth Endpoint';
