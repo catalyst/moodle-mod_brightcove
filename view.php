@@ -66,6 +66,8 @@ $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
+$PAGE->requires->js_call_amd('mod_brightcove/parent', 'init');
+
 $brightcove = new brightcove_api();
 $brightcove->set_context($modulecontext);
 
@@ -73,8 +75,6 @@ $templateobj= new stdClass();
 $templateobj->iframeurl = new moodle_url('/mod/brightcove/iframe.php', array('id' => $cm->id));
 $templateobj->transcripturl = $brightcove->get_transcript_url($moduleinstance->videoid);
 $templateobj->transcriptdownload = $brightcove->get_transcript_download_url();
-
-error_log(print_r($templateobj, true));
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($moduleinstance->name), 2);

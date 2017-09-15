@@ -61,10 +61,20 @@
                         <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-search="download" title="Download"><i class="fa fa-download" aria-hidden="true"></i></button>
                         <div class="dropdown-menu dropdown-menu-right">
                             <div class="dropdown-header">Download as:</div>
-                            <span id="insertionPoint"></span>
+                            <span id="insertionPoint">
+                                <span id="downloadVideo">
+                                    <a class="dropdown-item" href="#" title="Download video">
+                                        <i class='fa fa-file-video-o' aria-hidden='true'></i> 
+                                        Video
+                                    </a>
+                                </span>
+                            </span>
                             {{#transcripturl }}
                                 <span id="downloadTranscript">
-                                    <a class="dropdown-item" href="{{ transcriptdownload }}" title="Download transcript"><i class='fa fa-file-text-o' aria-hidden='true'></i> Transcript</a>
+                                    <a class="dropdown-item" href="{{ transcriptdownload }}" title="Download transcript">
+                                        <i class='fa fa-file-text-o' aria-hidden='true'></i> 
+                                        Transcript
+                                    </a>
                                 </span>
                             {{/transcripturl }}
                         </div>

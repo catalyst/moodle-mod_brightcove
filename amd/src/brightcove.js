@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Brightcove video rendering
+ * Javascript controller for the "Actions" panel at the bottom of the page.
  *
  * @module     mod_brightcove/download_video
  * @package    mod_brightcove
@@ -60,13 +60,7 @@ define(['bc'], function() {
                     // Set the highest rendition.
                     highestQuality = mp4Ara[0].src;
 
-                    downloadString = "<a class='dropdown-item' href='";
-                    downloadString +=  highestQuality;
-                    downloadString += "' download='";
-                    downloadString += videoName;
-                    downloadString += "' title='Download video'><i class='fa fa-file-video-o' aria-hidden='true'></i> Video</a>";
-
-                    document.getElementById('insertionPoint').innerHTML = downloadString;
+                    parent.postMessage(highestQuality, '*');
                 });
             });
         }
@@ -76,7 +70,6 @@ define(['bc'], function() {
 
         // Attach the plugins to videoJS.
         videojs(playerid).downloadVideoPlugin();
-
     };
 
     return Brightcove;
