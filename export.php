@@ -37,8 +37,9 @@ require_login($course, true, $cm);
 
 $modulecontext = context_module::instance($cm->id);
 
-$brightcove = new brightcove_api($moduleinstance, $modulecontext);
-$transcript = $brightcove->get_transcript_content();
+$brightcove = new brightcove_api();
+$brightcove->set_context($modulecontext);
+$transcript = $brightcove->get_transcript_content($moduleinstance->videoid);
 
 if ($type == 1) { // Type 1: is for transcript.
     $filename = format_string($moduleinstance->name) . '_transcript';

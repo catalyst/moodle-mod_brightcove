@@ -471,9 +471,9 @@ class brightcove_api {
      *
      * @return string $trackcontent Content of the first found text track.
      */
-    public function get_transcript_content($format = true, $internal = true) {
+    public function get_transcript_content($videoid, $format = true, $internal = true) {
         if ($internal) {
-            $content = $this->get_transcript_file()->get_content();
+            $content = $this->get_transcript_file($videoid)->get_content();
         } else {
             $trackurl = $this->get_transcript_url($internal);
             $response = $this->client->request('GET', $trackurl);

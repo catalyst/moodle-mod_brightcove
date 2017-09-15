@@ -134,8 +134,8 @@ function brightcove_update_instance($moduleinstance, $mform = null) {
 function brightcove_delete_instance($id) {
     global $DB;
 
-    $exists = $DB->get_record('brightcove', array('id' => $id));
-    if (!$exists) {
+    $moduleinstance = $DB->get_record('brightcove', array('id' => $id));
+    if (!$moduleinstance) {
         return false;
     }
 
