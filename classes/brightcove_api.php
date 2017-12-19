@@ -342,8 +342,8 @@ class brightcove_api {
     /**
      * Delete local transcript file.
      */
-    public function delete_transcript() {
-        $file = $this->get_transcript_file();
+    public function delete_transcript($videoid) {
+        $file = $this->get_transcript_file($videoid);
 
         if ($file) {
             $file->delete();

@@ -144,7 +144,7 @@ function brightcove_delete_instance($id) {
 
     $brightcove = new brightcove_api();
     $brightcove->set_context($context);
-    $brightcove->delete_transcript();
+    $brightcove->delete_transcript($moduleinstance->videoid);
 
     $DB->delete_records('brightcove', array('id' => $id));
 
