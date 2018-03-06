@@ -103,7 +103,7 @@ if ($pluginconfigured) {
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($moduleinstance->name), 2);
-echo html_helper::progress_bar($cm->id);
+
 if ($pluginconfigured) {
  echo $OUTPUT->render_from_template('mod_brightcove/player', $playervalues);
 } else {
