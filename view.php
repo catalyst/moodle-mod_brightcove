@@ -85,20 +85,12 @@ if ($pluginconfigured) {
     $playervalues->aspectratio = $aspectratio;
     $playervalues->transcripturl = $brightcove->get_transcript_url();
     $playervalues->transcriptdownload = $brightcove->get_transcript_download_url();
-    $playervalues->progress = $activityobject['progress'];
 
     $brightcoveurl = '//players.brightcove.net/' . $moduleconfig->accountid . '/' . $moduleconfig->playerid . '_default/index';
     $PAGE->requires->js_amd_inline("requirejs.config({paths:{'bc':['{$brightcoveurl}']}});");
     $PAGE->requires->js_call_amd('mod_brightcove/brightcove', 'init', array($moduleconfig->playerid));
     $PAGE->requires->js_call_amd('mod_brightcove/videojs_transcript', 'init');
     $PAGE->requires->js_call_amd('mod_brightcove/mark_transcript', 'init');
-    $PAGE->requires->js_call_amd('mod_brightcove/activity_progress', 'init', [
-        [
-            'playerid' => $playervalues->playerid,
-            'cmid'     => $cm->id,
-            'userid'   => $USER->id,
-        ],
-    ]);
 }
 
 echo $OUTPUT->header();
