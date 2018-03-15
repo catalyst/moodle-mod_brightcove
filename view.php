@@ -22,7 +22,6 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_activity_progress\html_helper;
 use mod_brightcove\brightcove_api;
 
 require(__DIR__.'/../../config.php');
@@ -101,6 +100,5 @@ if ($pluginconfigured) {
 } else {
     echo $OUTPUT->heading(get_string('notconfigured', 'brightcove'), 5);
 }
-echo html_helper::emoticon();
 
 echo $OUTPUT->footer();
