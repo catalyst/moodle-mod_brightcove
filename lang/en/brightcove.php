@@ -56,3 +56,5 @@ $string['search:activity'] = 'Brightcove - activity information';
 $string['videoid'] = 'Video ID';
 $string['videoid_help'] = 'eg 3059996735001';
 $string['filearea_transcript'] = 'Transcript files';
+// Privacy.
+$string['privacy:metadata'] = 'This plugin does not store personal data.';
